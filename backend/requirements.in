@@ -1,0 +1,14 @@
+# dependencies required for runtime 
+# direct / indirect that should be declared
+uvicorn
+fastapi
+sqlalchemy
+pymysql
+passlib[argon2]
+
+# devtools
+pip-tools
+pytest
+httpx
+black
+flake8

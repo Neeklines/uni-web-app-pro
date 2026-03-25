@@ -8,7 +8,7 @@ app = FastAPI()
 # CORS configuration to allow requests from the React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React dev server
+    allow_origins=["http://localhost:3000", "http://neeklines.xyz"],  # React dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -16,5 +16,5 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
-app.include_router(health.router)
-app.include_router(auth.router)
+app.include_router(health.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")

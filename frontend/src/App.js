@@ -28,11 +28,11 @@ function App() {
     setLoading(true);
 
     // Determine the endpoint based on whether the user is registering or logging in
-    const endpoint = isRegister ? '/auth/register' : '/auth/login';
+    const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
 
     // Make a POST request to the backend API with the email and password
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

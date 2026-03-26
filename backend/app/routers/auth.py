@@ -5,7 +5,6 @@ from app.schemas.user import UserCreate, UserLogin
 from app.services.auth_service import create_user, authenticate_user
 from app.database import get_db
 
-
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 

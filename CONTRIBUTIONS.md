@@ -357,7 +357,7 @@ Follow these steps to run the project locally.
 ```bash
 cd client
 npm install
-npm start   # or npm run dev (depending on setup)
+npm start
 ```
 
 Frontend will run at:

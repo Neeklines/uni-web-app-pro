@@ -3,17 +3,9 @@ from sqlalchemy.orm import Session
 
 from app.schemas.user import UserCreate, UserLogin
 from app.services.auth_service import create_user, authenticate_user
-from app.database import SessionLocal
+from app.database import get_db
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/register")

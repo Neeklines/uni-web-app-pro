@@ -1,13 +1,16 @@
 # dependencies required for runtime 
+
 # direct / indirect that should be declared
-uvicorn
 fastapi
 sqlalchemy
 pymysql
 passlib[argon2]
+python-jose[cryptography]
+python-dotenv
 
 # devtools
 pip-tools
+uvicorn
 pytest
 httpx
 black

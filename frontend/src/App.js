@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 
-//To run the app, make sure to have the backend server running on http://localhost:8000
-//To start use the command: npm start in the frontend directory
+// To run the app, make sure to have the backend server running on http://localhost:8000
+// To start use the command: npm start in the frontend directory
 
 function App() {
   // State variables for form inputs, messages, and loading state
@@ -12,9 +13,23 @@ function App() {
   const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null); // WARN: token is not used right now
 
-  //Logout handling, resets all states to initial values
+  // Check whether token is already stored, if so, user stays logged in after e.g. refresh
+  // FIXME: add GET /api/me to refresh email in logged in state
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  // Logout handling, resets all states to initial values
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+
     setIsLoggedIn(false);
     setEmail('');
     setPassword('');
@@ -51,6 +66,9 @@ function App() {
           setPassword('');
         } else {
           setMessage('Logowanie pomyślne! Przekierowywanie do dashboardu...');
+          const newToken = data.access_token;
+          localStorage.setItem('token', newToken);
+          setToken(newToken);
           setIsLoggedIn(true);
           setMessage('');
         }

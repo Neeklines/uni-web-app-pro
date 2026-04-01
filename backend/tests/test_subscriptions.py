@@ -5,12 +5,21 @@ def create_user(client):
     )
 
 
+def login_user(client):
+    response = client.post(
+        "/api/auth/login",
+        json={"email": "user@test.com", "password": "123456"},
+    )
+    return response.json()["access_token"]
+
+
 def test_create_subscription(client):
-    user = create_user(client).json()
+    create_user(client)
+    token = login_user(client)
 
     response = client.post(
         "/api/subscriptions",
-        headers={"x-user-id": str(user["id"])},
+        headers={"Authorization": f"Bearer {token}"},
         json={
             "name": "Netflix",
             "price": 15.99,
@@ -27,13 +36,13 @@ def test_create_subscription(client):
 
 
 def test_get_subscriptions(client):
-    user = create_user(client).json()
+    create_user(client)
+    token = login_user(client)
 
-    # create 2 subscriptions
     for name in ["Netflix", "Spotify"]:
         client.post(
             "/api/subscriptions",
-            headers={"x-user-id": str(user["id"])},
+            headers={"Authorization": f"Bearer {token}"},
             json={
                 "name": name,
                 "price": 10,
@@ -45,7 +54,7 @@ def test_get_subscriptions(client):
 
     response = client.get(
         "/api/subscriptions",
-        headers={"x-user-id": str(user["id"])},
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200

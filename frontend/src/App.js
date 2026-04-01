@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import './App.css';
 
-//To run the app, make sure to have the backend server running on http://localhost:8000
-//To start use the command: npm start in the frontend directory
+// To run the app, make sure to have the backend server running on http://localhost:8000
+// To start use the command: npm start in the frontend directory
 
 function App() {
   // State variables for form inputs, messages, and loading state
@@ -16,18 +16,16 @@ function App() {
   const [token, setToken] = useState(null); // WARN: token is not used right now
 
   // Check whether token is already stored, if so, user stays logged in after e.g. refresh
-  // NOTE: replace later with /api/me
+  // FIXME: add GET /api/me to refresh email in logged in state
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    const storedEmail = localStorage.getItem('email');
     if (storedToken) {
       setToken(storedToken);
-      setEmail(storedEmail || '');
       setIsLoggedIn(true);
     }
   }, []);
 
-  //Logout handling, resets all states to initial values
+  // Logout handling, resets all states to initial values
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);

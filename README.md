@@ -211,4 +211,4 @@ License is in `LICENSE.md` file. See it for details.
 
 To contribute, please see `CONTRIBUTIONS.md` for details.
 
-Project scope is defined in `SCOPE.md`.
+Project's initial scope is defined in `SCOPE.md`.

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function AuthForm({ type, onSubmit, error }) {
+function AuthForm({ type, onSubmit, error, loading, showLoader }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -42,9 +42,10 @@ function AuthForm({ type, onSubmit, error }) {
 
                 <button
                     type="submit"
-                    className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition"
+                    disabled={loading}
+                    className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition disabled:opacity-50"
                 >
-                    {type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
+                    {showLoader ? 'Ładowanie...' : type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
                 </button>
             </form>
 

@@ -18,23 +18,21 @@ function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-            <div className="w-full max-w-md">
+        <div className="w-full max-w-md">
 
-                <AuthForm
-                    type="register"
-                    onSubmit={handleRegister}
-                    error={error}
-                />
+            <AuthForm
+                type="register"
+                onSubmit={handleRegister}
+                error={error}
+            />
 
-                <p className="text-gray-400 mt-6 text-center">
-                    Masz konto?{' '}
-                    <Link to="/login" className="text-blue-400 hover:underline">
-                        Zaloguj się
-                    </Link>
-                </p>
+            <p className="text-gray-400 mt-6 text-center">
+                Masz konto?{' '}
+                <Link to="/login" className="text-blue-400 hover:underline">
+                    Zaloguj się
+                </Link>
+            </p>
 
-            </div>
         </div>
     );
 }

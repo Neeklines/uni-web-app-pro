@@ -7,7 +7,7 @@ export const loginSchema = z.object({
 
     password: z
         .string()
-        .min(6, 'Hasło musi mieć co najmniej 6 znaków'),
+        .min(3, 'Hasło musi mieć co najmniej 3 znaki'),
 });
 
 export const registerSchema = loginSchema.extend({

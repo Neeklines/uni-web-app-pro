@@ -33,26 +33,24 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-            <div className="w-full max-w-md">
+        <div className="w-full max-w-md">
 
-                <AuthForm
-                    type="login"
-                    onSubmit={handleLogin}
-                    error={error}
-                    loading={loading}
-                    showLoader={showLoader}
-                    onResetError={() => setError('')}
-                />
+            <AuthForm
+                type="login"
+                onSubmit={handleLogin}
+                error={error}
+                loading={loading}
+                showLoader={showLoader}
+                onResetError={() => setError('')}
+            />
 
-                <p className="text-gray-400 mt-6 text-center">
-                    Nie masz konta?{' '}
-                    <Link to="/register" className="text-blue-400 hover:underline">
-                        Zarejestruj się
-                    </Link>
-                </p>
+            <p className="text-gray-400 mt-6 text-center">
+                Nie masz konta?{' '}
+                <Link to="/register" className="text-blue-400 hover:underline">
+                    Zarejestruj się
+                </Link>
+            </p>
 
-            </div>
         </div>
     );
 }

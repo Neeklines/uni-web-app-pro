@@ -1,11 +1,26 @@
 import { useState } from 'react';
+import { loginSchema, registerSchema } from '../../validation/authSchemas';
 
-function AuthForm({ type, onSubmit, error, loading, showLoader }) {
+function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [validationError, setValidationError] = useState('');
+
+    const schema = type === 'login' ? loginSchema : registerSchema;
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        setValidationError('');
+        onResetError?.();
+
+        const result = schema.safeParse({ email, password });
+
+        if (!result.success) {
+            setValidationError(result.error.issues?.[0]?.message || 'Invalid input');
+            return;
+        }
+
         onSubmit(email, password);
     };
 
@@ -16,27 +31,31 @@ function AuthForm({ type, onSubmit, error, loading, showLoader }) {
                 {type === 'login' ? 'Logowanie' : 'Rejestracja'}
             </h1>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
 
                 <div>
-                    <label className="block text-gray-300 mb-1">Email</label>
+                    <label htmlFor="email" className="block text-gray-300 mb-1">
+                        Email
+                    </label>
                     <input
+                        id="email"
                         type="email"
                         className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </div>
 
                 <div>
-                    <label className="block text-gray-300 mb-1">Hasło</label>
+                    <label htmlFor="password" className="block text-gray-300 mb-1">
+                        Hasło
+                    </label>
                     <input
+                        id="password"
                         type="password"
                         className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        required
                     />
                 </div>
 
@@ -49,8 +68,18 @@ function AuthForm({ type, onSubmit, error, loading, showLoader }) {
                 </button>
             </form>
 
+            {/* Validation error */}
+            {validationError && (
+                <p className="text-red-400 mt-4 text-center">
+                    {validationError}
+                </p>
+            )}
+
+            {/* Backend error */}
             {error && (
-                <p className="text-yellow-400 mt-4 text-center">{error}</p>
+                <p className="text-yellow-400 mt-2 text-center">
+                    {error}
+                </p>
             )}
 
         </div>

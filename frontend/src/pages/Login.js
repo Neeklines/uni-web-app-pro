@@ -42,6 +42,7 @@ function Login() {
                     error={error}
                     loading={loading}
                     showLoader={showLoader}
+                    onResetError={() => setError('')}
                 />
 
                 <p className="text-gray-400 mt-6 text-center">

@@ -8,9 +8,19 @@ export function AuthProvider({ children }) {
     const [token, setToken] = useState(localStorage.getItem('token'));
 
     useEffect(() => {
-        if (token) {
-            setUser({ email: 'mock@example.com' }); // TODO: replace with /api/me
-        }
+        const loadUser = async () => {
+            if (!token) return;
+
+            try {
+                const userData = await authService.getMe(token);
+                setUser(userData);
+            } catch (err) {
+                console.error(err);
+                logout(); // token invalid
+            }
+        };
+
+        loadUser();
     }, [token]);
 
     const login = async (email, password) => {
@@ -18,7 +28,6 @@ export function AuthProvider({ children }) {
         localStorage.setItem('token', data.access_token);
 
         setToken(data.access_token);
-        setUser({ email });
     };
 
     const register = async (email, password) => {

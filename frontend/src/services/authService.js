@@ -25,3 +25,17 @@ export async function register(email, password) {
 
     return data;
 }
+
+export async function getMe(token) {
+    const response = await fetch('/api/auth/me', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch user');
+    }
+
+    return response.json();
+}

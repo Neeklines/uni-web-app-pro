@@ -1,20 +1,10 @@
-## Description
+## Overview
 
-Describe the changes introduced by this PR.
+Describe this PR.
 
-## Type of change
+## Changes
 
-- [ ] Feature
-- [ ] Bug fix
-- [ ] Refactor
-- [ ] Documentation
-
-## Checklist
-
-- [ ] Code follows project style
-- [ ] Tests pass
-- [ ] New tests added if needed
-- [ ] Documentation updated
+Walkthrough the changes introduced by this PR.
 
 ## Related issues
 

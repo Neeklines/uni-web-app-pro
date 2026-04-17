@@ -2,7 +2,7 @@
 
 function Landing() {
     return (
-        <div className="min-h-[calc(100vh-4rem)] bg-gray-900 text-white px-6 py-12 flex items-center justify-center">
+        <div className="bg-gray-900 text-white px-6 py-12 flex items-center justify-center">
             <div className="max-w-4xl mx-auto">
                 <div className="rounded-3xl border border-gray-700 bg-gray-950/60 p-10 shadow-xl shadow-black/20">
                     <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">

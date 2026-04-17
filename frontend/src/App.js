@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 
 import Layout from './components/layout/Layout';
+import AppLayout from './components/layout/AppLayout';
 import AuthLayout from './components/layout/AuthLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -24,8 +25,10 @@ function App() {
         <Route path="/register" element={<Register />} />
       </Route>
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+      <Route element={<AppLayout />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Route>
     </Routes>
   );

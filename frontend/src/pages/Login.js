@@ -15,7 +15,6 @@ function Login() {
         setLoading(true);
         setError('');
 
-        // 👇 delay showing loader
         const timer = setTimeout(() => {
             setShowLoader(true);
         }, 200);
@@ -34,7 +33,7 @@ function Login() {
 
     return (
         <div className="w-full max-w-md">
-
+            {/* Wszystko wewnątrz AuthForm trafi do ramki formularza */}
             <AuthForm
                 type="login"
                 onSubmit={handleLogin}
@@ -42,15 +41,25 @@ function Login() {
                 loading={loading}
                 showLoader={showLoader}
                 onResetError={() => setError('')}
-            />
+            >
+                {/* Ten blok wyświetli się pod przyciskiem "Zaloguj się" wewnątrz ramki */}
+                <div className="mt-4 pt-4 border-t border-gray-700/50 text-center">
+                    <Link 
+                        to="/forgot-password" 
+                        className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                        Nie pamiętasz hasła?
+                    </Link>
+                </div>
+            </AuthForm>
 
+            {/* Ten blok zostanie poza główną ramką (pod spodem) */}
             <p className="text-gray-400 mt-6 text-center">
                 Nie masz konta?{' '}
                 <Link to="/register" className="text-blue-400 hover:underline">
                     Zarejestruj się
                 </Link>
             </p>
-
         </div>
     );
 }

@@ -46,7 +46,7 @@ async def forgot_password(payload: ForgotPasswordRequest, db: Session = Depends(
     if result:
         await send_password_reset_email(result["user"].email, result["raw_token"])
 
-    return {"message": "If the account exists, a password reset link has been sent."}
+    return {"message": "Jeśli konto istnieje, wysłano link do zresetowania hasła."}
 
 
 @router.post("/reset-password")
@@ -56,4 +56,4 @@ def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db))
     if error:
         raise HTTPException(status_code=400, detail=error)
 
-    return {"message": "Password has been reset successfully."}
+    return {"message": "Hasło zostało zresetowane."}

@@ -7,20 +7,20 @@ from app.config import SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM
 async def send_password_reset_email(to_email: str, token: str):
     reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
 
-    subject = "SmartSub - Password reset"
-    body = f"""Hello,
+    subject = "SmartSub – Resetowanie hasła"
+    body = f"""Witaj!
+    
+Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w serwisie SmartSub.
 
-We received a request to reset your SmartSub account password.
-
-Click the link below to set a new password:
+Kliknij w poniższy link, aby ustawić nowe hasło:
 {reset_link}
 
-This link will expire in 30 minutes.
+Link wygaśnie za 30 minut.
 
-If you did not request this, you can ignore this email.
+Jeśli to nie Ty wysłałeś prośbę o zmianę hasła, po prostu zignoruj tę wiadomość. Twoje hasło pozostanie bez zmian.
 
-Best regards,
-SmartSub Team
+Pozdrawiamy,
+Zespół SmartSub
 """
 
     msg = EmailMessage()
@@ -29,7 +29,14 @@ SmartSub Team
     msg["To"] = to_email
     msg.set_content(body)
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
+    print("SMTP_HOST =", SMTP_HOST)
+    print("SMTP_PORT =", SMTP_PORT)
+    print("SMTP_USER =", SMTP_USER)
+    print("SMTP_FROM =", SMTP_FROM)
+    print("TO =", to_email)
+
+    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=20) as server:
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.send_message(msg)
+
+    print("MAIL SENT")

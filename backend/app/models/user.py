@@ -11,3 +11,5 @@ class User(Base):
     password = Column(String)
 
     subscriptions = relationship("Subscription", back_populates="user")
+    password_reset_tokens = relationship("PasswordResetToken", cascade="all, delete-orphan")
+    

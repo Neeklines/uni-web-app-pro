@@ -1,8 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
+from app.models.user import User
+from app.models.subscription import Subscription
+from app.models.password_reset_token import PasswordResetToken
 from app.routers import health, auth, meta
 from app.routers import subscriptions
+
 
 app = FastAPI()
 

@@ -13,7 +13,10 @@ class SubscriptionCreate(BaseModel):
     is_active: bool = True
     notes: str | None = None
 
-class SubscriptionUpdate(BaseModel): #allows partial update (pin, favourite, cancel, notes)
+
+class SubscriptionUpdate(
+    BaseModel
+):  # allows partial update (pin, favourite, cancel, notes)
     name: str | None = None
     price: float | None = None
     billing_cycle: str | None = None
@@ -23,6 +26,7 @@ class SubscriptionUpdate(BaseModel): #allows partial update (pin, favourite, can
     is_favourite: bool | None = None
     is_active: bool | None = None
     notes: str | None = None
+
 
 class SubscriptionOut(BaseModel):
     id: int
@@ -36,7 +40,6 @@ class SubscriptionOut(BaseModel):
     is_active: bool
     cancelled_at: date | None
     notes: str | None
-    
+
     class Config:
         from_attributes = True
-

@@ -58,7 +58,7 @@ function Footer() {
                     <p className="mt-1">
                         Running commit{' '}
                         <a
-                            href={`https://github.com/uni-web-app-pro/commit/${meta.version}`}
+                            href={`https://github.com/Neeklines/uni-web-app-pro/commit/${meta.version}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-400 hover:text-gray-300 transition"

@@ -79,7 +79,7 @@ def auto_clear_old_inactive(db: Session, user_id: int):
         db.query(Subscription)
         .filter(
             Subscription.user_id == user_id,
-            Subscription.is_active == False,
+            Subscription.is_active.is_(False),
             Subscription.cancelled_at <= cutoff,
         )
         .all()
@@ -95,7 +95,7 @@ def delete_one_inactive(db: Session, subscription_id: int, user_id: int):
         .filter(
             Subscription.id == subscription_id,
             Subscription.user_id == user_id,
-            Subscription.is_active == False,
+            Subscription.is_active.is_(False),
         )
         .first()
     )
@@ -109,7 +109,7 @@ def delete_one_inactive(db: Session, subscription_id: int, user_id: int):
 def delete_all_inactive(db: Session, user_id: int):
     inactive = (
         db.query(Subscription)
-        .filter(Subscription.user_id == user_id, Subscription.is_active == False)
+        .filter(Subscription.user_id == user_id, Subscription.is_active.is_(False))
         .all()
     )
     for sub in inactive:

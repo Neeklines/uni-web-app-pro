@@ -7,6 +7,7 @@ pymysql
 passlib[argon2]
 python-jose[cryptography]
 python-dotenv
+pydantic[email]
 
 # devtools
 pip-tools

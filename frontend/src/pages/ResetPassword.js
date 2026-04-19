@@ -36,7 +36,7 @@ function ResetPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/auth/reset-password', {
+      const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,14 +50,21 @@ function ResetPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'Nie udało się zmienić hasła.');
+        let errorMessage = 'Nie udało się zmienić hasła.';
+
+        if (Array.isArray(data.detail) && data.detail.length > 0) {
+          errorMessage = data.detail[0].msg.replace('Value error, ','');
+        } else if (typeof data.detail === 'string') {
+          errorMessage = data.detail;
+        }
+
+        throw new Error(errorMessage);
       }
 
-      setMessage(data.message || 'Hasło zostało zmienione.');
 
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+    navigate('/login', {
+      state: { resetSuccess: true }
+    });
     } catch (err) {
       setError(err.message || 'Wystąpił błąd.');
     } finally {

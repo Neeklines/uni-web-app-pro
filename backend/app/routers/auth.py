@@ -2,13 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 
-from app.schemas.user import UserCreate, UserLogin, ForgotPasswordRequest, ResetPasswordRequest
-from app.services.auth_service import create_user, authenticate_user, create_password_reset_token, reset_user_password
+from app.schemas.user import UserCreate, UserLogin
+from app.schemas.password_reset import ForgotPasswordRequest, ResetPasswordRequest
+from app.services.auth_service import (
+    create_user,
+    authenticate_user,
+    create_password_reset_token,
+    reset_user_password,
+)
 from app.core.security import create_access_token
 from app.dependencies.auth import get_current_user
 from app.models.user import User
 from app.services.email_service import send_password_reset_email
-
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -39,10 +44,11 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.post("/forgot-password")
-async def forgot_password(payload: ForgotPasswordRequest, db: Session = Depends(get_db)):
+async def forgot_password(
+    payload: ForgotPasswordRequest, db: Session = Depends(get_db)
+):
     result = create_password_reset_token(db, payload.email)
 
-    
     if result:
         await send_password_reset_email(result["user"].email, result["raw_token"])
 

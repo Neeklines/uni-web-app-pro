@@ -1,0 +1,27 @@
+Name,Work Email,Job Title,Manager Email Address
+System SmartSub,system.smartsub@smartsub.pl,System,
+Moduł Dashboard,modul.dashboard@smartsub.pl,Moduł,system.smartsub@smartsub.pl
+Moduł Zarządzania Subskrypcjami,modul.subskrypcji@smartsub.pl,Moduł,system.smartsub@smartsub.pl
+Moduł Ustawień i Autoryzacji,modul.autoryzacji@smartsub.pl,Moduł,system.smartsub@smartsub.pl
+Moduł Systemowy i Powiadomień,modul.systemowy@smartsub.pl,Moduł,system.smartsub@smartsub.pl
+Personalizacja widoku,personalizacja@smartsub.pl,Funkcja,modul.dashboard@smartsub.pl
+7. Wyświetlanie nazwy użytkownika,funkcja.7@smartsub.pl,Funkcja,personalizacja@smartsub.pl
+Analiza kosztów,analiza.kosztow@smartsub.pl,Funkcja,modul.dashboard@smartsub.pl
+8. Koszty miesięczne i roczne,funkcja.8@smartsub.pl,Funkcja,analiza.kosztow@smartsub.pl
+9. Diagram kołowy (2 tryby),funkcja.9@smartsub.pl,Funkcja,analiza.kosztow@smartsub.pl
+13. Kalendarz,funkcja.13@smartsub.pl,Funkcja,modul.dashboard@smartsub.pl
+12. Lista subskrypcji,funkcja.12@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
+10. Dodawanie/usuwanie subskrypcji,funkcja.10@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
+11. Edycja subskrypcji (pinned/favourite/notes/dane),funkcja.11@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
+Zarządzanie notatkami,notes@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
+Przypinanie (Pinned),pinned@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
+Oznaczanie jako ulubione (Favourite),favourite@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
+Autoryzacja i bezpieczeństwo,autoryzacja.sekcja@smartsub.pl,Funkcja,modul.autoryzacji@smartsub.pl
+1. Logowanie,funkcja.1@smartsub.pl,Funkcja,autoryzacja.sekcja@smartsub.pl
+2. Rejestrowanie użytkownika,funkcja.2@smartsub.pl,Funkcja,autoryzacja.sekcja@smartsub.pl
+3. Odzyskiwanie hasła,funkcja.3@smartsub.pl,Funkcja,autoryzacja.sekcja@smartsub.pl
+14. Ustawienia aplikacji,funkcja.14@smartsub.pl,Funkcja,modul.autoryzacji@smartsub.pl
+6. Wygaszanie subskrypcji,funkcja.6@smartsub.pl,Funkcja,modul.systemowy@smartsub.pl
+Komunikacja powiadomień,komunikacja.sekcja@smartsub.pl,Funkcja,modul.systemowy@smartsub.pl
+4. Powiadomienia e-mail,funkcja.4@smartsub.pl,Funkcja,komunikacja.sekcja@smartsub.pl
+5. Powiadomienia wewnątrz aplikacji,funkcja.5@smartsub.pl,Funkcja,komunikacja.sekcja@smartsub.pl

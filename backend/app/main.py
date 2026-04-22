@@ -4,6 +4,8 @@ from app.database import Base, engine
 from app.routers import health, auth, meta
 from app.routers import subscriptions
 from app.config import FRONTEND_URL
+from app.routers import notifications
+from app.services.scheduler_service import start_scheduler, stop_scheduler
 
 app = FastAPI()
 
@@ -22,3 +24,14 @@ app.include_router(health.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(subscriptions.router, prefix="/api")
 app.include_router(meta.router, prefix="/api")
+app.include_router(notifications.router, prefix="/api")
+
+
+@app.on_event("startup")
+def on_startup():
+    start_scheduler()
+
+
+@app.on_event("shutdown")
+def on_shutdown():
+    stop_scheduler()

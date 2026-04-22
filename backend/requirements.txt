@@ -12,6 +12,8 @@ anyio==4.12.1
     # via
     #   httpx
     #   starlette
+apscheduler==3.11.2
+    # via -r requirements.in
 argon2-cffi==25.1.0
     # via passlib
 argon2-cffi-bindings==25.1.0
@@ -138,6 +140,10 @@ typing-inspection==0.4.2
     # via
     #   fastapi
     #   pydantic
+tzdata==2026.1
+    # via tzlocal
+tzlocal==5.3.1
+    # via apscheduler
 uvicorn==0.41.0
     # via -r requirements.in
 wheel==0.46.3

@@ -11,6 +11,20 @@ from app.config import (
 )
 
 
+def send_email(to_email: str, subject: str, body: str):
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = SMTP_FROM
+    msg["To"] = to_email
+    msg.set_content(body)
+
+    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=20) as server:
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.send_message(msg)
+
+    print(f"MAIL SENT TO {to_email}")
+
+
 async def send_password_reset_email(to_email: str, token: str):
     reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
 
@@ -31,14 +45,4 @@ Pozdrawiamy,
 Zespół SmartSub
 """
 
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = SMTP_FROM
-    msg["To"] = to_email
-    msg.set_content(body)
-
-    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=20) as server:
-        server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(msg)
-
-    print("MAIL SENT")
+    send_email(to_email=to_email, subject=subject, body=body)

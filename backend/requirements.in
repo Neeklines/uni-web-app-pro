@@ -8,6 +8,7 @@ passlib[argon2]
 python-jose[cryptography]
 python-dotenv
 pydantic[email]
+apscheduler
 
 # devtools
 pip-tools

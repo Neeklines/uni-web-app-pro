@@ -53,7 +53,6 @@ async def google_login(token_data: GoogleToken, db: Session = Depends(get_db)):
         )
 
         email = idinfo.get("email")
-        first_name = idinfo.get("given_name", "Nieznany")
 
         user = db.query(User).filter(User.email == email).first()
 

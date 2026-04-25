@@ -12,3 +12,5 @@ class UserLogin(BaseModel):
 
 
 # captcha_token: str
+class GoogleToken(BaseModel):
+    credential: str

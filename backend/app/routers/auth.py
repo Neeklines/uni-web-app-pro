@@ -89,40 +89,34 @@ def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db))
 @router.post("/google-login")
 async def google_login(token_data: GoogleToken, db: Session = Depends(get_db)):
     try:
-        #Weryfikacja tokenu Google
+        # Weryfikacja tokenu Google
         client_id = os.getenv("GOOGLE_CLIENT_ID")
         idinfo = id_token.verify_oauth2_token(
-            token_data.credential, 
-            requests.Request(), 
-            client_id
+            token_data.credential, requests.Request(), client_id
         )
-        
+
         email = idinfo.get("email")
-        first_name = idinfo.get("given_name", "Nieznany") 
-        
+        first_name = idinfo.get("given_name", "Nieznany")
+
         user = db.query(User).filter(User.email == email).first()
-        
+
         if not user:
-        
-            random_password = f"google_oauth_{uuid.uuid4()}" 
-            
-            new_user = User(
-                email=email,
-                password=random_password
-            )
+
+            random_password = f"google_oauth_{uuid.uuid4()}"
+
+            new_user = User(email=email, password=random_password)
 
             db.add(new_user)
             db.commit()
             db.refresh(new_user)
             user = new_user
-            
-        
+
         access_token = create_access_token(data={"user_id": user.id})
-        
+
         return {
-            "access_token": access_token, 
+            "access_token": access_token,
             "token_type": "bearer",
-            "message": "Pomyślnie zalogowano przez Google"
+            "message": "Pomyślnie zalogowano przez Google",
         }
 
     except ValueError:

@@ -67,9 +67,7 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
                 >
                     {showLoader ? 'Ładowanie...' : type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
                 </button>
-<<<<<<< HEAD
                 {children}
-=======
 
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
                     <GoogleLogin
@@ -81,7 +79,6 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
                         }}
                     />
                 </div>
->>>>>>> 90362a6 (Added Google OAuth provider and login button.)
             </form>
 
             {/* Validation error */}

@@ -38,6 +38,8 @@ function Dashboard() {
     });
     const [formLoading, setFormLoading] = useState(false);
     const [formError, setFormError] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [upcomingPayments, setUpcomingPayments] = useState([]);
 
     const predefinedLogos = [
         { id: 'amazon_prime', label: 'Amazon Prime', src: amazonPrimeLogo },
@@ -60,11 +62,36 @@ function Dashboard() {
     };
 
     const fetchSubscriptions = useCallback(async () => {
-        if (!token) return;
+        if (!token) {
+            setLoading(false);
+            return;
+        }
 
         try {
             const data = await subscriptionService.getSubscriptions(token);
             setSubscriptions(data);
+
+            const popupAlreadyShown = sessionStorage.getItem('popupShown');
+            if (popupAlreadyShown) return;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const in7Days = new Date(today);
+            in7Days.setDate(in7Days.getDate() + 7);
+
+            const upcoming = data.filter((sub) => {
+                const payDate = new Date(sub.next_payment_date);
+                const isActive = sub.is_active !== false;
+
+                return isActive && payDate >= today && payDate <= in7Days;
+            });
+
+
+            setUpcomingPayments(upcoming);
+            setShowPopup(true);
+
+            sessionStorage.setItem('popupShown', 'true');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -292,6 +319,36 @@ function Dashboard() {
     return (
         <>
             <FullScreenLoader show={isPageLoading} />
+
+            {showPopup && (
+                <div className="fixed top-5 right-5 z-50 bg-gray-950/70 border border-gray-700 shadow-xl shadow-black/20 rounded-[32px] p-6 w-80">
+                    <div className="flex justify-between items-center mb-4">
+                        <p className="text-sm uppercase tracking-[0.15em] text-blue-400 whitespace-nowrap">
+                            Nadchodzące płatności
+                        </p>
+                        <button
+                            onClick={() => setShowPopup(false)}
+                            className="text-gray-400 hover:text-white text-xl leading-none ml-4 flex-shrink-0"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    {upcomingPayments.length === 0 ? (
+                        <p className="text-gray-400 text-sm">Brak nadchodzących płatności</p>
+                    ) : (
+                        <ul className="space-y-3">
+                            {upcomingPayments.map((sub) => (
+                                <li key={sub.id} className="rounded-3xl border border-gray-800 bg-gray-900/90 px-4 py-3 flex justify-between text-sm">
+                                    <span className="text-white font-semibold">{sub.name}</span>
+                                    <span className="text-gray-400">
+                                        {new Date(sub.next_payment_date).toLocaleDateString('en-GB')}
+                                    </span>                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            )}
+
             <div className="bg-gray-900 text-white px-4 py-8 sm:px-6 sm:py-12">
                 <div className="max-w-6xl mx-auto space-y-8">
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
@@ -306,7 +363,10 @@ function Dashboard() {
                                 </p>
                             </div>
                             <button
-                                onClick={logout}
+                                onClick={() => {
+                                    sessionStorage.removeItem('popupShown');
+                                    logout();
+                                }}
                                 className="w-full rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 sm:w-auto"
                             >
                                 Wyloguj się

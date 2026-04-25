@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { loginSchema, registerSchema } from '../../validation/authSchemas';
+import { GoogleLogin } from '@react-oauth/google';
 
 function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, children }) {
     const [email, setEmail] = useState('');
@@ -66,7 +67,21 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
                 >
                     {showLoader ? 'Ładowanie...' : type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
                 </button>
+<<<<<<< HEAD
                 {children}
+=======
+
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                            console.log("Sukces! Token od Google:", credentialResponse.credential);
+                         }}
+                        onError={() => {
+                             console.log("Logowanie Google zakończyło się niepowodzeniem");
+                        }}
+                    />
+                </div>
+>>>>>>> 90362a6 (Added Google OAuth provider and login button.)
             </form>
 
             {/* Validation error */}

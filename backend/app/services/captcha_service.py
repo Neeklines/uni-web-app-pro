@@ -23,7 +23,16 @@ async def verify_captcha(token: str, remote_ip: str | None = None) -> None:
         )
 
     data = response.json()
-    print("TURNSTILE RESPONSE:", data)
+    error_codes = data.get("error-codes", [])
 
     if not data.get("success"):
-        raise HTTPException(status_code=400, detail="CAPTCHA verification failed")
+        if "timeout-or-duplicate" in error_codes:
+            raise HTTPException(
+                status_code=400,
+                detail="CAPTCHA wygasła lub została już użyta. Spróbuj ponownie."
+            )
+
+        raise HTTPException(
+            status_code=400,
+            detail="Błąd weryfikacji CAPTCHA."
+        )

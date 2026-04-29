@@ -8,9 +8,9 @@ function Register() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
 
-    const handleRegister = async (email, password) => {
+    const handleRegister = async (email, password, captchaToken) => {
         try {
-            await register(email, password);
+            await register(email, password, captchaToken);
             navigate('/login');
         } catch (err) {
             setError(err.message);

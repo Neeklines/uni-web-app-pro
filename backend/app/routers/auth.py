@@ -21,6 +21,8 @@ from app.services.login_protection_service import (
     ensure_login_not_blocked,
 )
 
+from app.services.captcha_service import verify_captcha
+
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
@@ -33,7 +35,10 @@ def get_me(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db)):
+async def register(user: UserCreate, request: Request, db: Session = Depends(get_db)):
+    client_ip = request.client.host if request.client else None
+    await verify_captcha(user.captcha_token, client_ip)
+
     return create_user(db, user.email, user.password)
 
 
@@ -44,13 +49,13 @@ async def login(user: UserLogin, request: Request, db: Session = Depends(get_db)
     cleanup_expired_login_attempts(db)
     ensure_login_not_blocked(db, user.email, client_ip)
 
-    # await verify_captcha(user.captcha_token, client_ip)
+    await verify_captcha(user.captcha_token, client_ip)
 
     db_user = authenticate_user(db, user.email, user.password)
 
     if not db_user:
         register_failed_login(db, user.email, client_ip)
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Nieprawidłowy email lub hasło")
 
     clear_login_attempts(db, user.email, client_ip)
 

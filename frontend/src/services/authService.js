@@ -1,8 +1,8 @@
-export async function login(email, password) {
+export async function login(email, password, captchaToken) {
     const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, captcha_token: captchaToken }),
     });
 
     const data = await res.json();
@@ -12,11 +12,11 @@ export async function login(email, password) {
     return data;
 }
 
-export async function register(email, password) {
+export async function register(email, password, captchaToken) {
     const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, captcha_token: captchaToken }),
     });
 
     const data = await res.json();

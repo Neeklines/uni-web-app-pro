@@ -20,7 +20,7 @@ function Login() {
         }
     }, [resetSuccess]);
 
-    const handleLogin = async (email, password) => {
+    const handleLogin = async (email, password, captchaToken) => {
         console.log("LOGIN SUBMIT FIRED", { email, password });
         setLoading(true);
         setError('');
@@ -30,7 +30,7 @@ function Login() {
         }, 200);
 
         try {
-            await login(email, password);
+            await login(email, password, captchaToken);
             navigate('/dashboard');
         } catch (err) {
             setError(err.message);

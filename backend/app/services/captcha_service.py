@@ -23,6 +23,7 @@ async def verify_captcha(token: str, remote_ip: str | None = None) -> None:
         )
 
     data = response.json()
+    print("TURNSTILE RESPONSE:", data)
 
     if not data.get("success"):
         raise HTTPException(status_code=400, detail="CAPTCHA verification failed")

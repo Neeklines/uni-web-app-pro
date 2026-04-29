@@ -26,7 +26,8 @@ def ensure_login_not_blocked(db: Session, email: str, ip: str | None):
 
     if attempt.blocked_until and attempt.blocked_until > datetime.utcnow():
         raise HTTPException(
-            status_code=429, detail="Too many failed login attempts. Try again later."
+            status_code=429,
+            detail="Za dużo błędnych prób logowania. Spróbuj ponownie za 10 minut.",
         )
 
 
@@ -38,6 +39,11 @@ def register_failed_login(db: Session, email: str, ip: str | None):
         .filter(LoginAttempt.email == email, LoginAttempt.ip_address == ip)
         .first()
     )
+
+    if attempt and attempt.blocked_until and attempt.blocked_until < now:
+        db.delete(attempt)
+        db.commit()
+        attempt = None
 
     if attempt:
         attempt.failure_count += 1

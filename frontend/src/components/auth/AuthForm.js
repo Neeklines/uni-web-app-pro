@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { loginSchema, registerSchema } from '../../validation/authSchemas';
 
+import Turnstile from 'react-turnstile';
+
 function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, children }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
+    const [captchaToken, setCaptchaToken] = useState('');
 
     const schema = type === 'login' ? loginSchema : registerSchema;
 
@@ -21,7 +24,12 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
             return;
         }
 
-        onSubmit(email, password);
+        if (type === 'login' && !captchaToken) {
+            setValidationError('Potwierdź, że nie jesteś robotem');
+            return;
+        }
+
+    onSubmit(email, password, captchaToken);
     };
 
     return (
@@ -58,6 +66,15 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+
+                {(type === 'login' || type == 'register') && (
+                    <Turnstile
+                        sitekey={process.env.REACT_APP_TURNSTILE_SITE_KEY}
+                        onVerify={(token) => setCaptchaToken(token)}
+                        onExpire={() => setCaptchaToken('')}
+                        onError={() => setCaptchaToken('')}
+                    />
+                )}
 
                 <button
                     type="submit"

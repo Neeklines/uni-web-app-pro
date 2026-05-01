@@ -1,5 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import os
+import uuid
+
 from app.database import get_db
 
 from app.schemas.user import UserCreate, UserLogin
@@ -20,6 +25,8 @@ from app.services.login_protection_service import (
     cleanup_expired_login_attempts,
     ensure_login_not_blocked,
 )
+
+from app.schemas.user import GoogleToken
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -78,3 +85,39 @@ def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=400, detail=error)
 
     return {"message": "Hasło zostało zresetowane."}
+
+
+@router.post("/google-login")
+async def google_login(token_data: GoogleToken, db: Session = Depends(get_db)):
+    try:
+        # Weryfikacja tokenu Google
+        client_id = os.getenv("GOOGLE_CLIENT_ID")
+        idinfo = id_token.verify_oauth2_token(
+            token_data.credential, requests.Request(), client_id
+        )
+
+        email = idinfo.get("email")
+
+        user = db.query(User).filter(User.email == email).first()
+
+        if not user:
+
+            random_password = f"google_oauth_{uuid.uuid4()}"
+
+            new_user = User(email=email, password=random_password)
+
+            db.add(new_user)
+            db.commit()
+            db.refresh(new_user)
+            user = new_user
+
+        access_token = create_access_token(data={"user_id": user.id})
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "message": "Pomyślnie zalogowano przez Google",
+        }
+
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Nieprawidłowy token Google")

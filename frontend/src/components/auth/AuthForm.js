@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { loginSchema, registerSchema } from '../../validation/authSchemas';
 
-function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError }) {
+function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, children }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
@@ -66,6 +66,7 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError }) 
                 >
                     {showLoader ? 'Ładowanie...' : type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
                 </button>
+                {children}
             </form>
 
             {/* Validation error */}

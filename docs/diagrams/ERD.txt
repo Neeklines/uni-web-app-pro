@@ -1,0 +1,68 @@
+Entity-Relationship Diagram (ERD) for a subscription management system using crow's foot notation.
+
+Entities:
+
+1. User
+- id (PK)
+- email (unique)
+- password_hash
+
+2. Subscription
+- id (PK)
+- name
+- price
+- billing_cycle (monthly, yearly)
+- next_payment_date
+- created_at
+- is_pinned
+- is_favourite
+- is_active
+- cancelled_at
+- notes
+- user_id (FK)
+- category_id (FK)
+
+3. Category
+- id (PK)
+- name (unique)
+
+4. PasswordResetToken
+- id (PK)
+- user_id (FK)
+- token_hash (unique)
+- expires_at
+- used_at
+- created_at
+
+5. LoginAttempt
+- id (PK)
+- email
+- ip_address
+- failure_count
+- first_failed_at
+- last_failed_at
+- blocked_until
+- expires_at
+
+6. Logo
+- id (PK)
+- name
+- url
+- is_default
+- user_id (FK, optional)
+
+Relationships:
+
+- One User has many Subscriptions
+- One Subscription belongs to one User
+
+- One Category has many Subscriptions
+- One Subscription belongs to one Category (optional)
+
+- One User has many PasswordResetTokens
+- One PasswordResetToken belongs to one User
+
+- One User can have many Logos
+- Logo can optionally belong to a User (custom logos)
+
+- LoginAttempt is independent (no foreign keys required)

@@ -1,0 +1,78 @@
+TOP 10 User Stories z Kryteriami Akceptacji (AC)
+1. Rejestracja użytkownika
+User Story: Jako nowy użytkownik, chcę móc założyć konto w aplikacji, aby bezpiecznie przechowywać moje dane o wydatkach.
+ Kryteria Akceptacji (AC):
+* Formularz wymaga podania adresu e-mail oraz hasła.
+* System waliduje poprawność formatu adresu e-mail.
+* System sprawdza, czy hasło ma odpowiednią długość (np. min. 8 znaków).
+* Po udanej rejestracji użytkownik zostaje przekierowany do ekranu logowania.
+2. Logowanie do systemu
+User Story: Jako zarejestrowany użytkownik, chcę zalogować się do systemu za pomocą e-maila i hasła, aby uzyskać dostęp do mojego panelu zarządzania.
+Kryteria Akceptacji (AC):
+* Użytkownik musi wprowadzić poprawne dane dostępowe.
+* System weryfikuje dane z bazą; w przypadku błędu wyświetla komunikat „Nieprawidłowy e-mail lub hasło”.
+* Po udanym logowaniu użytkownik jest kierowany na główny Dashboard.
+3. Dodawanie subskrypcji z katalogu
+User Story: Jako użytkownik, chcę dodać wydatek wybierając go z gotowego katalogu popularnych usług (np. Netflix, Spotify), aby przyspieszyć proces wprowadzania danych.
+ Kryteria Akceptacji (AC):
+* Użytkownik ma do wyboru listę predefiniowanych usług.
+* Po wyborze usługi, system automatycznie przypisuje jej oficjalne logo do wpisu.
+* Użytkownik musi jedynie uzupełnić kwotę i cykl płatności (data).
+4. Ręczne dodawanie niestandardowych wydatków
+User Story: Jako użytkownik, chcę ręcznie wpisać własny stały wydatek (np. czynsz, bilet miesięczny), aby móc śledzić opłaty, których nie ma w katalogu.
+ Kryteria Akceptacji (AC):
+* Formularz posiada pola tekstowe na: Nazwę, Kwotę, Datę płatności i Kategorię.
+* Pola Nazwa i Kwota są wymagane do zapisania.
+* System przypisuje takiemu wydatkowi domyślną ikonę (np. ikonę portfela).
+5. Kategoryzacja wydatków
+User Story: Jako użytkownik, chcę przypisać wydatek do określonej kategorii (np. Rozrywka, Dom, Zdrowie), aby łatwiej analizować, na co wydaję pieniądze.
+ Kryteria Akceptacji (AC):
+* Podczas dodawania lub edycji wydatku widoczna jest rozwijana lista kategorii.
+* Wydatek wyświetla się na liście z wyraźnym oznaczeniem (etykietą) wybranej kategorii.
+6. Główny Dashboard – koszty miesięczne
+User Story: Jako użytkownik, chcę widzieć łączną sumę moich miesięcznych zobowiązań od razu po zalogowaniu, aby kontrolować swój aktualny budżet.
+Kryteria Akceptacji (AC):
+* System automatycznie sumuje wszystkie aktywne wydatki w skali miesiąca.
+* Kwota jest wyeksponowana na górze głównego pulpitu.
+* Suma aktualizuje się natychmiast po dodaniu lub usunięciu jakiejkolwiek subskrypcji.
+7. Główny Dashboard – koszty roczne
+User Story: Jako użytkownik, chcę widzieć prognozę moich kosztów stałych w ujęciu rocznym, aby uświadomić sobie długoterminową skalę wydatków.
+Kryteria Akceptacji (AC):
+* System wylicza roczny koszt na podstawie miesięcznych opłat (x12) oraz opłat rocznych.
+* Wartość ta jest wyświetlana obok lub pod kwotą miesięczną, np. w sekcji „Prognoza roczna”.
+8. Widok najbliższych płatności
+User Story: Jako użytkownik, chcę widzieć posortowaną listę nadchodzących opłat, aby wiedzieć, do kiedy muszę zabezpieczyć środki na koncie.
+ Kryteria Akceptacji (AC):
+* Wydatki wyświetlają się w formie listy lub kalendarza.
+* Lista jest posortowana rosnąco według najbliższej daty płatności.
+* Obok każdej nazwy wydatku widnieje konkretny dzień miesiąca, w którym przypada płatność.
+9. Edycja wprowadzonych wydatków
+User Story: Jako użytkownik, chcę móc zaktualizować kwotę lub datę istniejącej subskrypcji, aby moje statystyki uwzględniały podwyżki cen usług.
+Kryteria Akceptacji (AC):
+* Użytkownik po kliknięciu w wydatek widzi formularz z zapisanymi danymi.
+* Może nadpisać kwotę, datę lub kategorię i zapisać zmiany.
+* Po zapisaniu, sumy na Dashboardzie przeliczają się na nowo.
+10. Usuwanie wydatków
+User Story: Jako użytkownik, chcę usunąć subskrypcję, z której zrezygnowałem, aby nie wliczała się do moich przyszłych kosztów.
+Kryteria Akceptacji (AC):
+* Przy każdym wydatku na liście znajduje się przycisk "Usuń".
+* Kliknięcie wywołuje okno z prośbą o potwierdzenie akcji.
+* Po potwierdzeniu wydatek znika, a miesięczna kwota na pulpicie ulega zmniejszeniu.
+
+
+Pozostały Backlog (Miejsca 11-25)
+11. Jako zapominalski użytkownik, chcę zobaczyć atrapę ekranu odzyskiwania hasła, aby zobaczyć, jak wyglądałby ten proces w finalnej wersji produktu.
+12. Jako użytkownik mobilny, chcę aby interfejs dopasowywał się do pionowego ekranu mojego telefonu, aby wygodnie dodawać wydatki w biegu.
+13. Jako użytkownik desktopowy, chcę aby interfejs wykorzystywał pełną szerokość monitora komputera, aby móc łatwo przeglądać obszerne zestawienia.
+14. Jako użytkownik, chcę otrzymywać wizualne alerty wewnątrz aplikacji o zbliżających się płatnościach (np. na czerwono), aby nie przegapić terminu przelewu.
+15. Jako nowy użytkownik, chcę widzieć estetyczny "Pusty stan" (Empty State) przed dodaniem pierwszej subskrypcji, aby wiedzieć, od czego zacząć korzystanie z aplikacji.
+16. Jako użytkownik, chcę móc zmienić swoje hasło w ustawieniach konta, aby dbać o bezpieczeństwo swoich danych finansowych.
+17. Jako użytkownik, chcę trwale usunąć swoje konto wraz ze wszystkimi wprowadzonymi danymi, aby chronić swoją prywatność po rezygnacji z aplikacji.
+18. Jako użytkownik, chcę móc filtrować listę wydatków po konkretnej kategorii (np. tylko "Rozrywka"), aby zobaczyć, ile kosztuje mnie dany aspekt życia.
+19. Jako użytkownik, chcę móc określić walutę mojego wydatku (np. PLN, EUR, USD), aby poprawnie wyliczać koszty usług zagranicznych.
+20. Jako użytkownik, chcę dodać opcjonalną krótką notatkę do subskrypcji, aby zapisać np. z jakiego adresu e-mail założyłem dane konto VOD.
+21. Jako student, chcę aby aplikacja od razu wskazywała, z których subskrypcji potencjalnie już nie korzystam, aby móc je szybko namierzyć i odwołać.
+22. Jako użytkownik, chcę dodać wydatek, który ponoszę tylko raz w roku (np. roczne OC), aby system uwzględnił to przy rozbiciu miesięcznego i rocznego budżetu.
+23. Jako użytkownik, chcę zwinąć/ukryć wykresy na głównym pulpicie, aby skupić się tylko na samej liście nadchodzących zobowiązań.
+24. Jako użytkownik, chcę móc wylogować się z systemu jednym kliknięciem, aby zabezpieczyć konto, gdy używam współdzielonego komputera na uczelni.
+25. Jako gość, chcę widzieć stronę powitalną (Landing Page) wyjaśniającą, czym jest aplikacja i komu służy, aby zachęciło mnie to do rejestracji.

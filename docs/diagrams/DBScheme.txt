@@ -1,0 +1,59 @@
+Database schema diagram (relational model, shows primary keys, foreign keys, and constraints) for a subscription tracking system.
+
+Tables and columns:
+
+TABLE users
+- id INTEGER PRIMARY KEY
+- email VARCHAR UNIQUE NOT NULL
+- password_hash VARCHAR NOT NULL
+
+TABLE categories
+- id INTEGER PRIMARY KEY
+- name VARCHAR UNIQUE NOT NULL
+
+TABLE subscriptions
+- id INTEGER PRIMARY KEY
+- name VARCHAR NOT NULL
+- price NUMERIC(10,2) NOT NULL
+- billing_cycle VARCHAR NOT NULL
+- next_payment_date DATE NOT NULL
+- created_at TIMESTAMP
+- is_pinned BOOLEAN NOT NULL
+- is_favourite BOOLEAN NOT NULL
+- is_active BOOLEAN NOT NULL
+- cancelled_at DATE
+- notes TEXT
+- user_id INTEGER NOT NULL
+- category_id INTEGER
+
+TABLE password_reset_tokens
+- id INTEGER PRIMARY KEY
+- user_id INTEGER NOT NULL
+- token_hash VARCHAR UNIQUE NOT NULL
+- expires_at TIMESTAMP NOT NULL
+- used_at TIMESTAMP
+- created_at TIMESTAMP NOT NULL
+
+TABLE login_attempts
+- id INTEGER PRIMARY KEY
+- email VARCHAR
+- ip_address VARCHAR
+- failure_count INTEGER NOT NULL
+- first_failed_at TIMESTAMP NOT NULL
+- last_failed_at TIMESTAMP NOT NULL
+- blocked_until TIMESTAMP
+- expires_at TIMESTAMP NOT NULL
+
+TABLE logos
+- id INTEGER PRIMARY KEY
+- name VARCHAR NOT NULL
+- url VARCHAR NOT NULL
+- is_default BOOLEAN
+- user_id INTEGER
+
+Relationships:
+
+- subscriptions.user_id → users.id
+- subscriptions.category_id → categories.id
+- password_reset_tokens.user_id → users.id
+- logos.user_id → users.id (optional)

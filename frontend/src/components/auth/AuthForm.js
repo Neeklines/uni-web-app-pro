@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { loginSchema, registerSchema } from '../../validation/authSchemas';
 
-function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, children }) {
+function AuthForm({ type, onSubmit, error, success, loading, showLoader, onResetError, children }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
@@ -82,7 +82,12 @@ function AuthForm({ type, onSubmit, error, loading, showLoader, onResetError, ch
                     {error}
                 </p>
             )}
-
+            {/* Success message */}
+            {success && (
+                <p className="text-green-400 mt-2 text-center">
+                    {success}
+                </p>
+            )}
         </div>
     );
 }

@@ -23,15 +23,15 @@ export function AuthProvider({ children }) {
         loadUser();
     }, [token]);
 
-    const login = async (email, password) => {
-        const data = await authService.login(email, password);
+    const login = async (email, password, captchaToken) => {
+        const data = await authService.login(email, password, captchaToken);
         localStorage.setItem('token', data.access_token);
 
         setToken(data.access_token);
     };
 
-    const register = async (email, password) => {
-        await authService.register(email, password);
+    const register = async (email, password, captchaToken) => {
+        await authService.register(email, password, captchaToken);
     };
 
     const logout = () => {

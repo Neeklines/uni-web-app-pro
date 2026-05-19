@@ -1,5 +1,8 @@
 import { useAuth } from '../context/AuthContext';
+import { format } from 'date-fns';
 import { useEffect, useState, useCallback } from 'react';
+import SubscriptionCalendarView from '../components/dashboard/SubscriptionCalendarView';
+import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
 import FullScreenLoader from '../components/ui/FullScreenLoader';
 import CategoryCharts from '../components/dashboard/CategoryCharts';
@@ -41,6 +44,7 @@ function Dashboard() {
     const [formError, setFormError] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [upcomingPayments, setUpcomingPayments] = useState([]);
+    const [viewMode, setViewMode] = useState('list');
 
     const predefinedLogos = [
         { id: 'amazon_prime', label: 'Amazon Prime', src: amazonPrimeLogo },
@@ -410,6 +414,25 @@ function Dashboard() {
                             </div>
                             <div className="flex gap-2 relative">
                                 <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Lista
+                                </button>
+
+                                <button
+                                    onClick={() => setViewMode('calendar')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Kalendarz
+                                </button>
+                                <button
                                     onClick={() => setShowSortPopup(!showSortPopup)}
                                     className="rounded-full bg-gray-600 px-4 py-2 text-white font-semibold hover:bg-gray-500 transition"
                                 >
@@ -444,109 +467,34 @@ function Dashboard() {
                             />
                         </div>
 
-                        <div className="mt-6 space-y-4">
-                            {loading ? (
-                                <p className="text-gray-400">Ładowanie subskrypcji...</p>
-                            ) : error ? (
-                                <p className="text-red-400">Błąd: {error}</p>
-                            ) : subscriptions.length === 0 ? (
-                                <p className="text-gray-400">Brak subskrypcji do wyświetlenia.</p>
-                            ) : filteredSubscriptions.length === 0 ? (
-                                <p className="text-gray-400">Nie znaleziono subskrypcji.</p>
-                            ) : (
-                                filteredSubscriptions.map((subscription) => {
-                                    const logoSrc = getLogoSrc(subscription);
-                                    return (
-                                        <div
-                                            key={subscription.id}
-                                            className={`rounded-3xl border border-gray-800 bg-gray-900/90 p-4 sm:p-5 relative ${!subscription.is_active ? 'opacity-50' : ''}`}
-                                        >
-                                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                                <div className="flex items-center gap-4 flex-1">
-                                                    <div className="h-14 w-14 rounded-2xl bg-gray-800 border border-gray-700 overflow-hidden flex items-center justify-center">
-                                                        {logoSrc ? (
-                                                            <img src={logoSrc} alt={subscription.name} className="h-full w-full object-contain" />
-                                                        ) : (
-                                                            <span className="text-white text-lg font-semibold">
-                                                                {subscription.name?.charAt(0).toUpperCase()}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <div>
-                                                        <div className="flex items-center gap-2">
-                                                            <p className="text-lg font-semibold text-white">{subscription.name}</p>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => toggleFavorite(subscription.id)}
-                                                                className={`text-xl transition ${subscription.is_favourite ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-300'}`}
-                                                            >
-                                                                {subscription.is_favourite ? '★' : '☆'}
-                                                            </button>
-                                                        </div>
-                                                        <p className="mt-1 text-sm text-gray-400">Kategoria: {subscription.category}</p>
-                                                        {subscription.notes && (
-                                                            <p className="mt-1 text-sm text-gray-400">Notatki: {subscription.notes}</p>
-                                                        )}
-                                                        {!subscription.is_active && subscription.cancelled_at && (
-                                                            <p className="mt-2 text-xs uppercase tracking-[0.2em] text-red-400">
-                                                                anulowano: {new Date(subscription.cancelled_at).toLocaleDateString('en-GB')}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-xl font-semibold text-white">
-                                                        {subscription.price.toFixed(2)} PLN/mies.
-                                                    </p>
-                                                    <p className="mt-1 text-sm text-gray-400">Następna płatność: {subscription.next_payment_date}</p>
-                                                </div>
-                                                <div className="relative">
-                                                    <button
-                                                        onClick={() => setShowDeleteConfirm(showDeleteConfirm === subscription.id ? null : subscription.id)}
-                                                        className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
-                                                    >
-                                                        ⋯
-                                                    </button>
-                                                    {showDeleteConfirm === subscription.id && (
-                                                        <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-10 min-w-[120px]">
-                                                            <button
-                                                                onClick={() => handleEditSubscription(subscription)}
-                                                                className="block w-full text-left px-3 py-2 hover:bg-gray-700 text-white rounded"
-                                                            >
-                                                                Edytuj
-                                                            </button>
-                                                            {subscription.is_active ? (
-                                                                <button
-                                                                    onClick={() => handleCancelSubscription(subscription.id)}
-                                                                    className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
-                                                                >
-                                                                    Anuluj
-                                                                </button>
-                                                            ) : (
-                                                                <>
-                                                                    <button
-                                                                        onClick={() => handleReactivateSubscription(subscription.id)}
-                                                                        className="block w-full text-left px-3 py-2 hover:bg-green-700 text-green-400 hover:text-green-300 rounded"
-                                                                    >
-                                                                        Reaktywuj
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleDeleteSubscription(subscription.id)}
-                                                                        className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
-                                                                    >
-                                                                        Usuń
-                                                                    </button>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
+                        {viewMode === 'list' ? (
+                            <SubscriptionListView
+                                loading={loading}
+                                error={error}
+                                subscriptions={subscriptions}
+                                filteredSubscriptions={filteredSubscriptions}
+                                toggleFavorite={toggleFavorite}
+                                handleEditSubscription={handleEditSubscription}
+                                handleCancelSubscription={handleCancelSubscription}
+                                handleDeleteSubscription={handleDeleteSubscription}
+                                setShowDeleteConfirm={setShowDeleteConfirm}
+                                showDeleteConfirm={showDeleteConfirm}
+                                getLogoSrc={getLogoSrc}
+                            />
+                        ) : (
+                            <SubscriptionCalendarView
+                                subscriptions={filteredSubscriptions}
+                                onDayClick={(day) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        next_payment_date: format(day, 'yyyy-MM-dd'),
+                                    }));
+
+                                    setEditingSubscription(null);
+                                    setShowAddForm(true);
+                                }}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { useEffect, useState, useCallback } from 'react';
 import CalendarView from '../components/calendar/CalendarView';
-import SubscriptionCalendarView from '../components/dashboard/SubscriptionCalendarView';
 import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
 import FullScreenLoader from '../components/ui/FullScreenLoader';
@@ -495,16 +494,38 @@ function Dashboard() {
                             //         setShowAddForm(true);
                             //     }}
                             // />
+                            // <CalendarView
+                            //     subscriptions={subscriptions}
+                            //     onDayClick={(day) => {
+                            //         setFormData((prev) => ({
+                            //             ...prev,
+                            //             next_payment_date: format(day, 'yyyy-MM-dd'),
+                            //         }));
+
+                            //         setShowAddForm(true);
+                            //     }}
+                            // />
                             <CalendarView
-                                subscriptions={subscriptions}
+                                subscriptions={filteredSubscriptions}
                                 onDayClick={(day) => {
                                     setFormData((prev) => ({
                                         ...prev,
                                         next_payment_date: format(day, 'yyyy-MM-dd'),
                                     }));
 
+                                    setEditingSubscription(null);
                                     setShowAddForm(true);
                                 }}
+
+                                toggleFavorite={toggleFavorite}
+                                handleEditSubscription={handleEditSubscription}
+                                handleCancelSubscription={handleCancelSubscription}
+                                handleDeleteSubscription={handleDeleteSubscription}
+
+                                showDeleteConfirm={showDeleteConfirm}
+                                setShowDeleteConfirm={setShowDeleteConfirm}
+
+                                getLogoSrc={getLogoSrc}
                             />
                         )}
                     </div>

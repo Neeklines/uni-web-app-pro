@@ -13,6 +13,10 @@ function MonthView({
     currentDate,
     subscriptions,
     onDayClick,
+
+    toggleFavorite,
+    handleEditSubscription,
+    handleCancelSubscription,
 }) {
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
@@ -61,6 +65,9 @@ function MonthView({
                         subscriptions={subscriptions}
                         isCurrentMonth={isSameMonth(day, currentDate)}
                         onClick={() => onDayClick(day)}
+                        toggleFavorite={toggleFavorite}
+                        handleEditSubscription={handleEditSubscription}
+                        handleCancelSubscription={handleCancelSubscription}
                     />
                 ))}
             </div>

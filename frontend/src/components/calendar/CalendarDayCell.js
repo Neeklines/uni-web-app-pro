@@ -1,20 +1,25 @@
 import {
     format,
-    parseISO,
     isSameDay,
 } from 'date-fns';
+
+import CalendarEventCard from './CalendarEventCard';
 
 function CalendarDayCell({
     day,
     subscriptions,
     isCurrentMonth,
     onClick,
+
+    toggleFavorite,
+    handleEditSubscription,
+    handleCancelSubscription,
 }) {
     const daySubscriptions = subscriptions.filter((subscription) => {
-        if (!subscription.next_payment_date) return false;
+        if (!subscription.eventDate) return false;
 
         return isSameDay(
-            parseISO(subscription.next_payment_date),
+            subscription.eventDate,
             day
         );
     });
@@ -53,12 +58,14 @@ function CalendarDayCell({
             <div className="space-y-2">
 
                 {daySubscriptions.slice(0, 2).map((subscription) => (
-                    <div
-                        key={subscription.id}
-                        className="truncate rounded-lg bg-blue-500/20 px-2 py-1 text-xs text-blue-300"
-                    >
-                        {subscription.name}
-                    </div>
+                    <CalendarEventCard
+                        key={`${subscription.id}-${subscription.eventDate}`}
+                        subscription={subscription}
+                        compact
+                        toggleFavorite={toggleFavorite}
+                        handleEditSubscription={handleEditSubscription}
+                        handleCancelSubscription={handleCancelSubscription}
+                    />
                 ))}
 
                 {daySubscriptions.length > 2 && (

@@ -63,129 +63,86 @@ function Dashboard() {
         return logoItem ? logoItem.src : null;
     };
 
-    const fetchSubscriptions =
-        useCallback(async () => {
+    const fetchSubscriptions = useCallback(async () => {
+
+        if (!token || !user) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+
+            const data =
+                await subscriptionService.getSubscriptions(
+                    token
+                );
+
+            setSubscriptions(data);
 
             if (
-                !token
-                ||
-                !user
+                user.show_notifications === false ||
+                sessionStorage.getItem(
+                    'popupShown'
+                )
             ) {
-
-                setLoading(false);
-
                 return;
-
             }
 
-            try {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-                const data =
-                    await subscriptionService
-                        .getSubscriptions(
-                            token
+            const in7Days = new Date(today);
+            in7Days.setDate(
+                in7Days.getDate() + 7
+            );
+
+            const upcoming = data.filter(
+                (sub) => {
+
+                    const payDate =
+                        new Date(
+                            sub.next_payment_date
                         );
 
-                setSubscriptions(
-                    data
-                );
-
-                const popupAlreadyShown =
-                    sessionStorage.getItem(
-                        'popupShown'
-                    );
-
-                if (
-                    user?.show_notifications
-                    === false
-                ) {
-                    return;
-                }
-
-                if (
-                    popupAlreadyShown
-                ) {
-                    return;
-                }
-
-                const today =
-                    new Date();
-
-                today.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-                const in7Days =
-                    new Date(
-                        today
-                    );
-
-                in7Days.setDate(
-                    in7Days.getDate()
-                    + 7
-                );
-
-                const upcoming =
-                    data.filter(
-                        (sub) => {
-
-                            const payDate =
-                                new Date(
-                                    sub.next_payment_date
-                                );
-
-                            const isActive =
-                                sub.is_active
-                                !== false;
-
-                            return (
-                                isActive
-                                &&
-                                payDate >= today
-                                &&
-                                payDate <= in7Days
-                            );
-
-                        }
-                    );
-
-                if (
-                    upcoming.length > 0
-                ) {
-
-                    setUpcomingPayments(
-                        upcoming
-                    );
-
-                    setShowPopup(
-                        true
-                    );
-
-                    sessionStorage.setItem(
-                        'popupShown',
-                        'true'
+                    return (
+                        sub.is_active !== false &&
+                        payDate >= today &&
+                        payDate <= in7Days
                     );
 
                 }
+            );
 
-            } catch (err) {
+            if (
+                upcoming.length > 0
+            ) {
 
-                setError(
-                    err.message
+                setUpcomingPayments(
+                    upcoming
                 );
 
-            } finally {
+                setShowPopup(true);
 
-                setLoading(
-                    false
+                sessionStorage.setItem(
+                    'popupShown',
+                    'true'
                 );
 
             }
 
-        }, [token, user]);
+        } catch (err) {
+
+            setError(
+                err.message
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    }, [token, user]);
 
     useEffect(() => {
         fetchSubscriptions();

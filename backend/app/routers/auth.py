@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.database import get_db
-
+from app.schemas.settings import SettingsUpdate
 from app.schemas.user import UserCreate, UserLogin
 from app.schemas.password_reset import ForgotPasswordRequest, ResetPasswordRequest
 from app.services.auth_service import (
@@ -29,8 +29,36 @@ def get_me(current_user: User = Depends(get_current_user)):
     return {
         "id": current_user.id,
         "email": current_user.email,
-    }
 
+        "display_name": current_user.display_name,
+
+        "show_notifications": current_user.show_notifications,
+    }
+@router.patch("/settings")
+def update_settings(
+    payload: SettingsUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+
+    current_user.display_name = payload.display_name
+
+    current_user.show_notifications = (
+        payload.show_notifications
+    )
+
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "message": "Settings updated",
+
+        "display_name":
+            current_user.display_name,
+
+        "show_notifications":
+            current_user.show_notifications,
+    }
 
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):

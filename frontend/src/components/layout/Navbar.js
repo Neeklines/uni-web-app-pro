@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Settings } from 'lucide-react';
 
 function Navbar() {
     return (
@@ -15,6 +16,13 @@ function Navbar() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-3">
+
+                    <Link
+                        to="/settings"
+                        className="text-gray-400 hover:text-white transition"
+                    >
+                        <Settings size={22} />
+                    </Link>
 
                     <Link
                         to="/login"

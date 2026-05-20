@@ -22,7 +22,14 @@ def verify_password(password: str, hashed: str):
 
 
 def create_user(db: Session, email: str, password: str):
-    user = User(email=email, password=hash_password(password))
+    user = User(
+        email=email,
+        password=hash_password(password),
+
+        display_name=email,
+
+        show_notifications=True
+    )
 
     db.add(user)
     db.commit()

@@ -12,7 +12,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
-
+import Settings from './pages/Settings';
 function App() {
   return (
     <Routes>
@@ -32,6 +32,7 @@ function App() {
       <Route element={<AppLayout />}>
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
     </Routes>

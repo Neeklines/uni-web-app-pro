@@ -14,7 +14,8 @@ import playerLogo from '../logos/player_logo.png';
 import skyshowtimeLogo from '../logos/skyshowtime_logo.png';
 import spotifyLogo from '../logos/spotify_logo.png';
 import youtubeLogo from '../logos/youtube_logo.png';
-
+import { Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 function Dashboard() {
     const { user, logout, token } = useAuth();
     const [subscriptions, setSubscriptions] = useState([]);
@@ -61,43 +62,85 @@ function Dashboard() {
         return logoItem ? logoItem.src : null;
     };
 
-    const fetchSubscriptions = useCallback(async () => {
-        if (!token) {
-            setLoading(false);
-            return;
-        }
+    const fetchSubscriptions =
+        useCallback(async () => {
 
-        try {
-            const data = await subscriptionService.getSubscriptions(token);
-            setSubscriptions(data);
+            if (
+                !token
+                ||
+                !user
+            ) {
 
-            const popupAlreadyShown = sessionStorage.getItem('popupShown');
-            if (popupAlreadyShown) return;
+                setLoading(
+                    false
+                );
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+                return;
 
-            const in7Days = new Date(today);
-            in7Days.setDate(in7Days.getDate() + 7);
+            }
 
-            const upcoming = data.filter((sub) => {
-                const payDate = new Date(sub.next_payment_date);
-                const isActive = sub.is_active !== false;
+            try {
+                const data = await subscriptionService.getSubscriptions(token);
+                setSubscriptions(data);
 
-                return isActive && payDate >= today && payDate <= in7Days;
-            });
+                const popupAlreadyShown =
+                    sessionStorage.getItem(
+                        'popupShown'
+                    );
+
+                const notificationsEnabled =
+                    user?.show_notifications;
+
+                if (
+                    notificationsEnabled === false
+                ) {
+                    return;
+                }
+
+                if (
+                    popupAlreadyShown
+                ) {
+                    return;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const in7Days = new Date(today);
+                in7Days.setDate(in7Days.getDate() + 7);
+
+                const upcoming = data.filter((sub) => {
+                    const payDate = new Date(sub.next_payment_date);
+                    const isActive = sub.is_active !== false;
+
+                    return isActive && payDate >= today && payDate <= in7Days;
+                });
 
 
-            setUpcomingPayments(upcoming);
-            setShowPopup(true);
+                if (
+                    upcoming.length > 0
+                ) {
 
-            sessionStorage.setItem('popupShown', 'true');
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    }, [token]);
+                    setUpcomingPayments(
+                        upcoming
+                    );
+
+                    setShowPopup(
+                        true
+                    );
+
+                    sessionStorage.setItem(
+                        'popupShown',
+                        'true'
+                    );
+
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }, [token, user]);
 
     useEffect(() => {
         fetchSubscriptions();
@@ -356,21 +399,38 @@ function Dashboard() {
                             <div className="text-center sm:text-left">
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Dashboard</p>
                                 <h1 className="mt-3 text-3xl sm:text-4xl font-semibold text-white break-words">
-                                    Witaj, {user?.email ?? 'użytkowniku'}
+                                    Witaj, {
+                                        user?.display_name
+                                        ??
+                                        user?.email
+                                        ??
+                                        'użytkowniku'
+                                    }
                                 </h1>
                                 <p className="mt-4 text-gray-400">
                                     Tutaj możesz sprawdzić swoje aktualne subskrypcje oraz miesięczne i roczne koszty.
                                 </p>
                             </div>
-                            <button
-                                onClick={() => {
-                                    sessionStorage.removeItem('popupShown');
-                                    logout();
-                                }}
-                                className="w-full rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 sm:w-auto"
-                            >
-                                Wyloguj się
-                            </button>
+                            <div className="flex items-center gap-3">
+
+                                <Link
+                                    to="/settings"
+                                    className="rounded-full bg-gray-800 p-3 text-white hover:bg-gray-700 transition"
+                                >
+                                    <Settings size={22} />
+                                </Link>
+
+                                <button
+                                    onClick={() => {
+                                        sessionStorage.removeItem('popupShown');
+                                        logout();
+                                    }}
+                                    className="rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                                >
+                                    Wyloguj się
+                                </button>
+
+                            </div>
                         </div>
                     </div>
 

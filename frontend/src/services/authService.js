@@ -39,3 +39,45 @@ export async function getMe(token) {
 
     return response.json();
 }
+export async function updateSettings(
+    token,
+    display_name,
+    show_notifications
+) {
+
+    const response = await fetch(
+        '/api/auth/settings',
+        {
+            method: 'PATCH',
+
+            headers: {
+                'Content-Type':
+                    'application/json',
+
+                Authorization:
+                    `Bearer ${token}`,
+            },
+
+            body: JSON.stringify({
+
+                display_name,
+
+                show_notifications,
+
+            }),
+        }
+    );
+
+    const data =
+        await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.detail
+        );
+
+    }
+
+    return data;
+}

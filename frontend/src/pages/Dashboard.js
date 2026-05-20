@@ -71,33 +71,33 @@ function Dashboard() {
                 ||
                 !user
             ) {
-        try {
-            const data = await subscriptionService.getSubscriptions(token);
-            setSubscriptions(data);
-            console.log('Fetched subscriptions:', data);
 
-                setLoading(
-                    false
-                );
+                setLoading(false);
 
                 return;
 
             }
 
             try {
-                const data = await subscriptionService.getSubscriptions(token);
-                setSubscriptions(data);
+
+                const data =
+                    await subscriptionService
+                        .getSubscriptions(
+                            token
+                        );
+
+                setSubscriptions(
+                    data
+                );
 
                 const popupAlreadyShown =
                     sessionStorage.getItem(
                         'popupShown'
                     );
 
-                const notificationsEnabled =
-                    user?.show_notifications;
-
                 if (
-                    notificationsEnabled === false
+                    user?.show_notifications
+                    === false
                 ) {
                     return;
                 }
@@ -108,19 +108,49 @@ function Dashboard() {
                     return;
                 }
 
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
+                const today =
+                    new Date();
 
-                const in7Days = new Date(today);
-                in7Days.setDate(in7Days.getDate() + 7);
+                today.setHours(
+                    0,
+                    0,
+                    0,
+                    0
+                );
 
-                const upcoming = data.filter((sub) => {
-                    const payDate = new Date(sub.next_payment_date);
-                    const isActive = sub.is_active !== false;
+                const in7Days =
+                    new Date(
+                        today
+                    );
 
-                    return isActive && payDate >= today && payDate <= in7Days;
-                });
+                in7Days.setDate(
+                    in7Days.getDate()
+                    + 7
+                );
 
+                const upcoming =
+                    data.filter(
+                        (sub) => {
+
+                            const payDate =
+                                new Date(
+                                    sub.next_payment_date
+                                );
+
+                            const isActive =
+                                sub.is_active
+                                !== false;
+
+                            return (
+                                isActive
+                                &&
+                                payDate >= today
+                                &&
+                                payDate <= in7Days
+                            );
+
+                        }
+                    );
 
                 if (
                     upcoming.length > 0
@@ -140,11 +170,21 @@ function Dashboard() {
                     );
 
                 }
+
             } catch (err) {
-                setError(err.message);
+
+                setError(
+                    err.message
+                );
+
             } finally {
-                setLoading(false);
+
+                setLoading(
+                    false
+                );
+
             }
+
         }, [token, user]);
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect, useState, useCallback } from 'react';
 import * as subscriptionService from '../services/subscriptionService';
 import FullScreenLoader from '../components/ui/FullScreenLoader';
-import CategoryCharts from '../components/ui/CategoryCharts';
+import CategoryCharts from '../components/dashboard/CategoryCharts';
 import amazonPrimeLogo from '../logos/amazon_prime_logo.png';
 import appleTVLogo from '../logos/apple_TV_plus_logo.png';
 import canalLogo from '../logos/canal_+_logo.png';

@@ -63,7 +63,21 @@ export async function deleteSubscription(token, subscriptionId) {
 
     return response.json();
 }
+export async function reactivateSubscription(token, subscriptionId) {
+    const response = await fetch(`/api/subscriptions/${subscriptionId}/reactivate`, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Failed to reactivate subscription');
+    }
+
+    return response.json();
+}
 export async function cancelSubscription(token, subscriptionId) {
     const response = await fetch(`/api/subscriptions/${subscriptionId}/cancel`, {
         method: 'PATCH',

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -10,7 +10,7 @@ RECORD_TTL_HOURS = 24
 
 
 def cleanup_expired_login_attempts(db: Session):
-    db.query(LoginAttempt).filter(LoginAttempt.expires_at < datetime.utcnow()).delete()
+    db.query(LoginAttempt).filter(LoginAttempt.expires_at < datetime.now(timezone.utc).replace(tzinfo=None)).delete()
     db.commit()
 
 
@@ -24,14 +24,14 @@ def ensure_login_not_blocked(db: Session, email: str, ip: str | None):
     if not attempt:
         return
 
-    if attempt.blocked_until and attempt.blocked_until > datetime.utcnow():
+    if attempt.blocked_until and attempt.blocked_until > datetime.now(timezone.utc).replace(tzinfo=None):
         raise HTTPException(
             status_code=429, detail="Too many failed login attempts. Try again later."
         )
 
 
 def register_failed_login(db: Session, email: str, ip: str | None):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     attempt = (
         db.query(LoginAttempt)

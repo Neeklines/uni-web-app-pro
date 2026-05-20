@@ -1,6 +1,6 @@
 import secrets
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app.models.password_reset_token import PasswordResetToken
 from app.config import PASSWORD_RESET_TOKEN_EXPIRE_MINUTES
@@ -8,17 +8,21 @@ from app.config import PASSWORD_RESET_TOKEN_EXPIRE_MINUTES
 
 from sqlalchemy.orm import Session
 from app.models.user import User
-from passlib.context import CryptContext
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError, InvalidHashError
 
-pwd_context = CryptContext(schemes=["argon2"])
+ph = PasswordHasher()
 
 
 def hash_password(password: str):
-    return pwd_context.hash(password)
+    return ph.hash(password)
 
 
 def verify_password(password: str, hashed: str):
-    return pwd_context.verify(password, hashed)
+    try:
+        return ph.verify(hashed, password)
+    except (VerifyMismatchError, InvalidHashError):
+        return False
 
 
 def create_user(db: Session, email: str, password: str):
@@ -58,7 +62,7 @@ def create_password_reset_token(db: Session, email: str):
 
     # Remove all expired tokens from the entire database
     db.query(PasswordResetToken).filter(
-        PasswordResetToken.expires_at < datetime.utcnow()
+        PasswordResetToken.expires_at < datetime.now(timezone.utc).replace(tzinfo=None)
     ).delete()
 
     # Delete all previous tokens for this user
@@ -74,7 +78,7 @@ def create_password_reset_token(db: Session, email: str):
     reset_token = PasswordResetToken(
         user_id=user.id,
         token_hash=token_hash,
-        expires_at=datetime.utcnow()
+        expires_at=datetime.now(timezone.utc).replace(tzinfo=None)
         + timedelta(minutes=PASSWORD_RESET_TOKEN_EXPIRE_MINUTES),
     )
 
@@ -99,7 +103,7 @@ def reset_user_password(db: Session, token: str, new_password: str):
     if reset_record.used_at is not None:
         return None, "Token already used"
 
-    if reset_record.expires_at < datetime.utcnow():
+    if reset_record.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
         return None, "Token expired"
 
     user = db.query(User).filter(User.id == reset_record.user_id).first()

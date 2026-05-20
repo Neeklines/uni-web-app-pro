@@ -2,6 +2,7 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect, useState, useCallback } from 'react';
 import * as subscriptionService from '../services/subscriptionService';
 import FullScreenLoader from '../components/ui/FullScreenLoader';
+import CategoryCharts from '../components/dashboard/CategoryCharts';
 import amazonPrimeLogo from '../logos/amazon_prime_logo.png';
 import appleTVLogo from '../logos/apple_TV_plus_logo.png';
 import canalLogo from '../logos/canal_+_logo.png';
@@ -70,6 +71,7 @@ function Dashboard() {
         try {
             const data = await subscriptionService.getSubscriptions(token);
             setSubscriptions(data);
+            console.log('Fetched subscriptions:', data);
 
             const popupAlreadyShown = sessionStorage.getItem('popupShown');
             if (popupAlreadyShown) return;
@@ -258,7 +260,8 @@ function Dashboard() {
         }
     };
 
-    const totalMonthly = subscriptions.reduce((sum, item) => sum + item.price, 0);
+
+    const totalMonthly = subscriptions.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
     const totalYearly = totalMonthly * 12;
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
@@ -386,6 +389,8 @@ function Dashboard() {
                             <p className="mt-2 text-sm text-gray-400">Szacowany koszt subskrypcji za 12 miesięcy.</p>
                         </div>
                     </div>
+
+                    <CategoryCharts subscriptions={subscriptions} />
 
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

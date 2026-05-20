@@ -29,11 +29,11 @@ def get_me(current_user: User = Depends(get_current_user)):
     return {
         "id": current_user.id,
         "email": current_user.email,
-
         "display_name": current_user.display_name,
-
         "show_notifications": current_user.show_notifications,
     }
+
+
 @router.patch("/settings")
 def update_settings(
     payload: SettingsUpdate,
@@ -43,22 +43,17 @@ def update_settings(
 
     current_user.display_name = payload.display_name
 
-    current_user.show_notifications = (
-        payload.show_notifications
-    )
+    current_user.show_notifications = payload.show_notifications
 
     db.commit()
     db.refresh(current_user)
 
     return {
         "message": "Settings updated",
-
-        "display_name":
-            current_user.display_name,
-
-        "show_notifications":
-            current_user.show_notifications,
+        "display_name": current_user.display_name,
+        "show_notifications": current_user.show_notifications,
     }
+
 
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):

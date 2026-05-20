@@ -1,6 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { useEffect, useState, useCallback } from 'react';
+import CalendarView from '../components/calendar/CalendarView';
 import SubscriptionCalendarView from '../components/dashboard/SubscriptionCalendarView';
 import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
@@ -482,15 +483,26 @@ function Dashboard() {
                                 getLogoSrc={getLogoSrc}
                             />
                         ) : (
-                            <SubscriptionCalendarView
-                                subscriptions={filteredSubscriptions}
+                            // <SubscriptionCalendarView
+                            //     subscriptions={filteredSubscriptions}
+                            //     onDayClick={(day) => {
+                            //         setFormData((prev) => ({
+                            //             ...prev,
+                            //             next_payment_date: format(day, 'yyyy-MM-dd'),
+                            //         }));
+
+                            //         setEditingSubscription(null);
+                            //         setShowAddForm(true);
+                            //     }}
+                            // />
+                            <CalendarView
+                                subscriptions={subscriptions}
                                 onDayClick={(day) => {
                                     setFormData((prev) => ({
                                         ...prev,
                                         next_payment_date: format(day, 'yyyy-MM-dd'),
                                     }));
 
-                                    setEditingSubscription(null);
                                     setShowAddForm(true);
                                 }}
                             />

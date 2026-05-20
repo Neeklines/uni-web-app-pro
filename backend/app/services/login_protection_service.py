@@ -10,7 +10,9 @@ RECORD_TTL_HOURS = 24
 
 
 def cleanup_expired_login_attempts(db: Session):
-    db.query(LoginAttempt).filter(LoginAttempt.expires_at < datetime.now(timezone.utc).replace(tzinfo=None)).delete()
+    db.query(LoginAttempt).filter(
+        LoginAttempt.expires_at < datetime.now(timezone.utc).replace(tzinfo=None)
+    ).delete()
     db.commit()
 
 
@@ -24,7 +26,9 @@ def ensure_login_not_blocked(db: Session, email: str, ip: str | None):
     if not attempt:
         return
 
-    if attempt.blocked_until and attempt.blocked_until > datetime.now(timezone.utc).replace(tzinfo=None):
+    if attempt.blocked_until and attempt.blocked_until > datetime.now(
+        timezone.utc
+    ).replace(tzinfo=None):
         raise HTTPException(
             status_code=429, detail="Too many failed login attempts. Try again later."
         )

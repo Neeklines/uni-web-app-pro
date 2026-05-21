@@ -15,13 +15,9 @@ function CalendarToolbar({
 
             {/* Left */}
             <div>
-                <h2 className="text-3xl font-semibold text-white">
-                    Calendar
+                <h2 className="ml-6 text-3xl font-semibold text-white">
+                    {format(currentDate, 'MMMM yyyy')}
                 </h2>
-
-                <p className="mt-2 text-gray-400">
-                    Plan your subscriptions and payments.
-                </p>
             </div>
 
             {/* Right */}
@@ -71,17 +67,6 @@ function CalendarToolbar({
                         →
                     </button>
                 </div>
-            </div>
-
-            {/* Current month */}
-            <div className="w-full">
-                <h3 className="mt-6 text-2xl font-semibold text-white">
-                    {format(currentDate, 'MMMM yyyy')}
-                </h3>
-
-                <p className="mt-1 text-gray-400">
-                    Monthly overview of your subscriptions
-                </p>
             </div>
         </div>
     );

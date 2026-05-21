@@ -1,6 +1,7 @@
 import {
     format,
     isSameDay,
+    isToday,
 } from 'date-fns';
 
 import CalendarEventCard from './CalendarEventCard';
@@ -39,6 +40,10 @@ function CalendarDayCell({
                 ${isCurrentMonth
                     ? 'bg-gray-950/70'
                     : 'bg-gray-900/40 opacity-50'
+                }
+                ${isToday(day)
+                    ? 'border border-blue-500/70 shadow-[inset_0_0_0_1px_rgba(59,130,246,0.6),0_0_18px_rgba(59,130,246,0.18)]'
+                    : ''
                 }
             `}
         >

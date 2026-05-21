@@ -48,7 +48,7 @@ function CalendarView({
     );
 
     return (
-        <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
+        <div className="mt-6">
 
             <CalendarToolbar
                 currentDate={currentDate}

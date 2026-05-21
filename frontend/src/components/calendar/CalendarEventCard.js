@@ -1,3 +1,8 @@
+import {
+    Pencil,
+    X,
+} from 'lucide-react';
+
 function CalendarEventCard({
     subscription,
     compact = false,
@@ -7,13 +12,16 @@ function CalendarEventCard({
 }) {
     return (
         <div
+            onClick={(e) => e.stopPropagation()}
             className={`
                 rounded-xl border border-gray-700 bg-gray-800/90
-                px-2 py-1.5
                 text-left
                 transition
                 hover:border-blue-500
-                ${compact ? 'text-xs' : 'p-3'}
+                ${compact
+                    ? 'px-2 py-1.5 text-xs'
+                    : 'p-3'
+                }
             `}
         >
             <div className="flex items-start justify-between gap-2">
@@ -52,6 +60,27 @@ function CalendarEventCard({
                 </button>
             </div>
 
+            {/* Compact actions */}
+            {compact && (
+                <div className="mt-2 flex items-center gap-2">
+
+                    <button
+                        onClick={() => handleEditSubscription(subscription)}
+                        className="text-gray-400 hover:text-blue-400 transition"
+                    >
+                        <Pencil size={13} />
+                    </button>
+
+                    <button
+                        onClick={() => handleCancelSubscription(subscription.id)}
+                        className="text-gray-400 hover:text-red-400 transition"
+                    >
+                        <X size={14} />
+                    </button>
+                </div>
+            )}
+
+            {/* Full actions */}
             {!compact && (
                 <div className="mt-3 flex gap-2">
 

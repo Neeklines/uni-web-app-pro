@@ -407,12 +407,23 @@ function Dashboard() {
                     <CategoryCharts subscriptions={subscriptions} />
 
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                        {/* Toolbar */}
+                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
                                 <h2 className="mt-3 text-2xl font-semibold text-white">Lista subskrypcji</h2>
                             </div>
-                            <div className="flex gap-2 relative">
+
+                            {/* Right controls */}
+                            <div className="flex flex-wrap items-center gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Szukaj subskrypcji..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                />
                                 <button
                                     onClick={() => setViewMode('list')}
                                     className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
@@ -457,15 +468,12 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="mt-4">
-                            <input
-                                type="text"
-                                placeholder="Szukaj subskrypcji..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            />
-                        </div>
+                        {/* Divider */}
+                        <div className="my-6 h-px bg-gray-800" />
+
+                        {/* Content */}
+
+
 
                         {viewMode === 'list' ? (
                             <SubscriptionListView
@@ -482,29 +490,6 @@ function Dashboard() {
                                 getLogoSrc={getLogoSrc}
                             />
                         ) : (
-                            // <SubscriptionCalendarView
-                            //     subscriptions={filteredSubscriptions}
-                            //     onDayClick={(day) => {
-                            //         setFormData((prev) => ({
-                            //             ...prev,
-                            //             next_payment_date: format(day, 'yyyy-MM-dd'),
-                            //         }));
-
-                            //         setEditingSubscription(null);
-                            //         setShowAddForm(true);
-                            //     }}
-                            // />
-                            // <CalendarView
-                            //     subscriptions={subscriptions}
-                            //     onDayClick={(day) => {
-                            //         setFormData((prev) => ({
-                            //             ...prev,
-                            //             next_payment_date: format(day, 'yyyy-MM-dd'),
-                            //         }));
-
-                            //         setShowAddForm(true);
-                            //     }}
-                            // />
                             <CalendarView
                                 subscriptions={filteredSubscriptions}
                                 onDayClick={(day) => {

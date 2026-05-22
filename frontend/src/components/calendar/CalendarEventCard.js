@@ -10,6 +10,74 @@ function CalendarEventCard({
     handleEditSubscription,
     handleCancelSubscription,
 }) {
+    if (compact) {
+        return (
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditSubscription(subscription);
+                }}
+                className="
+                flex
+                items-center
+                gap-2
+                rounded-lg
+                border
+                border-gray-700
+                bg-gray-800/90
+                px-2
+                py-1.5
+                text-xs
+                text-white
+                transition
+                hover:border-blue-500
+                hover:bg-gray-700/90
+                cursor-pointer
+            "
+            >
+                {/* Star */}
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(subscription.id);
+                    }}
+                    className={`
+                    transition
+                    flex-shrink-0
+                    ${subscription.is_favourite
+                            ? 'text-yellow-400'
+                            : 'text-gray-500 hover:text-yellow-300'
+                        }
+                `}
+                >
+                    {subscription.is_favourite ? '★' : '☆'}
+                </button>
+
+                {/* Name */}
+                <div className="truncate flex-1">
+                    {subscription.name}
+                </div>
+
+                {/* Cancel */}
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleCancelSubscription(subscription.id);
+                    }}
+                    className="
+                    text-gray-500
+                    hover:text-red-400
+                    transition
+                    flex-shrink-0
+                "
+                >
+                    ✕
+                </button>
+            </div>
+        );
+    }
     return (
         <div
             onClick={(e) => e.stopPropagation()}

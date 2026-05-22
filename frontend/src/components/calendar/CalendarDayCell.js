@@ -4,7 +4,11 @@ import {
     isToday,
 } from 'date-fns';
 
-import { useState } from 'react';
+import {
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import CalendarEventCard from './CalendarEventCard';
 
@@ -27,11 +31,45 @@ function CalendarDayCell({
             day
         );
     });
+    const scrollRef = useRef(null);
+
+    const [hasOverflow, setHasOverflow] = useState(false);
+    const [showTopFade, setShowTopFade] = useState(false);
+    const [showBottomFade, setShowBottomFade] = useState(false);
+
+    useEffect(() => {
+        if (!expanded || !scrollRef.current) return;
+
+        const el = scrollRef.current;
+
+        const updateScrollState = () => {
+            const hasScrollableContent =
+                el.scrollHeight > el.clientHeight;
+
+            setHasOverflow(hasScrollableContent);
+
+            setShowTopFade(el.scrollTop > 4);
+
+            setShowBottomFade(
+                el.scrollTop + el.clientHeight < el.scrollHeight - 4
+            );
+        };
+
+        updateScrollState();
+
+        el.addEventListener('scroll', updateScrollState);
+
+        return () => {
+            el.removeEventListener('scroll', updateScrollState);
+        };
+    }, [expanded, daySubscriptions]);
 
     return (
         <button
             onClick={onClick}
             className={`
+            group
+
             h-[150px]
             overflow-hidden
 
@@ -71,7 +109,7 @@ function CalendarDayCell({
                     h-2 w-2 rounded-full transition
                     ${daySubscriptions.length > 0
                             ? 'bg-blue-400'
-                            : 'bg-gray-700'
+                            : ''
                         }
                 `}
                 />
@@ -117,19 +155,73 @@ function CalendarDayCell({
 
                 {/* Expanded scroll mode */}
                 {expanded && (
-                    <div className="calendar-scroll h-full overflow-y-auto space-y-2">
+                    <div className="relative h-full">
 
-                        {daySubscriptions.map((subscription) => (
-                            <CalendarEventCard
-                                key={`${subscription.id}-${subscription.eventDate}`}
-                                subscription={subscription}
-                                compact
-                                toggleFavorite={toggleFavorite}
-                                handleEditSubscription={handleEditSubscription}
-                                handleCancelSubscription={handleCancelSubscription}
+                        {/* Scroll area */}
+                        <div
+                            ref={scrollRef}
+                            className="
+                no-scrollbar
+                h-full
+                overflow-y-auto
+                space-y-2
+            "
+                        >
+                            {daySubscriptions.map((subscription) => (
+                                <CalendarEventCard
+                                    key={`${subscription.id}-${subscription.eventDate}`}
+                                    subscription={subscription}
+                                    compact
+                                    toggleFavorite={toggleFavorite}
+                                    handleEditSubscription={handleEditSubscription}
+                                    handleCancelSubscription={handleCancelSubscription}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Top fade */}
+                        {hasOverflow && showTopFade && (
+                            <div
+                                className="
+                    pointer-events-none
+                    absolute
+                    top-0
+                    left-0
+                    right-0
+                    h-5
+                    bg-gradient-to-b
+                    from-gray-950
+                    to-transparent
+                    opacity-100
+                    transition-opacity
+                    duration-200
+
+                    group-hover:opacity-60
+                "
                             />
-                        ))}
+                        )}
 
+                        {/* Bottom fade */}
+                        {hasOverflow && showBottomFade && (
+                            <div
+                                className="
+                    pointer-events-none
+                    absolute
+                    bottom-0
+                    left-0
+                    right-0
+                    h-5
+                    bg-gradient-to-t
+                    from-gray-950
+                    to-transparent
+                    opacity-100
+                    transition-opacity
+                    duration-200
+
+                    group-hover:opacity-60
+                "
+                            />
+                        )}
                     </div>
                 )}
             </div>

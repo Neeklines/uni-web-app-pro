@@ -5,6 +5,7 @@ import {
     endOfWeek,
     addDays,
     isSameMonth,
+    format,
 } from 'date-fns';
 
 import CalendarDayCell from './CalendarDayCell';
@@ -54,22 +55,27 @@ function MonthView({
                 ))}
             </div>
 
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7">
+            <div
+                key={format(currentDate, 'yyyy-MM')}
+                className="animate-calendar-fade"
+            >
+                {/* Calendar grid */}
+                <div className="grid grid-cols-7">
 
-                {days.map((day) => (
-                    <CalendarDayCell
-                        key={day.toISOString()}
-                        day={day}
-                        currentDate={currentDate}
-                        subscriptions={subscriptions}
-                        isCurrentMonth={isSameMonth(day, currentDate)}
-                        onClick={() => onDayClick(day)}
-                        toggleFavorite={toggleFavorite}
-                        handleEditSubscription={handleEditSubscription}
-                        handleCancelSubscription={handleCancelSubscription}
-                    />
-                ))}
+                    {days.map((day) => (
+                        <CalendarDayCell
+                            key={day.toISOString()}
+                            day={day}
+                            currentDate={currentDate}
+                            subscriptions={subscriptions}
+                            isCurrentMonth={isSameMonth(day, currentDate)}
+                            onClick={() => onDayClick(day)}
+                            toggleFavorite={toggleFavorite}
+                            handleEditSubscription={handleEditSubscription}
+                            handleCancelSubscription={handleCancelSubscription}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

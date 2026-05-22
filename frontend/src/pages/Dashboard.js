@@ -1,5 +1,6 @@
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
+import { Filter } from 'lucide-react';
 import { useEffect, useState, useCallback } from 'react';
 import CalendarView from '../components/calendar/CalendarView';
 import SubscriptionListView from '../components/dashboard/SubscriptionListView';
@@ -45,6 +46,7 @@ function Dashboard() {
     const [showPopup, setShowPopup] = useState(false);
     const [upcomingPayments, setUpcomingPayments] = useState([]);
     const [viewMode, setViewMode] = useState('list');
+    const [activePopup, setActivePopup] = useState(null);
 
     const predefinedLogos = [
         { id: 'amazon_prime', label: 'Amazon Prime', src: amazonPrimeLogo },
@@ -107,6 +109,21 @@ function Dashboard() {
 
     useEffect(() => {
         fetchSubscriptions();
+        function handleClickOutside() {
+            setActivePopup(null);
+        }
+
+        document.addEventListener(
+            'mousedown',
+            handleClickOutside
+        );
+
+        return () => {
+            document.removeEventListener(
+                'mousedown',
+                handleClickOutside
+            );
+        };
     }, [fetchSubscriptions]);
 
     const handleFormChange = (e) => {
@@ -412,7 +429,11 @@ function Dashboard() {
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
-                                <h2 className="mt-3 text-2xl font-semibold text-white">Lista subskrypcji</h2>
+                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                    {viewMode === 'list'
+                                        ? 'Lista subskrypcji'
+                                        : 'Kalendarz subskrypcji'}
+                                </h2>
                             </div>
 
                             {/* Right controls */}
@@ -443,28 +464,72 @@ function Dashboard() {
                                 >
                                     Kalendarz
                                 </button>
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={() => setShowSortPopup(!showSortPopup)}
+                                        className="
+                                            h-10
+                                            rounded-full
+                                            bg-gray-700
+                                            px-4
+                                            text-white
+                                            font-semibold
+                                            hover:bg-gray-600
+                                            transition
+                                        "
+                                    >
+                                        {getSortIcon()}
+                                    </button>
+
+                                    {showSortPopup && (
+                                        <div
+                                            className="
+                                                absolute
+                                                left-1/2
+                                                top-[calc(100%+8px)]
+                                                -translate-x-1/2
+
+                                                z-20
+                                                min-w-[140px]
+
+                                                rounded-xl
+                                                border
+                                                border-gray-700
+                                                bg-gray-800
+                                                p-2
+                                                shadow-xl
+                                            "
+                                        >
+                                            <button onClick={() => { setSortMode('name-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
+                                        </div>
+                                    )}
+
+                                </div>
                                 <button
-                                    onClick={() => setShowSortPopup(!showSortPopup)}
-                                    className="rounded-full bg-gray-600 px-4 py-2 text-white font-semibold hover:bg-gray-500 transition"
+                                    className="
+                                        rounded-full
+                                        bg-gray-700
+                                        px-4
+                                        h-10
+                                        text-white
+                                        hover:bg-gray-600
+                                        transition
+                                        "
                                 >
-                                    {getSortIcon()}
+                                    <Filter size={18} />
                                 </button>
                                 <button
                                     onClick={() => setShowAddForm(true)}
-                                    className="rounded-full bg-blue-500 px-4 py-2 text-white font-semibold hover:bg-blue-400 transition"
+                                    className="rounded-full bg-blue-500 px-4 h-10 text-white font-semibold hover:bg-blue-400 transition"
                                 >
                                     +
                                 </button>
-                                {showSortPopup && (
-                                    <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-10 min-w-[120px]">
-                                        <button onClick={() => { setSortMode('name-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
-                                        <button onClick={() => { setSortMode('name-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
-                                        <button onClick={() => { setSortMode('price-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
-                                        <button onClick={() => { setSortMode('price-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
-                                        <button onClick={() => { setSortMode('date-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
-                                        <button onClick={() => { setSortMode('date-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
-                                    </div>
-                                )}
                             </div>
                         </div>
 

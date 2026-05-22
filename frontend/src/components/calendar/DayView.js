@@ -17,37 +17,27 @@ function DayView({
     );
 
     return (
-        <div className="rounded-3xl border border-gray-700 bg-gray-900/70 p-6">
 
-            <div className="mb-6">
+
+        <div className="space-y-4">
+
+            {dayEvents.length === 0 ? (
                 <p className="text-gray-400">
-                    {format(currentDate, 'EEEE')}
+                    No subscriptions for this day.
                 </p>
-
-                <h2 className="text-4xl font-semibold text-white">
-                    {format(currentDate, 'd MMMM yyyy')}
-                </h2>
-            </div>
-
-            <div className="space-y-4">
-
-                {dayEvents.length === 0 ? (
-                    <p className="text-gray-400">
-                        No subscriptions for this day.
-                    </p>
-                ) : (
-                    dayEvents.map((subscription) => (
-                        <CalendarEventCard
-                            key={`${subscription.id}-${subscription.eventDate}`}
-                            subscription={subscription}
-                            toggleFavorite={toggleFavorite}
-                            handleEditSubscription={handleEditSubscription}
-                            handleCancelSubscription={handleCancelSubscription}
-                        />
-                    ))
-                )}
-            </div>
+            ) : (
+                dayEvents.map((subscription) => (
+                    <CalendarEventCard
+                        key={`${subscription.id}-${subscription.eventDate}`}
+                        subscription={subscription}
+                        toggleFavorite={toggleFavorite}
+                        handleEditSubscription={handleEditSubscription}
+                        handleCancelSubscription={handleCancelSubscription}
+                    />
+                ))
+            )}
         </div>
+
     );
 }
 

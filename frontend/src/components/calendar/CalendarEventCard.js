@@ -86,10 +86,7 @@ function CalendarEventCard({
                 text-left
                 transition
                 hover:border-blue-500
-                ${compact
-                    ? 'px-2 py-1.5 text-xs'
-                    : 'p-3'
-                }
+                px-2 py-1.5 text-xs
             `}
         >
             <div className="flex items-start justify-between gap-2">
@@ -100,17 +97,6 @@ function CalendarEventCard({
                         {subscription.name}
                     </p>
 
-                    {!compact && (
-                        <>
-                            <p className="mt-1 text-sm text-gray-400">
-                                {subscription.price.toFixed(2)} PLN
-                            </p>
-
-                            <p className="text-xs text-gray-500">
-                                {subscription.category}
-                            </p>
-                        </>
-                    )}
                 </div>
 
                 <button
@@ -128,9 +114,14 @@ function CalendarEventCard({
                 </button>
             </div>
 
-            {/* Compact actions */}
-            {compact && (
-                <div className="mt-2 flex items-center gap-2">
+
+            <div className="mt-2 flex items-center justify-between gap-2">
+
+                <p className="text-xs text-gray-500">
+                    {subscription.price} {/* TODO: waluta */}
+                </p>
+
+                <div className="flex items-center gap-2">
 
                     <button
                         onClick={() => handleEditSubscription(subscription)}
@@ -145,28 +136,10 @@ function CalendarEventCard({
                     >
                         <X size={14} />
                     </button>
+
                 </div>
-            )}
+            </div>
 
-            {/* Full actions */}
-            {!compact && (
-                <div className="mt-3 flex gap-2">
-
-                    <button
-                        onClick={() => handleEditSubscription(subscription)}
-                        className="rounded-lg bg-gray-700 px-3 py-1 text-xs text-white hover:bg-gray-600 transition"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        onClick={() => handleCancelSubscription(subscription.id)}
-                        className="rounded-lg bg-red-500/20 px-3 py-1 text-xs text-red-300 hover:bg-red-500/30 transition"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

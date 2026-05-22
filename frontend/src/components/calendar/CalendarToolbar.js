@@ -1,6 +1,10 @@
 import {
     addMonths,
+    addWeeks,
+    addDays,
     subMonths,
+    subWeeks,
+    subDays,
     format,
 } from 'date-fns';
 
@@ -10,13 +14,52 @@ function CalendarToolbar({
     view,
     setView,
 }) {
+    const handlePrevious = () => {
+        if (view === 'month') {
+            setCurrentDate(subMonths(currentDate, 1));
+        }
+
+        if (view === 'week') {
+            setCurrentDate(subWeeks(currentDate, 1));
+        }
+
+        if (view === 'day') {
+            setCurrentDate(subDays(currentDate, 1));
+        }
+    };
+
+    const handleNext = () => {
+        if (view === 'month') {
+            setCurrentDate(addMonths(currentDate, 1));
+        }
+
+        if (view === 'week') {
+            setCurrentDate(addWeeks(currentDate, 1));
+        }
+
+        if (view === 'day') {
+            setCurrentDate(addDays(currentDate, 1));
+        }
+    };
+
+    const getTitle = () => {
+        if (view === 'month') {
+            return format(currentDate, 'MMMM yyyy');
+        }
+
+        if (view === 'week') {
+            return `Week of ${format(currentDate, 'd MMM yyyy')}`;
+        }
+
+        return format(currentDate, 'EEEE, d MMMM yyyy');
+    };
     return (
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
             {/* Left */}
             <div>
                 <h2 className="ml-6 text-3xl font-semibold text-white">
-                    {format(currentDate, 'MMMM yyyy')}
+                    {getTitle()}
                 </h2>
             </div>
 
@@ -47,7 +90,7 @@ function CalendarToolbar({
                 <div className="flex items-center gap-2">
 
                     <button
-                        onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+                        onClick={() => handlePrevious()}
                         className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-2 text-white hover:bg-gray-700 transition"
                     >
                         ←
@@ -61,7 +104,7 @@ function CalendarToolbar({
                     </button>
 
                     <button
-                        onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+                        onClick={() => handleNext()}
                         className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-2 text-white hover:bg-gray-700 transition"
                     >
                         →

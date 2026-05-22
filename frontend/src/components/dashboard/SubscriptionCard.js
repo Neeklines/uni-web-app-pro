@@ -4,9 +4,10 @@ function SubscriptionCard({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
-    setShowDeleteConfirm,
-    showDeleteConfirm,
+    activePopup,
+    setActivePopup,
     getLogoSrc,
+    popupRef,
 }) {
     const logoSrc = getLogoSrc(subscription);
 
@@ -110,13 +111,15 @@ function SubscriptionCard({
                 <div className="relative">
 
                     <button
-                        onClick={() =>
-                            setShowDeleteConfirm(
-                                showDeleteConfirm === subscription.id
+                        onClick={(e) => {
+                            e.stopPropagation();
+
+                            setActivePopup((prev) =>
+                                (prev) === `subscription-${subscription.id}`
                                     ? null
-                                    : subscription.id
-                            )
-                        }
+                                    : `subscription-${subscription.id}`
+                            );
+                        }}
                         className="
                             text-gray-400
                             hover:text-white
@@ -129,7 +132,7 @@ function SubscriptionCard({
                         ⋯
                     </button>
 
-                    {showDeleteConfirm === subscription.id && (
+                    {activePopup === `subscription-${subscription.id}` && (
                         <div className="
 
                             absolute
@@ -144,7 +147,7 @@ function SubscriptionCard({
                             p-2
                             z-10
                             min-w-[120px]
-                        ">
+                        "ref={popupRef}>
 
                             <button
                                 onClick={() =>

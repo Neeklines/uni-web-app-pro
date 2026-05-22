@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { Filter } from 'lucide-react';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import CalendarView from '../components/calendar/CalendarView';
 import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
@@ -27,7 +27,6 @@ function Dashboard() {
     const [error, setError] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [sortMode, setSortMode] = useState('name-asc');
-    const [showSortPopup, setShowSortPopup] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editingSubscription, setEditingSubscription] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
@@ -47,6 +46,7 @@ function Dashboard() {
     const [upcomingPayments, setUpcomingPayments] = useState([]);
     const [viewMode, setViewMode] = useState('list');
     const [activePopup, setActivePopup] = useState(null);
+    const popupRef = useRef(null);
 
     const predefinedLogos = [
         { id: 'amazon_prime', label: 'Amazon Prime', src: amazonPrimeLogo },
@@ -109,22 +109,34 @@ function Dashboard() {
 
     useEffect(() => {
         fetchSubscriptions();
-        function handleClickOutside() {
+    }, [fetchSubscriptions]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (!activePopup) return;
+
+            if (
+                popupRef.current &&
+                popupRef.current.contains(event.target)
+            ) {
+                return;
+            }
+
             setActivePopup(null);
         }
 
         document.addEventListener(
-            'mousedown',
+            'click',
             handleClickOutside
         );
 
         return () => {
             document.removeEventListener(
-                'mousedown',
+                'click',
                 handleClickOutside
             );
         };
-    }, [fetchSubscriptions]);
+    }, [activePopup]);
 
     const handleFormChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -467,7 +479,15 @@ function Dashboard() {
                                 <div className="relative flex items-center">
 
                                     <button
-                                        onClick={() => setShowSortPopup(!showSortPopup)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+
+                                            setActivePopup((prev) =>
+                                                prev === 'sort'
+                                                    ? null
+                                                    : 'sort'
+                                            );
+                                        }}
                                         className="
                                             h-10
                                             rounded-full
@@ -482,8 +502,9 @@ function Dashboard() {
                                         {getSortIcon()}
                                     </button>
 
-                                    {showSortPopup && (
+                                    {activePopup === 'sort' && (
                                         <div
+                                            ref={popupRef}
                                             className="
                                                 absolute
                                                 left-1/2
@@ -501,12 +522,12 @@ function Dashboard() {
                                                 shadow-xl
                                             "
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
                                         </div>
                                     )}
 
@@ -550,8 +571,9 @@ function Dashboard() {
                                 handleEditSubscription={handleEditSubscription}
                                 handleCancelSubscription={handleCancelSubscription}
                                 handleDeleteSubscription={handleDeleteSubscription}
-                                setShowDeleteConfirm={setShowDeleteConfirm}
-                                showDeleteConfirm={showDeleteConfirm}
+                                activePopup={activePopup}
+                                setActivePopup={setActivePopup}
+                                popupRef={popupRef}
                                 getLogoSrc={getLogoSrc}
                             />
                         ) : (

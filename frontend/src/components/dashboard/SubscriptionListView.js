@@ -9,9 +9,10 @@ function SubscriptionListView({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
-    setShowDeleteConfirm,
-    showDeleteConfirm,
     getLogoSrc,
+    activePopup,
+    setActivePopup,
+    popupRef,
 }) {
     return (
         <div className="mt-6 space-y-4">
@@ -45,9 +46,10 @@ function SubscriptionListView({
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
                         handleDeleteSubscription={handleDeleteSubscription}
-                        setShowDeleteConfirm={setShowDeleteConfirm}
-                        showDeleteConfirm={showDeleteConfirm}
                         getLogoSrc={getLogoSrc}
+                        activePopup={activePopup}
+                        setActivePopup={setActivePopup}
+                        popupRef={popupRef}
                     />
                 ))
             )}

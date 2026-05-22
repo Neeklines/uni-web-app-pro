@@ -70,14 +70,14 @@ function CalendarDayCell({
             className={`
             group
 
-            h-[150px]
+            h-[72px] sm:h-[150px]
             overflow-hidden
 
             border-r
             border-b
             border-gray-700
 
-            p-3
+            p-1.5 sm:p-3
             text-left
             transition
             hover:bg-gray-800/70
@@ -98,76 +98,31 @@ function CalendarDayCell({
         >
 
             {/* Header */}
-            <div className="mb-3 flex items-center justify-between flex-shrink-0">
+            <div className="mb-1 flex items-center justify-center sm:justify-between flex-shrink-0">
 
                 <span className="text-sm font-semibold text-white">
                     {format(day, 'd')}
                 </span>
 
-                <div
-                    className={`
-                    h-2 w-2 rounded-full transition
-                    ${daySubscriptions.length > 0
-                            ? 'bg-blue-400'
-                            : ''
-                        }
-                `}
-                />
+                {daySubscriptions.length > 0 && (
+                    <div
+                        className="
+                    h-2 w-2 rounded-full hidden
+                    bg-blue-400 sm:block
+                "></div>)}
             </div>
 
             {/* Events */}
-            <div className="flex-1 min-h-0">
+            <div className="mt-2 flex-1 min-h-0">
 
-                {/* Default compact mode */}
-                {!expanded && (
-                    <div className="space-y-2">
+                {/* Desktop */}
+                <div className="hidden sm:block h-full">
 
-                        {daySubscriptions.slice(0, 2).map((subscription) => (
-                            <CalendarEventCard
-                                key={`${subscription.id}-${subscription.eventDate}`}
-                                subscription={subscription}
-                                compact
-                                toggleFavorite={toggleFavorite}
-                                handleEditSubscription={handleEditSubscription}
-                                handleCancelSubscription={handleCancelSubscription}
-                            />
-                        ))}
+                    {/* Default compact mode */}
+                    {!expanded && (
+                        <div className="space-y-2">
 
-                        {daySubscriptions.length > 2 && (
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setExpanded(true);
-                                }}
-                                className="
-                                text-xs
-                                text-gray-500
-                                hover:text-blue-400
-                                transition
-                            "
-                            >
-                                +{daySubscriptions.length - 2} more
-                            </button>
-                        )}
-                    </div>
-                )}
-
-                {/* Expanded scroll mode */}
-                {expanded && (
-                    <div className="relative h-full">
-
-                        {/* Scroll area */}
-                        <div
-                            ref={scrollRef}
-                            className="
-                no-scrollbar
-                h-full
-                overflow-y-auto
-                space-y-2
-            "
-                        >
-                            {daySubscriptions.map((subscription) => (
+                            {daySubscriptions.slice(0, 2).map((subscription) => (
                                 <CalendarEventCard
                                     key={`${subscription.id}-${subscription.eventDate}`}
                                     subscription={subscription}
@@ -177,53 +132,122 @@ function CalendarDayCell({
                                     handleCancelSubscription={handleCancelSubscription}
                                 />
                             ))}
+
+                            {daySubscriptions.length > 2 && (
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpanded(true);
+                                    }}
+                                    className="
+                            text-xs
+                            text-gray-500
+                            hover:text-blue-400
+                            transition
+                        "
+                                >
+                                    +{daySubscriptions.length - 2} more
+                                </button>
+                            )}
                         </div>
+                    )}
 
-                        {/* Top fade */}
-                        {hasOverflow && showTopFade && (
+                    {/* Expanded scroll mode */}
+                    {expanded && (
+                        <div className="relative h-full">
+
+                            {/* Scroll area */}
                             <div
+                                ref={scrollRef}
                                 className="
-                    pointer-events-none
-                    absolute
-                    top-0
-                    left-0
-                    right-0
-                    h-5
-                    bg-gradient-to-b
-                    from-gray-950
-                    to-transparent
-                    opacity-100
-                    transition-opacity
-                    duration-200
+                        no-scrollbar
+                        h-full
+                        overflow-y-auto
+                        space-y-2
+                    "
+                            >
+                                {daySubscriptions.map((subscription) => (
+                                    <CalendarEventCard
+                                        key={`${subscription.id}-${subscription.eventDate}`}
+                                        subscription={subscription}
+                                        compact
+                                        toggleFavorite={toggleFavorite}
+                                        handleEditSubscription={handleEditSubscription}
+                                        handleCancelSubscription={handleCancelSubscription}
+                                    />
+                                ))}
+                            </div>
 
-                    group-hover:opacity-60
-                "
-                            />
-                        )}
+                            {/* Top fade */}
+                            {hasOverflow && showTopFade && (
+                                <div
+                                    className="
+                            pointer-events-none
+                            absolute
+                            top-0
+                            left-0
+                            right-0
+                            h-5
+                            bg-gradient-to-b
+                            from-gray-950
+                            to-transparent
+                            opacity-100
+                            transition-opacity
+                            duration-200
+                            group-hover:opacity-60
+                        "
+                                />
+                            )}
 
-                        {/* Bottom fade */}
-                        {hasOverflow && showBottomFade && (
-                            <div
-                                className="
-                    pointer-events-none
-                    absolute
-                    bottom-0
-                    left-0
-                    right-0
-                    h-5
-                    bg-gradient-to-t
-                    from-gray-950
-                    to-transparent
-                    opacity-100
-                    transition-opacity
-                    duration-200
+                            {/* Bottom fade */}
+                            {hasOverflow && showBottomFade && (
+                                <div
+                                    className="
+                            pointer-events-none
+                            absolute
+                            bottom-0
+                            left-0
+                            right-0
+                            h-5
+                            bg-gradient-to-t
+                            from-gray-950
+                            to-transparent
+                            opacity-100
+                            transition-opacity
+                            duration-200
+                            group-hover:opacity-60
+                        "
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
 
-                    group-hover:opacity-60
-                "
-                            />
-                        )}
-                    </div>
-                )}
+                {/* Mobile */}
+                <div className="sm:hidden flex justify-center flex-wrap gap-1">
+
+                    {daySubscriptions.slice(0, 4).map((subscription) => (
+                        <div
+                            key={`${subscription.id}-${subscription.eventDate}`}
+                            className={`
+                    h-2
+                    w-2
+                    rounded-full
+                    ${subscription.is_favourite
+                                    ? 'bg-yellow-400'
+                                    : 'bg-blue-400'
+                                }
+                `}
+                        />
+                    ))}
+
+                    {daySubscriptions.length > 4 && (
+                        <div className="text-[10px] text-gray-500 leading-none">
+                            +{daySubscriptions.length - 4}
+                        </div>
+                    )}
+                </div>
             </div>
         </button>
     );

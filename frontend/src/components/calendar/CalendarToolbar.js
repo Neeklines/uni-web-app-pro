@@ -54,40 +54,20 @@ function CalendarToolbar({
         return format(currentDate, 'EEEE, d MMMM yyyy');
     };
     return (
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
             {/* Left */}
             <div>
-                <h2 className="ml-6 text-3xl font-semibold text-white">
+                <h2 className="sm:ml-6 text-3xl font-semibold text-white text-center sm:text-left">
                     {getTitle()}
                 </h2>
             </div>
 
             {/* Right */}
-            <div className="flex flex-wrap items-center gap-3">
-
-                {/* View switch */}
-                <div className="flex rounded-2xl border border-gray-700 bg-gray-900 p-1">
-
-                    {['month', 'week', 'day'].map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => setView(item)}
-                            className={`
-                                rounded-xl px-5 py-2 text-sm font-medium transition
-                                ${view === item
-                                    ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white'
-                                }
-                            `}
-                        >
-                            {item.charAt(0).toUpperCase() + item.slice(1)}
-                        </button>
-                    ))}
-                </div>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-3">
 
                 {/* Navigation */}
-                <div className="flex items-center gap-2">
+                <div className="flex justify-center gap-2">
 
                     <button
                         onClick={() => handlePrevious()}
@@ -109,6 +89,26 @@ function CalendarToolbar({
                     >
                         →
                     </button>
+                </div>
+
+                {/* View switch */}
+                <div className="flex rounded-2xl border border-gray-700 bg-gray-900 p-1">
+
+                    {['month', 'week', 'day'].map((item) => (
+                        <button
+                            key={item}
+                            onClick={() => setView(item)}
+                            className={`
+                                rounded-xl px-5 py-2 text-sm font-medium transition
+                                ${view === item
+                                    ? 'bg-gray-800 text-white'
+                                    : 'text-gray-400 hover:text-white'
+                                }
+                            `}
+                        >
+                            {item.charAt(0).toUpperCase() + item.slice(1)}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>

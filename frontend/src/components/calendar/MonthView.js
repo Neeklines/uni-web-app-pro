@@ -40,7 +40,7 @@ function MonthView({
     }
 
     return (
-        <div className="overflow-hidden rounded-[32px] border border-gray-700">
+        <div className="overflow-hidden sm:rounded-[32px] rounded-[12px] border border-gray-700">
 
             {/* Week labels */}
             <div className="grid grid-cols-7 bg-gray-900">
@@ -48,7 +48,7 @@ function MonthView({
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label) => (
                     <div
                         key={label}
-                        className="border-b border-r border-gray-700 p-4 text-center text-sm font-medium text-gray-400 last:border-r-0"
+                        className="border-b border-r border-gray-700 sm:p-4 p-1 text-center text-sm font-medium text-gray-400 last:border-r-0"
                     >
                         {label}
                     </div>

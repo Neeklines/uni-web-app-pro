@@ -395,7 +395,7 @@ function Dashboard() {
                 </div>
             )}
 
-            <div className="bg-gray-900 text-white px-4 py-8 sm:px-6 sm:py-12">
+            <div className="bg-gray-900 text-white px-4 py-4 sm:px-6 sm:py-12">
                 <div className="max-w-6xl mx-auto space-y-8">
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">

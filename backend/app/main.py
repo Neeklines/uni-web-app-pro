@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
@@ -7,7 +8,15 @@ from app.config import FRONTEND_URL
 from app.routers import notifications
 from app.services.scheduler_service import start_scheduler, stop_scheduler
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_scheduler()
+    yield
+    stop_scheduler()
+
+
+app = FastAPI(lifespan=lifespan)
 
 # CORS configuration to allow requests from the React frontend
 app.add_middleware(
@@ -25,13 +34,3 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(subscriptions.router, prefix="/api")
 app.include_router(meta.router, prefix="/api")
 app.include_router(notifications.router, prefix="/api")
-
-
-@app.on_event("startup")
-def on_startup():
-    start_scheduler()
-
-
-@app.on_event("shutdown")
-def on_shutdown():
-    stop_scheduler()

@@ -206,6 +206,16 @@ function Dashboard() {
         }
     };
 
+    const handleReactivateSubscription = async (subscriptionId) => {
+        try {
+            await subscriptionService.reactivateSubscription(token, subscriptionId);
+            await fetchSubscriptions();
+            setShowDeleteConfirm(null);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     const handleUpdateSubscription = async (e) => {
         e.preventDefault();
         setFormLoading(true);
@@ -260,8 +270,8 @@ function Dashboard() {
         }
     };
 
-
-    const totalMonthly = subscriptions.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    const activeSubscriptions = subscriptions.filter((item) => item.is_active !== false);
+    const totalMonthly = activeSubscriptions.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
     const totalYearly = totalMonthly * 12;
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
@@ -477,6 +487,11 @@ function Dashboard() {
                                                         {subscription.notes && (
                                                             <p className="mt-1 text-sm text-gray-400">Notatki: {subscription.notes}</p>
                                                         )}
+                                                        {!subscription.is_active && subscription.cancelled_at && (
+                                                            <p className="mt-2 text-xs uppercase tracking-[0.2em] text-red-400">
+                                                                anulowano: {new Date(subscription.cancelled_at).toLocaleDateString('en-GB')}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
@@ -508,12 +523,20 @@ function Dashboard() {
                                                                     Anuluj
                                                                 </button>
                                                             ) : (
-                                                                <button
-                                                                    onClick={() => handleDeleteSubscription(subscription.id)}
-                                                                    className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
-                                                                >
-                                                                    Usuń
-                                                                </button>
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => handleReactivateSubscription(subscription.id)}
+                                                                        className="block w-full text-left px-3 py-2 hover:bg-green-700 text-green-400 hover:text-green-300 rounded"
+                                                                    >
+                                                                        Reaktywuj
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDeleteSubscription(subscription.id)}
+                                                                        className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
+                                                                    >
+                                                                        Usuń
+                                                                    </button>
+                                                                </>
                                                             )}
                                                         </div>
                                                     )}

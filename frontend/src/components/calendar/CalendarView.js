@@ -47,6 +47,8 @@ function CalendarView({
         intervalEnd,
     );
 
+    const isMobile = window.innerWidth < 640;
+
     return (
         <div className="mt-6">
 
@@ -55,6 +57,7 @@ function CalendarView({
                 setCurrentDate={setCurrentDate}
                 view={view}
                 setView={setView}
+                isMobile={isMobile}
             />
 
             <div className="mt-6">
@@ -63,7 +66,15 @@ function CalendarView({
                     <MonthView
                         currentDate={currentDate}
                         subscriptions={recurringEvents}
-                        onDayClick={onDayClick}
+                        onDayClick={(day) => {
+                            if (isMobile) {
+                                setCurrentDate(day);
+                                setView('day');
+                                return;
+                            }
+
+                            onDayClick(day);
+                        }}
 
                         toggleFavorite={toggleFavorite}
                         handleEditSubscription={handleEditSubscription}

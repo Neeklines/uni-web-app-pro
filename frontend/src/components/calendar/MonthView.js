@@ -45,7 +45,7 @@ function MonthView({
             {/* Week labels */}
             <div className="grid grid-cols-7 bg-gray-900">
 
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label) => (
+                {['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'].map((label) => (
                     <div
                         key={label}
                         className="border-b border-r border-gray-700 sm:p-4 p-1 text-center text-sm font-medium text-gray-400 last:border-r-0"

@@ -5,14 +5,19 @@ import {
     subMonths,
     subWeeks,
     subDays,
+    startOfWeek,
+    endOfWeek,
     format,
 } from 'date-fns';
+
+import { pl } from 'date-fns/locale';
 
 function CalendarToolbar({
     currentDate,
     setCurrentDate,
     view,
     setView,
+    isMobile,
 }) {
     const handlePrevious = () => {
         if (view === 'month') {
@@ -42,17 +47,52 @@ function CalendarToolbar({
         }
     };
 
+    const capitalize = (text) =>
+        text.charAt(0).toUpperCase() + text.slice(1);
+
     const getTitle = () => {
         if (view === 'month') {
-            return format(currentDate, 'MMMM yyyy');
+            return capitalize(format(currentDate, 'LLLL yyyy', {
+                locale: pl,
+            }));
         }
 
         if (view === 'week') {
-            return `Week of ${format(currentDate, 'd MMM yyyy')}`;
+
+            const weekStart = startOfWeek(currentDate, {
+                weekStartsOn: 1,
+            });
+
+            const weekEnd = endOfWeek(currentDate, {
+                weekStartsOn: 1,
+            });
+
+            return `Tydzień ${format(
+                weekStart,
+                'd MMMM yyyy',
+                { locale: pl }
+            )} - ${format(
+                weekEnd,
+                'd MMMM yyyy',
+                { locale: pl }
+            )}`;
         }
 
-        return format(currentDate, 'EEEE, d MMMM yyyy');
+        return capitalize(
+            format(
+                currentDate,
+                'EEEE, d MMMM yyyy',
+                { locale: pl }
+            )
+        );
     };
+
+    const viewLabels = {
+        month: 'Miesiąc',
+        week: 'Tydzień',
+        day: 'Dzień',
+    };
+
     return (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
@@ -80,7 +120,7 @@ function CalendarToolbar({
                         onClick={() => setCurrentDate(new Date())}
                         className="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-2 text-white hover:bg-gray-700 transition"
                     >
-                        Today
+                        Dziś
                     </button>
 
                     <button
@@ -94,7 +134,7 @@ function CalendarToolbar({
                 {/* View switch */}
                 <div className="flex rounded-2xl border border-gray-700 bg-gray-900 p-1">
 
-                    {['month', 'week', 'day'].map((item) => (
+                    {['month', ...(isMobile ? [] : ['week']), 'day'].map((item) => (
                         <button
                             key={item}
                             onClick={() => setView(item)}
@@ -106,7 +146,7 @@ function CalendarToolbar({
                                 }
                             `}
                         >
-                            {item.charAt(0).toUpperCase() + item.slice(1)}
+                            {viewLabels[item]}
                         </button>
                     ))}
                 </div>

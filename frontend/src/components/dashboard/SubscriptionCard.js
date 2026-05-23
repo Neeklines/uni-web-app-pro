@@ -26,10 +26,10 @@ function SubscriptionCard({
                 
             `}
         >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
 
                 {/* Left */}
-                <div className={`flex items-center gap-4 flex-1 ${!subscription.is_active ? 'opacity-50' : ''}`}>
+                <div className={`flex items-center gap-4 sm:min-w-[260px] sm:max-w-[320px] ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     {/* Logo */}
                     <div className="
@@ -84,19 +84,47 @@ function SubscriptionCard({
                         </div>
 
                         <p className="mt-1 text-sm text-gray-400">
-                            Kategoria: {subscription.category}
+                            {subscription.category}
                         </p>
-
-                        {subscription.notes && (
-                            <p className="mt-1 text-sm text-gray-400">
-                                Notatki: {subscription.notes}
-                            </p>
-                        )}
                     </div>
                 </div>
 
+                {/* Notes */}
+                {subscription.notes && (
+                    <div
+                        className={`
+                            flex-1
+
+                            rounded-2xl
+                            border
+                            border-gray-800
+
+                            bg-gray-800/40
+
+                            sm:mr-12
+                            px-4
+                            py-3
+
+                            text-sm
+                            text-gray-300
+
+                            flex
+                            items-center
+
+                            ${!subscription.is_active ? 'opacity-50' : ''}
+                        `}
+                    >
+                        <p className="
+                            line-clamp-2
+                            break-words
+                        ">
+                            {subscription.notes}
+                        </p>
+                    </div>
+                )}
+
                 {/* Price */}
-                <div className={`text-right ${!subscription.is_active ? 'opacity-50' : ''}`}>
+                <div className={`text-right sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     <p className="text-xl font-semibold text-white">
                         {subscription.price.toFixed(2)} PLN/mies.
@@ -108,7 +136,13 @@ function SubscriptionCard({
                 </div>
 
                 {/* Actions */}
-                <div className="relative">
+                <div className="relative
+
+                    sm:static
+
+                    max-sm:absolute
+                    max-sm:top-4
+                    max-sm:right-4">
 
                     <button
                         onClick={(e) => {

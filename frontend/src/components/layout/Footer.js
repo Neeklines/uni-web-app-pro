@@ -18,7 +18,7 @@ function Footer() {
     }, []);
 
     return (
-        <footer className="text-center text-gray-500 text-sm sm:mt-16 mb-6">
+        <footer className="text-center text-gray-500 text-sm my-6">
 
             <p>
                 SmartSub © 2026{' '}

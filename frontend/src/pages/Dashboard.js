@@ -395,7 +395,7 @@ function Dashboard() {
                 </div>
             )}
 
-            <div className="bg-gray-900 text-white px-4 py-4 sm:px-6 sm:py-12">
+            <div className="bg-gray-900 text-white px-4 py-4 sm:px-6 sm:py-6">
                 <div className="max-w-6xl mx-auto space-y-8">
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -438,7 +438,167 @@ function Dashboard() {
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
 
                         {/* Toolbar */}
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+                        {/* Mobile */}
+                        <div className="flex flex-col gap-5 sm:hidden">
+
+                            {/* Title */}
+                            <div className="text-center">
+                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">
+                                    Twoje subskrypcje
+                                </p>
+
+                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                    {viewMode === 'list'
+                                        ? 'Lista subskrypcji'
+                                        : 'Kalendarz subskrypcji'}
+                                </h2>
+                            </div>
+
+                            {/* Search */}
+                            <input
+                                type="text"
+                                placeholder="Szukaj subskrypcji..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="
+                                    w-full
+                                    rounded-lg
+                                    border
+                                    border-gray-600
+                                    bg-gray-800
+                                    px-4
+                                    py-2
+                                    text-white
+                                    placeholder-gray-400
+                                    focus:border-blue-500
+                                    focus:outline-none
+                                    focus:ring-1
+                                    focus:ring-blue-500
+                                "
+                            />
+
+                            {/* View buttons */}
+                            <div className="flex justify-center gap-3">
+
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition
+                ${viewMode === 'list'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Lista
+                                </button>
+
+                                <button
+                                    onClick={() => setViewMode('calendar')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition
+                ${viewMode === 'calendar'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Kalendarz
+                                </button>
+                            </div>
+
+                            {/* Action buttons */}
+                            <div className="flex justify-center gap-3">
+
+                                {/* SORT */}
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+
+                                            setActivePopup((prev) =>
+                                                prev === 'sort'
+                                                    ? null
+                                                    : 'sort'
+                                            );
+                                        }}
+                                        className="
+                                            h-10
+                                            rounded-full
+                                            bg-gray-700
+                                            px-4
+                                            text-white
+                                            font-semibold
+                                            hover:bg-gray-600
+                                            transition
+                                        "
+                                    >
+                                        {getSortIcon()}
+                                    </button>
+
+                                    {activePopup === 'sort' && (
+                                        <div
+                                            ref={popupRef}
+                                            className="
+                                                absolute
+                                                left-1/2
+                                                top-[calc(100%+8px)]
+                                                -translate-x-1/2
+                                                z-20
+                                                min-w-[140px]
+                                                rounded-xl
+                                                border
+                                                border-gray-700
+                                                bg-gray-800
+                                                p-2
+                                                shadow-xl
+                                            "
+                                        >
+                                            {/* popup buttons */}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* FILTER */}
+                                <button
+                                    className="
+                                        flex
+                                        h-10
+                                        w-10
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-gray-700
+                                        text-white
+                                        hover:bg-gray-600
+                                        transition
+                                    "
+                                >
+                                    <Filter size={18} />
+                                </button>
+
+                                {/* ADD */}
+                                <button
+                                    onClick={() => setShowAddForm(true)}
+                                    className="
+                                        flex
+                                        h-10
+                                        w-10
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-blue-500
+                                        text-white
+                                        font-semibold
+                                        hover:bg-blue-400
+                                        transition
+                                    "
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Desktop */}
+                        <div className="hidden sm:flex sm:flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                             <div>
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
                                 <h2 className="mt-3 text-2xl font-semibold text-white">

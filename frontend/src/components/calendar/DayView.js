@@ -23,7 +23,7 @@ function DayView({
 
             {dayEvents.length === 0 ? (
                 <p className="text-gray-400">
-                    No subscriptions for this day.
+                    Brak subskrypcji w tym dniu.
                 </p>
             ) : (
                 dayEvents.map((subscription) => (

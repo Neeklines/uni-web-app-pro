@@ -458,7 +458,7 @@ function Dashboard() {
                             />
                         </div>
 
-                        <div className="mt-6 space-y-4">
+                        <div className="mt-6 space-y-4 overflow-visible">
                             {loading ? (
                                 <p className="text-gray-400">Ładowanie subskrypcji...</p>
                             ) : error ? (
@@ -473,7 +473,7 @@ function Dashboard() {
                                     return (
                                         <div
                                             key={subscription.id}
-                                            className={`rounded-3xl border border-gray-800 bg-gray-900/90 p-4 sm:p-5 relative ${!subscription.is_active ? 'opacity-50' : ''}`}
+                                            className={`rounded-3xl border border-gray-800 bg-gray-900/90 p-4 sm:p-5 relative overflow-visible ${!subscription.is_active ? 'opacity-50' : ''} ${showDeleteConfirm === subscription.id ? 'z-50' : ''}`}
                                         >
                                             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                                 <div className="flex items-center gap-4 flex-1">
@@ -522,7 +522,7 @@ function Dashboard() {
                                                         ⋯
                                                     </button>
                                                     {showDeleteConfirm === subscription.id && (
-                                                        <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-10 min-w-[120px]">
+                                                        <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-50 min-w-[120px] shadow-xl">
                                                             <button
                                                                 onClick={() => handleEditSubscription(subscription)}
                                                                 className="block w-full text-left px-3 py-2 hover:bg-gray-700 text-white rounded"

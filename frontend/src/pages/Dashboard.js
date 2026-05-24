@@ -270,9 +270,23 @@ function Dashboard() {
         }
     };
 
+    const formatSubscriptionPrice = (subscription) => {
+        const price = Number(subscription.price) || 0;
+        return subscription.billing_cycle === 'yearly'
+            ? `${price.toFixed(2)} PLN/rok`
+            : `${price.toFixed(2)} PLN/mies.`;
+    };
+
     const activeSubscriptions = subscriptions.filter((item) => item.is_active !== false);
-    const totalMonthly = activeSubscriptions.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-    const totalYearly = totalMonthly * 12;
+    const totalMonthly = activeSubscriptions.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+        return sum + (item.billing_cycle === 'yearly' ? price / 12 : price);
+    }, 0);
+
+    const totalYearly = activeSubscriptions.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+        return sum + (item.billing_cycle === 'yearly' ? price : price * 12);
+    }, 0);
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
         // First, sort by is_favourite (true first)
@@ -496,7 +510,7 @@ function Dashboard() {
                                                 </div>
                                                 <div className="text-right">
                                                     <p className="text-xl font-semibold text-white">
-                                                        {subscription.price.toFixed(2)} PLN/mies.
+                                                        {formatSubscriptionPrice(subscription)}
                                                     </p>
                                                     <p className="mt-1 text-sm text-gray-400">Następna płatność: {subscription.next_payment_date}</p>
                                                 </div>

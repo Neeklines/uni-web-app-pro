@@ -359,7 +359,11 @@ function Dashboard() {
     }, 0);
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
-        // First, sort by is_favourite (true first)
+        // First, sort by is_pinned (true first)
+        const pinnedDiff = (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0);
+        if (pinnedDiff !== 0) return pinnedDiff;
+
+        // Then, sort by is_favourite (true first)
         const favDiff = (b.is_favourite ? 1 : 0) - (a.is_favourite ? 1 : 0);
         if (favDiff !== 0) return favDiff;
 

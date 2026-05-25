@@ -12,9 +12,8 @@ Analiza kosztów,analiza.kosztow@smartsub.pl,Funkcja,modul.dashboard@smartsub.pl
 13. Kalendarz,funkcja.13@smartsub.pl,Funkcja,modul.dashboard@smartsub.pl
 12. Lista subskrypcji,funkcja.12@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
 10. Dodawanie/usuwanie subskrypcji,funkcja.10@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
-11. Edycja subskrypcji (pinned/favourite/notes/dane),funkcja.11@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
+11. Edycja subskrypcji (favourite/notes/dane),funkcja.11@smartsub.pl,Funkcja,modul.subskrypcji@smartsub.pl
 Zarządzanie notatkami,notes@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
-Przypinanie (Pinned),pinned@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
 Oznaczanie jako ulubione (Favourite),favourite@smartsub.pl,Funkcja,funkcja.11@smartsub.pl
 Autoryzacja i bezpieczeństwo,autoryzacja.sekcja@smartsub.pl,Funkcja,modul.autoryzacji@smartsub.pl
 1. Logowanie,funkcja.1@smartsub.pl,Funkcja,autoryzacja.sekcja@smartsub.pl

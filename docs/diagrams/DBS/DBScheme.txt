@@ -34,7 +34,6 @@ CREATE TABLE subscriptions (
 
     category VARCHAR NULL,
 
-    is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
     is_favourite BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
 

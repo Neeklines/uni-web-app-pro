@@ -15,7 +15,6 @@ class Subscription(Base):
     next_payment_date = Column(Date, nullable=False)
     category = Column(String, nullable=True)
 
-    is_pinned = Column(Boolean, default=False, nullable=False)
     is_favourite = Column(Boolean, default=False, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     cancelled_at = Column(Date, nullable=True)

@@ -47,7 +47,6 @@ function Dashboard() {
         billing_cycle: 'monthly',
         next_payment_date: '',
         category: '',
-        is_pinned: false,
         is_favourite: false,
         notes: '',
     });
@@ -174,7 +173,6 @@ function Dashboard() {
             billing_cycle: 'monthly',
             next_payment_date: '',
             category: '',
-            is_pinned: false,
             is_favourite: false,
             notes: '',
             selectedPredefined: 'custom',
@@ -206,7 +204,6 @@ function Dashboard() {
                 billing_cycle: formData.billing_cycle,
                 next_payment_date: new Date(formData.next_payment_date).toISOString().split('T')[0],
                 category: formData.category,
-                is_pinned: formData.is_pinned,
                 is_favourite: formData.is_favourite,
                 notes: formData.notes,
             };
@@ -232,7 +229,6 @@ function Dashboard() {
             billing_cycle: subscription.billing_cycle,
             next_payment_date: subscription.next_payment_date,
             category: subscription.category,
-            is_pinned: subscription.is_pinned ?? false,
             is_favourite: subscription.is_favourite ?? false,
             notes: subscription.notes ?? '',
             selectedPredefined: isPredefined ? subscription.name : 'custom',
@@ -294,7 +290,6 @@ function Dashboard() {
                 billing_cycle: formData.billing_cycle,
                 next_payment_date: new Date(formData.next_payment_date).toISOString().split('T')[0],
                 category: formData.category,
-                is_pinned: formData.is_pinned,
                 is_favourite: formData.is_favourite,
                 notes: formData.notes,
             };
@@ -359,11 +354,7 @@ function Dashboard() {
     }, 0);
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
-        // First, sort by is_pinned (true first)
-        const pinnedDiff = (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0);
-        if (pinnedDiff !== 0) return pinnedDiff;
-
-        // Then, sort by is_favourite (true first)
+        // First, sort by is_favourite (true first)
         const favDiff = (b.is_favourite ? 1 : 0) - (a.is_favourite ? 1 : 0);
         if (favDiff !== 0) return favDiff;
 
@@ -995,32 +986,19 @@ function Dashboard() {
                                 />
                             </div>
 
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <label className="flex items-center gap-3 text-gray-300">
-                                    <input
-                                        type="checkbox"
-                                        name="is_pinned"
-                                        checked={formData.is_pinned}
-                                        onChange={handleFormChange}
-                                        className="accent-blue-500"
-                                    />
-                                    Przypięte
-                                </label>
-                                <label className="flex items-center gap-3 text-gray-300">
-                                    <input
-                                        type="checkbox"
-                                        name="is_favourite"
-                                        checked={formData.is_favourite}
-                                        onChange={handleFormChange}
-                                        className="accent-blue-500"
-                                    />
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">
                                     Ulubione
                                 </label>
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData(prev => ({ ...prev, is_favourite: !prev.is_favourite }))}
+                                    title={formData.is_favourite ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}
+                                    className={`text-2xl transition ${formData.is_favourite ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-300'}`}
+                                >
+                                    {formData.is_favourite ? '★' : '☆'}
+                                </button>
                             </div>
-
-
-
-
 
                             {formError && (
                                 <p className="text-red-400 text-sm">{formError}</p>

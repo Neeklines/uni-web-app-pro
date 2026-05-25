@@ -13,9 +13,7 @@ class SubscriptionCreate(BaseModel):
     notes: str | None = None
 
 
-class SubscriptionUpdate(
-    BaseModel
-):  # allows partial update (favourite, cancel, notes)
+class SubscriptionUpdate(BaseModel):  # allows partial update (favourite, cancel, notes)
     name: str | None = None
     price: float | None = None
     billing_cycle: str | None = None

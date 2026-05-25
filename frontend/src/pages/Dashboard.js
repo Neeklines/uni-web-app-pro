@@ -1,5 +1,9 @@
 import { useAuth } from '../context/AuthContext';
-import { useEffect, useState, useCallback } from 'react';
+import { format } from 'date-fns';
+import { Filter } from 'lucide-react';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import CalendarView from '../components/calendar/CalendarView';
+import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
 import FullScreenLoader from '../components/ui/FullScreenLoader';
 import CategoryCharts from '../components/dashboard/CategoryCharts';
@@ -23,7 +27,6 @@ function Dashboard() {
     const [error, setError] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [sortMode, setSortMode] = useState('name-asc');
-    const [showSortPopup, setShowSortPopup] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editingSubscription, setEditingSubscription] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
@@ -41,6 +44,9 @@ function Dashboard() {
     const [formError, setFormError] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [upcomingPayments, setUpcomingPayments] = useState([]);
+    const [viewMode, setViewMode] = useState('list');
+    const [activePopup, setActivePopup] = useState(null);
+    const popupRef = useRef(null);
 
     const predefinedLogos = [
         { id: 'amazon_prime', label: 'Amazon Prime', src: amazonPrimeLogo },
@@ -104,6 +110,33 @@ function Dashboard() {
     useEffect(() => {
         fetchSubscriptions();
     }, [fetchSubscriptions]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (!activePopup) return;
+
+            if (
+                popupRef.current &&
+                popupRef.current.contains(event.target)
+            ) {
+                return;
+            }
+
+            setActivePopup(null);
+        }
+
+        document.addEventListener(
+            'click',
+            handleClickOutside
+        );
+
+        return () => {
+            document.removeEventListener(
+                'click',
+                handleClickOutside
+            );
+        };
+    }, [activePopup]);
 
     const handleFormChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -362,7 +395,7 @@ function Dashboard() {
                 </div>
             )}
 
-            <div className="bg-gray-900 text-white px-4 py-8 sm:px-6 sm:py-12">
+            <div className="bg-gray-900 text-white px-4 py-4 sm:px-6 sm:py-6">
                 <div className="max-w-6xl mx-auto space-y-8">
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -403,150 +436,330 @@ function Dashboard() {
                     <CategoryCharts subscriptions={subscriptions} />
 
                     <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
-                                <h2 className="mt-3 text-2xl font-semibold text-white">Lista subskrypcji</h2>
-                            </div>
-                            <div className="flex gap-2 relative">
-                                <button
-                                    onClick={() => setShowSortPopup(!showSortPopup)}
-                                    className="rounded-full bg-gray-600 px-4 py-2 text-white font-semibold hover:bg-gray-500 transition"
-                                >
-                                    {getSortIcon()}
-                                </button>
-                                <button
-                                    onClick={() => setShowAddForm(true)}
-                                    className="rounded-full bg-blue-500 px-4 py-2 text-white font-semibold hover:bg-blue-400 transition"
-                                >
-                                    +
-                                </button>
-                                {showSortPopup && (
-                                    <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-10 min-w-[120px]">
-                                        <button onClick={() => { setSortMode('name-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
-                                        <button onClick={() => { setSortMode('name-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
-                                        <button onClick={() => { setSortMode('price-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
-                                        <button onClick={() => { setSortMode('price-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
-                                        <button onClick={() => { setSortMode('date-asc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
-                                        <button onClick={() => { setSortMode('date-desc'); setShowSortPopup(false); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
 
-                        <div className="mt-4">
+                        {/* Toolbar */}
+
+                        {/* Mobile */}
+                        <div className="flex flex-col gap-5 sm:hidden">
+
+                            {/* Title */}
+                            <div className="text-center">
+                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">
+                                    Twoje subskrypcje
+                                </p>
+
+                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                    {viewMode === 'list'
+                                        ? 'Lista subskrypcji'
+                                        : 'Kalendarz subskrypcji'}
+                                </h2>
+                            </div>
+
+                            {/* Search */}
                             <input
                                 type="text"
                                 placeholder="Szukaj subskrypcji..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="
+                                    w-full
+                                    rounded-lg
+                                    border
+                                    border-gray-600
+                                    bg-gray-800
+                                    px-4
+                                    py-2
+                                    text-white
+                                    placeholder-gray-400
+                                    focus:border-blue-500
+                                    focus:outline-none
+                                    focus:ring-1
+                                    focus:ring-blue-500
+                                "
                             />
+
+                            {/* View buttons */}
+                            <div className="flex justify-center gap-3">
+
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition
+                ${viewMode === 'list'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Lista
+                                </button>
+
+                                <button
+                                    onClick={() => setViewMode('calendar')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition
+                ${viewMode === 'calendar'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Kalendarz
+                                </button>
+                            </div>
+
+                            {/* Action buttons */}
+                            <div className="flex justify-center gap-3">
+
+                                {/* SORT */}
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+
+                                            setActivePopup((prev) =>
+                                                prev === 'sort'
+                                                    ? null
+                                                    : 'sort'
+                                            );
+                                        }}
+                                        className="
+                                            h-10
+                                            rounded-full
+                                            bg-gray-700
+                                            px-4
+                                            text-white
+                                            font-semibold
+                                            hover:bg-gray-600
+                                            transition
+                                        "
+                                    >
+                                        {getSortIcon()}
+                                    </button>
+
+                                    {activePopup === 'sort' && (
+                                        <div
+                                            ref={popupRef}
+                                            className="
+                                                absolute
+                                                left-1/2
+                                                top-[calc(100%+8px)]
+                                                -translate-x-1/2
+                                                z-20
+                                                min-w-[140px]
+                                                rounded-xl
+                                                border
+                                                border-gray-700
+                                                bg-gray-800
+                                                p-2
+                                                shadow-xl
+                                            "
+                                        >
+                                            {/* popup buttons */}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* FILTER */}
+                                <button
+                                    className="
+                                        flex
+                                        h-10
+                                        w-10
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-gray-700
+                                        text-white
+                                        hover:bg-gray-600
+                                        transition
+                                    "
+                                >
+                                    <Filter size={18} />
+                                </button>
+
+                                {/* ADD */}
+                                <button
+                                    onClick={() => setShowAddForm(true)}
+                                    className="
+                                        flex
+                                        h-10
+                                        w-10
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-blue-500
+                                        text-white
+                                        font-semibold
+                                        hover:bg-blue-400
+                                        transition
+                                    "
+                                >
+                                    +
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="mt-6 space-y-4">
-                            {loading ? (
-                                <p className="text-gray-400">Ładowanie subskrypcji...</p>
-                            ) : error ? (
-                                <p className="text-red-400">Błąd: {error}</p>
-                            ) : subscriptions.length === 0 ? (
-                                <p className="text-gray-400">Brak subskrypcji do wyświetlenia.</p>
-                            ) : filteredSubscriptions.length === 0 ? (
-                                <p className="text-gray-400">Nie znaleziono subskrypcji.</p>
-                            ) : (
-                                filteredSubscriptions.map((subscription) => {
-                                    const logoSrc = getLogoSrc(subscription);
-                                    return (
+                        {/* Desktop */}
+                        <div className="hidden sm:flex sm:flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                            <div>
+                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
+                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                    {viewMode === 'list'
+                                        ? 'Lista subskrypcji'
+                                        : 'Kalendarz subskrypcji'}
+                                </h2>
+                            </div>
+
+                            {/* Right controls */}
+                            <div className="flex flex-wrap items-center gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Szukaj subskrypcji..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                />
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Lista
+                                </button>
+
+                                <button
+                                    onClick={() => setViewMode('calendar')}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-700 text-gray-300'
+                                        }`}
+                                >
+                                    Kalendarz
+                                </button>
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+
+                                            setActivePopup((prev) =>
+                                                prev === 'sort'
+                                                    ? null
+                                                    : 'sort'
+                                            );
+                                        }}
+                                        className="
+                                            h-10
+                                            rounded-full
+                                            bg-gray-700
+                                            px-4
+                                            text-white
+                                            font-semibold
+                                            hover:bg-gray-600
+                                            transition
+                                        "
+                                    >
+                                        {getSortIcon()}
+                                    </button>
+
+                                    {activePopup === 'sort' && (
                                         <div
-                                            key={subscription.id}
-                                            className={`rounded-3xl border border-gray-800 bg-gray-900/90 p-4 sm:p-5 relative ${!subscription.is_active ? 'opacity-50' : ''}`}
+                                            ref={popupRef}
+                                            className="
+                                                absolute
+                                                left-1/2
+                                                top-[calc(100%+8px)]
+                                                -translate-x-1/2
+
+                                                z-20
+                                                min-w-[140px]
+
+                                                rounded-xl
+                                                border
+                                                border-gray-700
+                                                bg-gray-800
+                                                p-2
+                                                shadow-xl
+                                            "
                                         >
-                                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                                                <div className="flex items-center gap-4 flex-1">
-                                                    <div className="h-14 w-14 rounded-2xl bg-gray-800 border border-gray-700 overflow-hidden flex items-center justify-center">
-                                                        {logoSrc ? (
-                                                            <img src={logoSrc} alt={subscription.name} className="h-full w-full object-contain" />
-                                                        ) : (
-                                                            <span className="text-white text-lg font-semibold">
-                                                                {subscription.name?.charAt(0).toUpperCase()}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <div>
-                                                        <div className="flex items-center gap-2">
-                                                            <p className="text-lg font-semibold text-white">{subscription.name}</p>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => toggleFavorite(subscription.id)}
-                                                                className={`text-xl transition ${subscription.is_favourite ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-300'}`}
-                                                            >
-                                                                {subscription.is_favourite ? '★' : '☆'}
-                                                            </button>
-                                                        </div>
-                                                        <p className="mt-1 text-sm text-gray-400">Kategoria: {subscription.category}</p>
-                                                        {subscription.notes && (
-                                                            <p className="mt-1 text-sm text-gray-400">Notatki: {subscription.notes}</p>
-                                                        )}
-                                                        {!subscription.is_active && subscription.cancelled_at && (
-                                                            <p className="mt-2 text-xs uppercase tracking-[0.2em] text-red-400">
-                                                                anulowano: {new Date(subscription.cancelled_at).toLocaleDateString('en-GB')}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-xl font-semibold text-white">
-                                                        {subscription.price.toFixed(2)} PLN/mies.
-                                                    </p>
-                                                    <p className="mt-1 text-sm text-gray-400">Następna płatność: {subscription.next_payment_date}</p>
-                                                </div>
-                                                <div className="relative">
-                                                    <button
-                                                        onClick={() => setShowDeleteConfirm(showDeleteConfirm === subscription.id ? null : subscription.id)}
-                                                        className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
-                                                    >
-                                                        ⋯
-                                                    </button>
-                                                    {showDeleteConfirm === subscription.id && (
-                                                        <div className="absolute right-0 top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg p-2 z-10 min-w-[120px]">
-                                                            <button
-                                                                onClick={() => handleEditSubscription(subscription)}
-                                                                className="block w-full text-left px-3 py-2 hover:bg-gray-700 text-white rounded"
-                                                            >
-                                                                Edytuj
-                                                            </button>
-                                                            {subscription.is_active ? (
-                                                                <button
-                                                                    onClick={() => handleCancelSubscription(subscription.id)}
-                                                                    className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
-                                                                >
-                                                                    Anuluj
-                                                                </button>
-                                                            ) : (
-                                                                <>
-                                                                    <button
-                                                                        onClick={() => handleReactivateSubscription(subscription.id)}
-                                                                        className="block w-full text-left px-3 py-2 hover:bg-green-700 text-green-400 hover:text-green-300 rounded"
-                                                                    >
-                                                                        Reaktywuj
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleDeleteSubscription(subscription.id)}
-                                                                        className="block w-full text-left px-3 py-2 hover:bg-red-700 text-red-400 hover:text-red-300 rounded"
-                                                                    >
-                                                                        Usuń
-                                                                    </button>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
                                         </div>
-                                    );
-                                })
-                            )}
+                                    )}
+
+                                </div>
+                                <button
+                                    className="
+                                        rounded-full
+                                        bg-gray-700
+                                        px-4
+                                        h-10
+                                        text-white
+                                        hover:bg-gray-600
+                                        transition
+                                        "
+                                >
+                                    <Filter size={18} />
+                                </button>
+                                <button
+                                    onClick={() => setShowAddForm(true)}
+                                    className="rounded-full bg-blue-500 px-4 h-10 text-white font-semibold hover:bg-blue-400 transition"
+                                >
+                                    +
+                                </button>
+                            </div>
                         </div>
+
+                        {/* Divider */}
+                        <div className="my-6 h-px bg-gray-800" />
+
+                        {/* Content */}
+
+
+
+                        {viewMode === 'list' ? (
+                            <SubscriptionListView
+                                loading={loading}
+                                error={error}
+                                subscriptions={subscriptions}
+                                filteredSubscriptions={filteredSubscriptions}
+                                toggleFavorite={toggleFavorite}
+                                handleEditSubscription={handleEditSubscription}
+                                handleCancelSubscription={handleCancelSubscription}
+                                handleDeleteSubscription={handleDeleteSubscription}
+                                activePopup={activePopup}
+                                setActivePopup={setActivePopup}
+                                popupRef={popupRef}
+                                getLogoSrc={getLogoSrc}
+                            />
+                        ) : (
+                            <CalendarView
+                                subscriptions={filteredSubscriptions}
+                                onDayClick={(day) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        next_payment_date: format(day, 'yyyy-MM-dd'),
+                                    }));
+
+                                    setEditingSubscription(null);
+                                    setShowAddForm(true);
+                                }}
+
+                                toggleFavorite={toggleFavorite}
+                                handleEditSubscription={handleEditSubscription}
+                                handleCancelSubscription={handleCancelSubscription}
+                                handleDeleteSubscription={handleDeleteSubscription}
+
+                                showDeleteConfirm={showDeleteConfirm}
+                                setShowDeleteConfirm={setShowDeleteConfirm}
+
+                                getLogoSrc={getLogoSrc}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

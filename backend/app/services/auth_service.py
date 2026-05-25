@@ -26,7 +26,16 @@ def verify_password(password: str, hashed: str):
 
 
 def create_user(db: Session, email: str, password: str):
-    user = User(email=email, password=hash_password(password))
+    user = User(
+        email=email,
+        password=hash_password(password),
+        display_name=email.split("@")[0],
+        theme="dark",
+        currency="PLN",
+        date_format="dd.MM.yyyy",
+        in_app_notifications=True,
+        email_notifications=True,
+    )
 
     db.add(user)
     db.commit()

@@ -1,7 +1,9 @@
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
-import { Filter } from 'lucide-react';
+import { Filter, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { usePreferences } from '../context/UserPreferencesContext';
 import CalendarView from '../components/calendar/CalendarView';
 import SubscriptionListView from '../components/dashboard/SubscriptionListView';
 import * as subscriptionService from '../services/subscriptionService';
@@ -20,7 +22,16 @@ import skyshowtimeLogo from '../logos/skyshowtime_logo.png';
 import spotifyLogo from '../logos/spotify_logo.png';
 import youtubeLogo from '../logos/youtube_logo.png';
 
+import {
+    formatPrice,
+} from '../utils/formatPrice';
+
+import {
+    formatDate,
+} from '../utils/formatDate';
+
 function Dashboard() {
+    const navigate = useNavigate();
     const { user, logout, token } = useAuth();
     const [subscriptions, setSubscriptions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -68,9 +79,19 @@ function Dashboard() {
         return logoItem ? logoItem.src : null;
     };
 
+    const {
+        currency,
+        dateFormat,
+        inAppNotifications,
+    } = usePreferences();
+
     const fetchSubscriptions = useCallback(async () => {
         if (!token) {
             setLoading(false);
+            return;
+        }
+
+        if (!inAppNotifications) {
             return;
         }
 
@@ -105,7 +126,7 @@ function Dashboard() {
         } finally {
             setLoading(false);
         }
-    }, [token]);
+    }, [token, inAppNotifications]);
 
     useEffect(() => {
         fetchSubscriptions();
@@ -304,8 +325,38 @@ function Dashboard() {
     };
 
     const activeSubscriptions = subscriptions.filter((item) => item.is_active !== false);
-    const totalMonthly = activeSubscriptions.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-    const totalYearly = totalMonthly * 12;
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+
+    const totalMonthly = activeSubscriptions.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+
+        const paymentDate = new Date(item.next_payment_date);
+
+        const isDueThisMonth =
+            paymentDate.getMonth() === currentMonth &&
+            paymentDate.getFullYear() === currentYear;
+
+        if (item.billing_cycle === 'monthly') {
+            return sum + price;
+        }
+
+        if (item.billing_cycle === 'yearly' && isDueThisMonth) {
+            return sum + price;
+        }
+
+        return sum;
+    }, 0);
+
+    const totalYearly = activeSubscriptions.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+
+        return sum + (
+            item.billing_cycle === 'yearly'
+                ? price
+                : price * 12
+        );
+    }, 0);
 
     const sortedSubscriptions = [...subscriptions].sort((a, b) => {
         // First, sort by is_favourite (true first)
@@ -387,7 +438,7 @@ function Dashboard() {
                                 <li key={sub.id} className="rounded-3xl border border-gray-800 bg-gray-900/90 px-4 py-3 flex justify-between text-sm">
                                     <span className="text-white font-semibold">{sub.name}</span>
                                     <span className="text-gray-400">
-                                        {new Date(sub.next_payment_date).toLocaleDateString('en-GB')}
+                                        {formatDate(sub.next_payment_date, dateFormat)}
                                     </span>                                </li>
                             ))}
                         </ul>
@@ -402,33 +453,74 @@ function Dashboard() {
                             <div className="text-center sm:text-left">
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Dashboard</p>
                                 <h1 className="mt-3 text-3xl sm:text-4xl font-semibold text-white break-words">
-                                    Witaj, {user?.email ?? 'użytkowniku'}
+                                    Witaj, {user?.display_name || user?.email}
                                 </h1>
                                 <p className="mt-4 text-gray-400">
                                     Tutaj możesz sprawdzić swoje aktualne subskrypcje oraz miesięczne i roczne koszty.
                                 </p>
                             </div>
-                            <button
-                                onClick={() => {
-                                    sessionStorage.removeItem('popupShown');
-                                    logout();
-                                }}
-                                className="w-full rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 sm:w-auto"
-                            >
-                                Wyloguj się
-                            </button>
+                            <div className="
+                                flex
+                                items-center
+                                gap-3
+                            ">
+                                <button
+                                    onClick={() => navigate('/settings')}
+                                    className="
+                                        flex
+                                        h-12
+                                        w-12
+                                        items-center
+                                        justify-center
+
+                                        rounded-full
+                                        bg-gray-800
+
+                                        text-gray-300
+
+                                        transition
+                                        hover:bg-gray-700
+                                        hover:text-white
+                                    "
+                                >
+                                    <Settings size={20} />
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        sessionStorage.removeItem(
+                                            'popupShown'
+                                        );
+
+                                        logout();
+                                    }}
+                                    className="
+                                        rounded-full
+                                        bg-blue-500
+                                        px-6
+                                        py-3
+                                        text-sm
+                                        font-semibold
+                                        text-white
+                                        transition
+                                        hover:bg-blue-400
+                                    "
+                                >
+                                    Wyloguj się
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
                             <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Miesięczny koszt</p>
-                            <p className="mt-4 text-4xl font-semibold text-white">{totalMonthly.toFixed(2)} PLN</p>
+                            <p className="mt-4 text-4xl font-semibold text-white">{formatPrice(totalMonthly, currency)}</p>
                             <p className="mt-2 text-sm text-gray-400">Suma wszystkich subskrypcji na najbliższy miesiąc.</p>
                         </div>
                         <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
                             <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Roczny koszt</p>
-                            <p className="mt-4 text-4xl font-semibold text-white">{totalYearly.toFixed(2)} PLN</p>
+                            <p className="mt-4 text-4xl font-semibold text-white">{formatPrice(totalYearly, currency)}</p>
                             <p className="mt-2 text-sm text-gray-400">Szacowany koszt subskrypcji za 12 miesięcy.</p>
                         </div>
                     </div>

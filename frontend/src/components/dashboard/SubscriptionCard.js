@@ -1,3 +1,15 @@
+import {
+    formatPrice,
+} from '../../utils/formatPrice';
+
+import {
+    formatDate,
+} from '../../utils/formatDate';
+
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function SubscriptionCard({
     subscription,
     toggleFavorite,
@@ -9,7 +21,23 @@ function SubscriptionCard({
     getLogoSrc,
     popupRef,
 }) {
+    const {
+        currency,
+        dateFormat,
+    } = usePreferences();
+
     const logoSrc = getLogoSrc(subscription);
+
+    const formattedPrice =
+        subscription.billing_cycle === 'yearly'
+            ? `${formatPrice(
+                subscription.price,
+                currency
+            )}/rok`
+            : `${formatPrice(
+                subscription.price,
+                currency
+            )}/mies.`;
 
     return (
         <div
@@ -18,7 +46,6 @@ function SubscriptionCard({
                 border
                 border-gray-800
                 ${!subscription.is_active ? 'bg-gray-900/45' : 'bg-gray-900/90'}
-                bg-gray-900/90
                 p-4
                 sm:p-5
                 relative
@@ -127,11 +154,15 @@ function SubscriptionCard({
                 <div className={`text-right sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     <p className="text-xl font-semibold text-white">
-                        {subscription.price.toFixed(2)} PLN/mies.
+                        {formattedPrice}
                     </p>
 
                     <p className="mt-1 text-sm text-gray-400">
-                        Następna płatność: {subscription.next_payment_date}
+                        Następna płatność:{' '}
+                        {formatDate(
+                            subscription.next_payment_date,
+                            dateFormat
+                        )}
                     </p>
                 </div>
 

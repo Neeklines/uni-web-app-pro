@@ -3,6 +3,14 @@ import {
     X,
 } from 'lucide-react';
 
+import {
+    formatPrice,
+} from '../../utils/formatPrice';
+
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function CalendarEventCard({
     subscription,
     compact = false,
@@ -10,6 +18,7 @@ function CalendarEventCard({
     handleEditSubscription,
     handleCancelSubscription,
 }) {
+    const { currency } = usePreferences();
     if (compact) {
         return (
             <div
@@ -118,7 +127,10 @@ function CalendarEventCard({
             <div className="mt-2 flex items-center justify-between gap-2">
 
                 <p className="text-xs text-gray-500">
-                    {subscription.price} {/* TODO: waluta */}
+                    {formatPrice(
+                        subscription.price,
+                        currency
+                    )}
                 </p>
 
                 <div className="flex items-center gap-2">

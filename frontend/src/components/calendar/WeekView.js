@@ -5,6 +5,8 @@ import {
     isSameDay,
 } from 'date-fns';
 
+import { pl } from 'date-fns/locale';
+
 import CalendarEventCard from './CalendarEventCard';
 
 function WeekView({
@@ -37,7 +39,9 @@ function WeekView({
                     >
                         <div className="mb-4">
                             <p className="text-sm text-gray-400">
-                                {format(day, 'EEE')}
+                                {format(day, 'EEE', {
+                                    locale: pl,
+                                })}
                             </p>
 
                             <p className="text-2xl font-semibold text-white">

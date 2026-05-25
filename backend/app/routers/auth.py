@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.database import get_db
 
-from app.schemas.user import UserCreate, UserLogin
+from app.schemas.user import UserCreate, UserLogin, UserOut, UserSettingsUpdate
 from app.schemas.password_reset import ForgotPasswordRequest, ResetPasswordRequest
 from app.services.auth_service import (
     create_user,
@@ -20,16 +20,16 @@ from app.services.login_protection_service import (
     cleanup_expired_login_attempts,
     ensure_login_not_blocked,
 )
+from app.services.user_service import (
+    update_user_settings,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.get("/me")
+@router.get("/me", response_model=UserOut)
 def get_me(current_user: User = Depends(get_current_user)):
-    return {
-        "id": current_user.id,
-        "email": current_user.email,
-    }
+    return current_user
 
 
 @router.post("/register")
@@ -78,3 +78,19 @@ def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=400, detail=error)
 
     return {"message": "Hasło zostało zresetowane."}
+
+
+@router.patch("/settings", response_model=UserOut)
+def update_settings(
+    payload: UserSettingsUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    updates = payload.model_dump(exclude_unset=True)
+
+    update_user_settings(current_user, updates)
+
+    db.commit()
+    db.refresh(current_user)
+
+    return current_user

@@ -11,6 +11,7 @@ import Landing from './pages/Landing';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
@@ -36,6 +37,7 @@ function App() {
       <Route element={<AppLayout />}>
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
     </Routes>

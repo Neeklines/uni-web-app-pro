@@ -1,59 +1,69 @@
-Database schema diagram (relational model, shows primary keys, foreign keys, and constraints) for a subscription tracking system.
+-- =========================================
+-- DATABASE SCHEMA
+-- SQLAlchemy → PostgreSQL/MySQL Compatible
+-- =========================================
 
-Tables and columns:
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
 
-TABLE users
-- id INTEGER PRIMARY KEY
-- email VARCHAR UNIQUE NOT NULL
-- password_hash VARCHAR NOT NULL
+    email VARCHAR NOT NULL UNIQUE,
+    password VARCHAR NOT NULL,
 
-TABLE categories
-- id INTEGER PRIMARY KEY
-- name VARCHAR UNIQUE NOT NULL
+    -- profile
+    display_name VARCHAR NOT NULL DEFAULT '',
 
-TABLE subscriptions
-- id INTEGER PRIMARY KEY
-- name VARCHAR NOT NULL
-- price NUMERIC(10,2) NOT NULL
-- billing_cycle VARCHAR NOT NULL
-- next_payment_date DATE NOT NULL
-- created_at TIMESTAMP
-- is_pinned BOOLEAN NOT NULL
-- is_favourite BOOLEAN NOT NULL
-- is_active BOOLEAN NOT NULL
-- cancelled_at DATE
-- notes TEXT
-- user_id INTEGER NOT NULL
-- category_id INTEGER
+    -- preferences
+    theme VARCHAR NOT NULL DEFAULT 'dark',
+    currency VARCHAR NOT NULL DEFAULT 'PLN',
+    date_format VARCHAR NOT NULL DEFAULT 'dd.MM.yyyy',
 
-TABLE password_reset_tokens
-- id INTEGER PRIMARY KEY
-- user_id INTEGER NOT NULL
-- token_hash VARCHAR UNIQUE NOT NULL
-- expires_at TIMESTAMP NOT NULL
-- used_at TIMESTAMP
-- created_at TIMESTAMP NOT NULL
+    -- notifications
+    in_app_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    email_notifications BOOLEAN NOT NULL DEFAULT TRUE
+);
 
-TABLE login_attempts
-- id INTEGER PRIMARY KEY
-- email VARCHAR
-- ip_address VARCHAR
-- failure_count INTEGER NOT NULL
-- first_failed_at TIMESTAMP NOT NULL
-- last_failed_at TIMESTAMP NOT NULL
-- blocked_until TIMESTAMP
-- expires_at TIMESTAMP NOT NULL
 
-TABLE logos
-- id INTEGER PRIMARY KEY
-- name VARCHAR NOT NULL
-- url VARCHAR NOT NULL
-- is_default BOOLEAN
-- user_id INTEGER
+CREATE TABLE subscriptions (
+    id INTEGER PRIMARY KEY,
 
-Relationships:
+    name VARCHAR NOT NULL,
+    price FLOAT NOT NULL,
 
-- subscriptions.user_id → users.id
-- subscriptions.category_id → categories.id
-- password_reset_tokens.user_id → users.id
-- logos.user_id → users.id (optional)
+    billing_cycle VARCHAR NOT NULL,
+    next_payment_date DATE NOT NULL,
+
+    category VARCHAR NULL,
+
+    is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
+    is_favourite BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    cancelled_at DATE NULL,
+    notes TEXT NULL,
+
+    user_id INTEGER NOT NULL,
+
+    CONSTRAINT fk_subscription_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+-- =========================================
+-- INDEXES
+-- =========================================
+
+CREATE UNIQUE INDEX ix_users_email
+ON users(email);
+
+CREATE INDEX ix_subscriptions_id
+ON subscriptions(id);
+
+-- =========================================
+-- RELATIONSHIPS
+-- =========================================
+-- USER 1 ----< N SUBSCRIPTION
+--
+-- One USER can have many SUBSCRIPTIONS
+-- One SUBSCRIPTION belongs to exactly one USER
+-- =========================================

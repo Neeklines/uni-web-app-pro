@@ -38,6 +38,12 @@ function Dashboard() {
     const [error, setError] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [sortMode, setSortMode] = useState('name-asc');
+    const [onlyFavorites, setOnlyFavorites] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedBillingCycle, setSelectedBillingCycle] = useState('all');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+
     const [searchTerm, setSearchTerm] = useState('');
     const [editingSubscription, setEditingSubscription] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
@@ -380,10 +386,25 @@ function Dashboard() {
                 return 0;
         }
     });
+    const categories = [
+        ...new Set(
+            subscriptions
+                .map(sub => sub.category)
+                .filter(Boolean)
+        )
+    ];
+    const filteredSubscriptions = sortedSubscriptions.filter(subscription => {
 
-    const filteredSubscriptions = sortedSubscriptions.filter(subscription =>
-        subscription.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-    );
+        const matchesSearch =
+            subscription.name.toLowerCase().startsWith(searchTerm.toLowerCase());
+
+        const matchesFavorites = !onlyFavorites || subscription.is_favourite;
+        const matchesCategory = selectedCategory === 'all' || subscription.category === selectedCategory;
+        const matchesBillingCycle = selectedBillingCycle === 'all' || subscription.billing_cycle === selectedBillingCycle;
+        const matchesMinPrice = minPrice === '' || Number(subscription.price) >= Number(minPrice);
+        const matchesMaxPrice = maxPrice === '' || Number(subscription.price) <= Number(maxPrice);
+        return (matchesSearch && matchesFavorites && matchesCategory && matchesBillingCycle && matchesMinPrice && matchesMaxPrice);
+    });
 
     const getSortIcon = () => {
         switch (sortMode) {
@@ -779,19 +800,118 @@ function Dashboard() {
                                     )}
 
                                 </div>
-                                <button
-                                    className="
-                                        rounded-full
-                                        bg-gray-700
-                                        px-4
-                                        h-10
-                                        text-white
-                                        hover:bg-gray-600
-                                        transition
-                                        "
-                                >
-                                    <Filter size={18} />
-                                </button>
+                                {/* filter */}
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActivePopup((prev) => prev === 'filter' ? null : 'filter');
+                                        }}
+                                        className=" rounded-full bg-gray-700 px-4 h-10 text-white hover:bg-gray-600 transition "
+                                    >
+                                        <Filter size={18} />
+                                    </button>
+
+                                    {activePopup === 'filter' && (
+                                        <div
+                                            ref={popupRef}
+                                            className="absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 rounded-xl border border-gray-700 bg-gray-800 p-4 shadow-xl text-white "
+                                        >
+                                            <div className="flex flex-col gap-4 min-w-[260px]">
+                                                <label className="flex items-center gap-2 text-white">
+                                                    <button onClick={() => setOnlyFavorites(!onlyFavorites)}
+                                                        className="flex items-center gap-2 rounded-lg px-2 py-2 transition hover:bg-gray-700"
+                                                    >
+                                                        <span className="text-xl">
+                                                            {onlyFavorites ? '⭐' : '☆'}
+                                                        </span>
+                                                        <span className="text-white">
+                                                            Tylko ulubione
+                                                        </span>
+                                                    </button>
+                                                </label>
+
+                                                <div>
+                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                        Kategoria
+                                                    </label>
+
+                                                    <select
+                                                        value={selectedCategory}
+                                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                                        className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    >
+                                                        <option value="all">
+                                                            Wszystkie
+                                                        </option>
+                                                        {categories.map(category => (
+                                                            <option
+                                                                key={category}
+                                                                value={category}
+                                                            >
+                                                                {category}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                        Cykl rozliczeniowy
+                                                    </label>
+
+                                                    <select
+                                                        value={selectedBillingCycle}
+                                                        onChange={(e) => setSelectedBillingCycle(e.target.value)}
+                                                        className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    >
+                                                        <option value="all">
+                                                            Wszystkie
+                                                        </option>
+                                                        <option value="monthly">
+                                                            Miesięczne
+                                                        </option>
+                                                        <option value="yearly">
+                                                            Roczne
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block mb-2 text-sm text-gray-300">
+                                                        Cena
+                                                    </label>
+
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Od"
+                                                            value={minPrice}
+                                                            onChange={(e) => setMinPrice(e.target.value)}
+                                                            className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                        />
+
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Do"
+                                                            value={maxPrice}
+                                                            onChange={(e) => setMaxPrice(e.target.value)}
+                                                            className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-center">
+                                                <button
+                                                    onClick={() => (setOnlyFavorites(false), setSelectedCategory('all'), setMinPrice(''), setMaxPrice(''))}
+                                                    className="rounded-lg  bg-gray-700 py-2 px-2 mt-2 text-white hover:bg-gray-600 transition"
+                                                >
+                                                    Wyczyść
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
                                 <button
                                     onClick={() => setShowAddForm(true)}
                                     className="rounded-full bg-blue-500 px-4 h-10 text-white font-semibold hover:bg-blue-400 transition"

@@ -14,7 +14,7 @@ mógł:
 
 - [x] Moduł rejestracji, logowania użytkownika oraz w pełni działający system odzyskiwania hasła
 - [ ] Główny pulpit (Dashboard) zawierający powitanie z imieniem użytkownika, łączne koszty w ujęciu miesięcznym i rocznym oraz interaktywny diagram kołowy z danymi w dwóch trybach.
-- [x] Pełne zarządzanie subskrypcjami: dodawanie (ręczne lub z katalogu), usuwanie, wygaszanie oraz zaawansowana edycja (m.in. przypinanie – pinned, oznaczanie jako ulubione, dodawanie notatek oraz edycja wprowadzonych danych).
+- [x] Pełne zarządzanie subskrypcjami: dodawanie (ręczne lub z katalogu), usuwanie, wygaszanie oraz zaawansowana edycja (m.in. oznaczanie jako ulubione, dodawanie notatek oraz edycja wprowadzonych danych).
 - [x] Widok listy subskrypcji wyposażony w mechanizmy filtrowania, sortowania oraz wyszukiwania konkretnych wydatków.
 - [ ] Widok kalendarza pozwalający na śledzenie dat najbliższych płatności.
 - [x] System powiadomień o zbliżających się płatnościach: wizualne alerty wewnątrz aplikacji oraz powiadomienia wysyłane na adres e-mail użytkownika.
@@ -49,7 +49,7 @@ pomiędzy różnymi użytkownikami
     + diagram kołowy (dwa tryby)
     + dodawanie/usuwanie subskrypcji
 * Sebastian Gęborys:
-    + edycja subskrybcji (pinned, favourite, notes, dane)
+    + edycja subskrybcji (favourite, notes, dane)
     + ustawienia
 * Bartosz Mroczek:
     + lista subskrybcji (oraz filtrowanie, sortowanie, wyszukiwanie)

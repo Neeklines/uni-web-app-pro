@@ -11,7 +11,6 @@ def create_subscription(db: Session, user_id: int, data):
         next_payment_date=data.next_payment_date,
         category=data.category,
         user_id=user_id,
-        is_pinned=data.is_pinned,
         is_favourite=data.is_favourite,
         is_active=data.is_active,
         notes=data.notes,
@@ -30,7 +29,6 @@ def get_user_subscriptions(db: Session, user_id: int):
         db.query(Subscription)
         .filter(Subscription.user_id == user_id)
         .order_by(
-            Subscription.is_pinned.desc(),
             Subscription.is_active.desc(),
             Subscription.next_payment_date.asc(),
         )

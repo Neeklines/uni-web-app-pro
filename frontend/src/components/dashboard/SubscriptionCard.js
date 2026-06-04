@@ -16,6 +16,7 @@ function SubscriptionCard({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
+    handleReactivateSubscription,
     activePopup,
     setActivePopup,
     getLogoSrc,
@@ -252,24 +253,44 @@ function SubscriptionCard({
                                     Anuluj
                                 </button>
                             ) : (
-                                <button
-                                    onClick={() =>
-                                        handleDeleteSubscription(subscription.id)
-                                    }
-                                    className="
-                                        block
-                                        w-full
-                                        text-left
-                                        px-3
-                                        py-2
-                                        hover:bg-red-700
-                                        text-red-400
-                                        hover:text-red-300
-                                        rounded
-                                    "
-                                >
-                                    Usuń
-                                </button>
+                                <>
+                                    <button
+                                        onClick={() =>
+                                            handleReactivateSubscription(subscription.id)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-green-900/50
+                                            text-green-400
+                                            hover:text-green-300
+                                            rounded
+                                        "
+                                    >
+                                        Reaktywuj
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteSubscription(subscription.id)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-red-700
+                                            text-red-400
+                                            hover:text-red-300
+                                            rounded
+                                        "
+                                    >
+                                        Usuń
+                                    </button>
+                                </>
                             )}
                         </div>
                     )}

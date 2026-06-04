@@ -215,30 +215,30 @@ function SubscriptionCard({
                             min-w-[120px]
                         "ref={popupRef}>
 
-                            <button
-                                onClick={() =>
-                                    handleEditSubscription(subscription)
-                                }
-                                className="
-                                    block
-                                    w-full
-                                    text-left
-                                    px-3
-                                    py-2
-                                    hover:bg-gray-700
-                                    text-white
-                                    rounded
-                                "
-                            >
-                                Edytuj
-                            </button>
-
                             {subscription.is_active ? (
-                                <button
-                                    onClick={() =>
-                                        handleCancelSubscription(subscription.id)
-                                    }
-                                    className="
+                                <>
+                                    <button
+                                        onClick={() =>
+                                            handleEditSubscription(subscription)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-gray-700
+                                            text-white
+                                            rounded
+                                        "
+                                    >
+                                        Edytuj
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleCancelSubscription(subscription.id)
+                                        }
+                                        className="
                                         block
                                         w-full
                                         text-left
@@ -249,9 +249,10 @@ function SubscriptionCard({
                                         hover:text-red-300
                                         rounded
                                     "
-                                >
-                                    Anuluj
-                                </button>
+                                    >
+                                        Anuluj
+                                    </button>
+                                </>
                             ) : (
                                 <>
                                     <button

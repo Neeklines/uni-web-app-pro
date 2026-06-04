@@ -38,6 +38,35 @@ function Dashboard() {
     const [error, setError] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [sortMode, setSortMode] = useState('name-asc');
+    const [onlyFavorites, setOnlyFavorites] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedBillingCycle, setSelectedBillingCycle] = useState('all');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const hasActiveFilters =
+        onlyFavorites ||
+        selectedCategory !== 'all' ||
+        selectedBillingCycle !== 'all' ||
+        minPrice !== '' ||
+        maxPrice !== '';
+
+    const getResultsLabel = (count) => {
+
+        if (count === 1) {
+            return 'wynik';
+        }
+
+        if (
+            count % 10 >= 2 &&
+            count % 10 <= 4 &&
+            (count % 100 < 12 || count % 100 > 14)
+        ) {
+            return 'wyniki';
+        }
+
+        return 'wyników';
+    };
+
     const [searchTerm, setSearchTerm] = useState('');
     const [editingSubscription, setEditingSubscription] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
@@ -380,10 +409,25 @@ function Dashboard() {
                 return 0;
         }
     });
+    const categories = [
+        ...new Set(
+            subscriptions
+                .map(sub => sub.category)
+                .filter(Boolean)
+        )
+    ];
+    const filteredSubscriptions = sortedSubscriptions.filter(subscription => {
 
-    const filteredSubscriptions = sortedSubscriptions.filter(subscription =>
-        subscription.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-    );
+        const matchesSearch =
+            subscription.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesFavorites = !onlyFavorites || subscription.is_favourite;
+        const matchesCategory = selectedCategory === 'all' || subscription.category === selectedCategory;
+        const matchesBillingCycle = selectedBillingCycle === 'all' || subscription.billing_cycle === selectedBillingCycle;
+        const matchesMinPrice = minPrice === '' || Number(subscription.price) >= Number(minPrice);
+        const matchesMaxPrice = maxPrice === '' || Number(subscription.price) <= Number(maxPrice);
+        return (matchesSearch && matchesFavorites && matchesCategory && matchesBillingCycle && matchesMinPrice && matchesMaxPrice);
+    });
 
     const getSortIcon = () => {
         switch (sortMode) {
@@ -571,7 +615,7 @@ function Dashboard() {
                                 <button
                                     onClick={() => setViewMode('list')}
                                     className={`rounded-full px-4 py-2 font-semibold transition
-                ${viewMode === 'list'
+                                    ${viewMode === 'list'
                                             ? 'bg-blue-500 text-white'
                                             : 'bg-gray-700 text-gray-300'
                                         }`}
@@ -582,7 +626,7 @@ function Dashboard() {
                                 <button
                                     onClick={() => setViewMode('calendar')}
                                     className={`rounded-full px-4 py-2 font-semibold transition
-                ${viewMode === 'calendar'
+                                    ${viewMode === 'calendar'
                                             ? 'bg-blue-500 text-white'
                                             : 'bg-gray-700 text-gray-300'
                                         }`}
@@ -629,8 +673,10 @@ function Dashboard() {
                                                 left-1/2
                                                 top-[calc(100%+8px)]
                                                 -translate-x-1/2
+
                                                 z-20
                                                 min-w-[140px]
+
                                                 rounded-xl
                                                 border
                                                 border-gray-700
@@ -639,13 +685,27 @@ function Dashboard() {
                                                 shadow-xl
                                             "
                                         >
-                                            {/* popup buttons */}
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* FILTER */}
                                 <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+
+                                        setActivePopup((prev) =>
+                                            prev === 'filter'
+                                                ? null
+                                                : 'filter'
+                                        );
+                                    }}
                                     className="
                                         flex
                                         h-10
@@ -659,8 +719,169 @@ function Dashboard() {
                                         transition
                                     "
                                 >
-                                    <Filter size={18} />
+                                    <Filter size={18} fill={hasActiveFilters ? 'currentColor' : 'none'} />
                                 </button>
+
+                                {activePopup === 'filter' && (
+                                    <div
+                                        ref={popupRef}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="
+                                            fixed
+                                            top-1/2
+                                            -ztranslate-x-1/2
+                                            -translate-y-1/2
+
+                                            z-50
+
+                                            w-[80vw]
+                                            max-w-sm
+
+                                            rounded-xl
+                                            border
+                                            border-gray-700
+                                            bg-gray-800
+                                            p-4
+                                            shadow-xl
+                                            text-white
+                                        "
+                                    >
+                                        <div className="flex flex-col gap-4 min-w-[260px]">
+                                            <label className="flex items-center gap-2 text-white">
+                                                <button
+                                                    onClick={() =>
+                                                        setOnlyFavorites(!onlyFavorites)
+                                                    }
+                                                    className="
+                                                            flex
+                                                            items-center
+                                                            gap-3
+                                                            rounded-lg
+                                                            px-2
+                                                            py-2
+                                                            transition
+                                                            hover:bg-gray-700
+                                                        "
+                                                >
+                                                    <span
+                                                        className={`
+                                                                    text-2xl
+                                                                    transition
+                                                                ${onlyFavorites
+                                                                ? 'text-yellow-400'
+                                                                : 'text-gray-500 hover:text-yellow-300'
+                                                            }
+                                                            `}
+                                                    >
+                                                        {onlyFavorites ? '★' : '☆'}
+                                                    </span>
+                                                    <span className="text-white">
+                                                        Tylko ulubione
+                                                    </span>
+                                                </button>
+                                            </label>
+
+                                            <div>
+                                                <label className="block mb-1 text-sm text-gray-300">
+                                                    Kategoria
+                                                </label>
+
+                                                <select
+                                                    value={selectedCategory}
+                                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                                    className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                >
+                                                    <option value="all">
+                                                        Wszystkie
+                                                    </option>
+                                                    {categories.map(category => (
+                                                        <option
+                                                            key={category}
+                                                            value={category}
+                                                        >
+                                                            {category}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block mb-1 text-sm text-gray-300">
+                                                    Cykl rozliczeniowy
+                                                </label>
+
+                                                <select
+                                                    value={selectedBillingCycle}
+                                                    onChange={(e) => setSelectedBillingCycle(e.target.value)}
+                                                    className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                >
+                                                    <option value="all">
+                                                        Wszystkie
+                                                    </option>
+                                                    <option value="monthly">
+                                                        Miesięczne
+                                                    </option>
+                                                    <option value="yearly">
+                                                        Roczne
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block mb-2 text-sm text-gray-300">
+                                                    Cena
+                                                </label>
+
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Od"
+                                                        value={minPrice}
+                                                        onChange={(e) => setMinPrice(e.target.value)}
+                                                        className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    />
+
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Do"
+                                                        value={maxPrice}
+                                                        onChange={(e) => setMaxPrice(e.target.value)}
+                                                        className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mt-2 flex items-center justify-between gap-3">
+
+                                            <p className="text-sm text-gray-400">
+                                                {filteredSubscriptions.length}{' '}
+                                                {getResultsLabel(
+                                                    filteredSubscriptions.length
+                                                )}
+                                            </p>
+
+                                            <button
+                                                onClick={() => {
+                                                    setOnlyFavorites(false);
+                                                    setSelectedCategory('all');
+                                                    setSelectedBillingCycle('all');
+                                                    setMinPrice('');
+                                                    setMaxPrice('');
+                                                }}
+                                                className="
+                                                        rounded-lg
+                                                        bg-gray-700
+                                                        px-3
+                                                        py-2
+                                                        text-white
+                                                        transition
+                                                        hover:bg-gray-600
+                                                    "
+                                            >
+                                                Wyczyść
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* ADD */}
                                 <button
@@ -779,19 +1000,162 @@ function Dashboard() {
                                     )}
 
                                 </div>
-                                <button
-                                    className="
-                                        rounded-full
-                                        bg-gray-700
-                                        px-4
-                                        h-10
-                                        text-white
-                                        hover:bg-gray-600
-                                        transition
-                                        "
-                                >
-                                    <Filter size={18} />
-                                </button>
+                                {/* filter */}
+                                <div className="relative flex items-center">
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActivePopup((prev) => prev === 'filter' ? null : 'filter');
+                                        }}
+                                        className=" rounded-full bg-gray-700 px-4 h-10 text-white hover:bg-gray-600 transition "
+                                    >
+                                        <Filter size={18} />
+                                    </button>
+
+                                    {activePopup === 'filter' && (
+                                        <div
+                                            ref={popupRef}
+                                            className="absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 rounded-xl border border-gray-700 bg-gray-800 p-4 shadow-xl text-white "
+                                        >
+                                            <div className="flex flex-col gap-4 min-w-[260px]">
+                                                <label className="flex items-center gap-2 text-white">
+                                                    <button
+                                                        onClick={() =>
+                                                            setOnlyFavorites(!onlyFavorites)
+                                                        }
+                                                        className="
+                                                            flex
+                                                            items-center
+                                                            gap-3
+                                                            rounded-lg
+                                                            px-2
+                                                            py-2
+                                                            transition
+                                                            hover:bg-gray-700
+                                                        "
+                                                    >
+                                                        <span
+                                                            className={`
+                                                                    text-2xl
+                                                                    transition
+                                                                ${onlyFavorites
+                                                                    ? 'text-yellow-400'
+                                                                    : 'text-gray-500 hover:text-yellow-300'
+                                                                }
+                                                            `}
+                                                        >
+                                                            {onlyFavorites ? '★' : '☆'}
+                                                        </span>
+                                                        <span className="text-white">
+                                                            Tylko ulubione
+                                                        </span>
+                                                    </button>
+                                                </label>
+
+                                                <div>
+                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                        Kategoria
+                                                    </label>
+
+                                                    <select
+                                                        value={selectedCategory}
+                                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                                        className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    >
+                                                        <option value="all">
+                                                            Wszystkie
+                                                        </option>
+                                                        {categories.map(category => (
+                                                            <option
+                                                                key={category}
+                                                                value={category}
+                                                            >
+                                                                {category}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                        Cykl rozliczeniowy
+                                                    </label>
+
+                                                    <select
+                                                        value={selectedBillingCycle}
+                                                        onChange={(e) => setSelectedBillingCycle(e.target.value)}
+                                                        className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    >
+                                                        <option value="all">
+                                                            Wszystkie
+                                                        </option>
+                                                        <option value="monthly">
+                                                            Miesięczne
+                                                        </option>
+                                                        <option value="yearly">
+                                                            Roczne
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block mb-2 text-sm text-gray-300">
+                                                        Cena
+                                                    </label>
+
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Od"
+                                                            value={minPrice}
+                                                            onChange={(e) => setMinPrice(e.target.value)}
+                                                            className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                        />
+
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Do"
+                                                            value={maxPrice}
+                                                            onChange={(e) => setMaxPrice(e.target.value)}
+                                                            className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-2 flex items-center justify-between gap-3">
+
+                                                <p className="text-sm text-gray-400">
+                                                    {filteredSubscriptions.length}{' '}
+                                                    {getResultsLabel(
+                                                        filteredSubscriptions.length
+                                                    )}
+                                                </p>
+
+                                                <button
+                                                    onClick={() => {
+                                                        setOnlyFavorites(false);
+                                                        setSelectedCategory('all');
+                                                        setSelectedBillingCycle('all');
+                                                        setMinPrice('');
+                                                        setMaxPrice('');
+                                                    }}
+                                                    className="
+                                                        rounded-lg
+                                                        bg-gray-700
+                                                        px-3
+                                                        py-2
+                                                        text-white
+                                                        transition
+                                                        hover:bg-gray-600
+                                                    "
+                                                >
+                                                    Wyczyść
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
                                 <button
                                     onClick={() => setShowAddForm(true)}
                                     className="rounded-full bg-blue-500 px-4 h-10 text-white font-semibold hover:bg-blue-400 transition"

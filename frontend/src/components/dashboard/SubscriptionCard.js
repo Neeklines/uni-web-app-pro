@@ -16,6 +16,7 @@ function SubscriptionCard({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
+    handleReactivateSubscription,
     activePopup,
     setActivePopup,
     getLogoSrc,
@@ -214,30 +215,30 @@ function SubscriptionCard({
                             min-w-[120px]
                         "ref={popupRef}>
 
-                            <button
-                                onClick={() =>
-                                    handleEditSubscription(subscription)
-                                }
-                                className="
-                                    block
-                                    w-full
-                                    text-left
-                                    px-3
-                                    py-2
-                                    hover:bg-gray-700
-                                    text-white
-                                    rounded
-                                "
-                            >
-                                Edytuj
-                            </button>
-
                             {subscription.is_active ? (
-                                <button
-                                    onClick={() =>
-                                        handleCancelSubscription(subscription.id)
-                                    }
-                                    className="
+                                <>
+                                    <button
+                                        onClick={() =>
+                                            handleEditSubscription(subscription)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-gray-700
+                                            text-white
+                                            rounded
+                                        "
+                                    >
+                                        Edytuj
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleCancelSubscription(subscription.id)
+                                        }
+                                        className="
                                         block
                                         w-full
                                         text-left
@@ -248,28 +249,49 @@ function SubscriptionCard({
                                         hover:text-red-300
                                         rounded
                                     "
-                                >
-                                    Anuluj
-                                </button>
+                                    >
+                                        Anuluj
+                                    </button>
+                                </>
                             ) : (
-                                <button
-                                    onClick={() =>
-                                        handleDeleteSubscription(subscription.id)
-                                    }
-                                    className="
-                                        block
-                                        w-full
-                                        text-left
-                                        px-3
-                                        py-2
-                                        hover:bg-red-700
-                                        text-red-400
-                                        hover:text-red-300
-                                        rounded
-                                    "
-                                >
-                                    Usuń
-                                </button>
+                                <>
+                                    <button
+                                        onClick={() =>
+                                            handleReactivateSubscription(subscription.id)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-green-900/50
+                                            text-green-400
+                                            hover:text-green-300
+                                            rounded
+                                        "
+                                    >
+                                        Reaktywuj
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteSubscription(subscription.id)
+                                        }
+                                        className="
+                                            block
+                                            w-full
+                                            text-left
+                                            px-3
+                                            py-2
+                                            hover:bg-red-700
+                                            text-red-400
+                                            hover:text-red-300
+                                            rounded
+                                        "
+                                    >
+                                        Usuń
+                                    </button>
+                                </>
                             )}
                         </div>
                     )}

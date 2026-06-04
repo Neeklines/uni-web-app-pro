@@ -1182,6 +1182,7 @@ function Dashboard() {
                                 handleEditSubscription={handleEditSubscription}
                                 handleCancelSubscription={handleCancelSubscription}
                                 handleDeleteSubscription={handleDeleteSubscription}
+                                handleReactivateSubscription={handleReactivateSubscription}
                                 activePopup={activePopup}
                                 setActivePopup={setActivePopup}
                                 popupRef={popupRef}

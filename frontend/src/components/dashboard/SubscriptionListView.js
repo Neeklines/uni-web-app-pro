@@ -9,6 +9,7 @@ function SubscriptionListView({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
+    handleReactivateSubscription,
     getLogoSrc,
     activePopup,
     setActivePopup,
@@ -46,6 +47,7 @@ function SubscriptionListView({
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
                         handleDeleteSubscription={handleDeleteSubscription}
+                        handleReactivateSubscription={handleReactivateSubscription}
                         getLogoSrc={getLogoSrc}
                         activePopup={activePopup}
                         setActivePopup={setActivePopup}

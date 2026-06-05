@@ -498,8 +498,10 @@ function Dashboard() {
                             </div>
                             <div className="
                                 flex
+                                justify-center
                                 items-center
                                 gap-3
+                                sm:justify-start
                             ">
                                 <button
                                     onClick={() => navigate('/settings')}
@@ -538,6 +540,28 @@ function Dashboard() {
                                     `}
                                 >
                                     Wyloguj się
+                                </button>
+
+                                <button
+                                    onClick={() => navigate('/settings')}
+                                    className="
+                                        flex
+                                        h-12
+                                        w-12
+                                        items-center
+                                        justify-center
+
+                                        rounded-full
+                                        bg-gray-800
+
+                                        text-gray-300
+
+                                        transition
+                                        hover:bg-gray-700
+                                        hover:text-white
+                                    "
+                                >
+                                    <Settings size={20} />
                                 </button>
                             </div>
                         </div>

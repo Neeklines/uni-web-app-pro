@@ -148,8 +148,8 @@ function SubscriptionCard({
                         `}
                     >
                         <p className="
+                            break-all
                             line-clamp-2
-                            break-words
                         ">
                             {subscription.notes}
                         </p>
@@ -157,7 +157,8 @@ function SubscriptionCard({
                 )}
 
                 {/* Price */}
-                <div className={`text-right sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
+                <div className={`text-right flex flex-col items-end justify-center self-stretch 
+                                    sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     <p className={`text-xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                         {formattedPrice}

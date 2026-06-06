@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import {
     Bell,
     Monitor,
@@ -23,37 +22,59 @@ function Section({
     title,
     children,
 }) {
+    const { theme } = usePreferences();
+
     return (
-        <div className="
+
+        <div
+            className={`
             rounded-[32px]
             border
-            border-gray-700
-            bg-gray-950/70
             p-6
             sm:p-8
             shadow-xl
-            shadow-black/20
-        ">
+
+            ${theme === 'light'
+                    ?
+                    `
+                        border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20
+                    `
+                    :
+                    `
+                        border-gray-700 bg-gray-950/70 shadow-black/20
+                    `
+                }
+        `}
+        >
             <div className="
-                mb-6
-                flex
-                items-center
-                gap-3
-            ">
-                <div className="
-                    rounded-2xl
-                    bg-blue-500/10
-                    p-3
-                    text-blue-400
-                ">
+            mb-6
+            flex
+            items-center
+            gap-3
+        ">
+                <div className={`
+                rounded-2xl
+                p-3
+
+                ${theme === 'light'
+                        ? 'bg-blue-500/10 text-blue-500'
+                        : 'bg-blue-500/10 text-blue-400'
+                    }
+            `}>
                     {icon}
                 </div>
 
-                <h2 className="
+                <h2
+                    className={`
                     text-xl
                     font-semibold
-                    text-white
-                ">
+
+                    ${theme === 'light'
+                            ? 'text-stone-900'
+                            : 'text-white'
+                        }
+                `}
+                >
                     {title}
                 </h2>
             </div>
@@ -166,14 +187,20 @@ function Settings() {
     };
 
     return (
-        <div className="
-            bg-gray-900
+        <div
+            className="
             px-4
             py-8
 
             sm:px-6
-            sm:py-12
-        ">
+            sm:py-12"
+            style={{
+                backgroundColor:
+                    theme === 'light'
+                        ? '#ede4d3'
+                        : '#111827'
+            }}
+        >
             <div className="
                 mx-auto
                 max-w-5xl
@@ -191,28 +218,45 @@ function Settings() {
                     sm:justify-between
                 ">
                     <div>
-                        <p className="
+                        <p
+                            className={`
                             text-sm
                             uppercase
                             tracking-[0.3em]
-                            text-blue-400
-                        ">
+
+                        ${theme === 'light'
+                                    ? 'text-[rgb(140,110,80)]'
+                                    : 'text-blue-400'
+                                }
+                            `}
+                        >
                             Ustawienia
                         </p>
-
-                        <h1 className="
+                        <h1
+                            className={`
                             mt-3
                             text-3xl
                             font-semibold
-                            text-white
-                        ">
+
+                            ${theme === 'light'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
+                                }
+                            `}
+                        >
                             Preferencje aplikacji
                         </h1>
 
-                        <p className="
-                            mt-3
-                            text-gray-400
-                        ">
+                        <p
+                            className={`
+                             mt-3
+
+                        ${theme === 'light'
+                                    ? 'text-[rgb(70,70,70)]'
+                                    : 'text-gray-400'
+                                }
+                            `}
+                        >
                             Zarządzaj swoim profilem,
                             wyglądem aplikacji
                             i powiadomieniami.
@@ -246,12 +290,18 @@ function Settings() {
                 >
                     <div className="space-y-3">
 
-                        <label className="
+                        <label
+                            className={`
                             block
                             text-sm
                             font-medium
-                            text-gray-300
-                        ">
+
+                            ${theme === 'light'
+                                    ? 'text-[rgb(70,70,70)]'
+                                    : 'text-gray-300'
+                                }
+                            `}
+                        >
                             Widoczna nazwa
                         </label>
 
@@ -263,19 +313,31 @@ function Settings() {
                                     e.target.value
                                 )
                             }
-                            className="
+                            className={`
                                 w-full
                                 rounded-2xl
                                 border
-                                border-gray-700
-                                bg-gray-800
                                 px-4
                                 py-3
-                                text-white
-                                placeholder-gray-400
                                 focus:border-blue-500
                                 focus:outline-none
-                            "
+
+                                ${theme === 'light'
+                                    ? `
+                                    border-[rgb(220,210,195)]
+                                    bg-[rgb(245,240,232)]
+                                    text-[rgb(35,35,35)]
+                                    placeholder-[rgb(120,120,120)]
+                                    `
+                                    :
+                                    `
+                                    border-gray-700
+                                    bg-gray-800
+                                    text-white
+                                    placeholder-gray-400
+                                    `
+                                }
+                            `}
                         />
                     </div>
                 </Section>
@@ -295,12 +357,18 @@ function Settings() {
                         {/* Currency */}
                         <div className="space-y-3">
 
-                            <label className="
-                                block
-                                text-sm
-                                font-medium
-                                text-gray-300
-                            ">
+                            <label
+                                className={`
+                                    block
+                                    text-sm
+                                    font-medium
+
+                                    ${theme === 'light'
+                                        ? 'text-[rgb(70,70,70)]'
+                                        : 'text-gray-300'
+                                    }
+                                `}
+                            >
                                 Waluta
                             </label>
 
@@ -311,18 +379,28 @@ function Settings() {
                                         e.target.value
                                     )
                                 }
-                                className="
+                                className={`
                                     w-full
                                     rounded-2xl
                                     border
-                                    border-gray-700
-                                    bg-gray-800
                                     px-4
                                     py-3
-                                    text-white
                                     focus:border-blue-500
                                     focus:outline-none
-                                "
+
+                                    ${theme === 'light'
+                                        ? `
+                                        border-[rgb(220,210,195)]
+                                        bg-[rgb(245,240,232)]
+                                        text-[rgb(35,35,35)]
+                                         `
+                                        : `
+                                        border-gray-700
+                                        bg-gray-800
+                                        text-white
+                                        `
+                                    }
+                                `}
                             >
                                 <option value="PLN">
                                     PLN
@@ -341,12 +419,18 @@ function Settings() {
                         {/* Date format */}
                         <div className="space-y-3">
 
-                            <label className="
+                            <label
+                                className={`
                                 block
                                 text-sm
                                 font-medium
-                                text-gray-300
-                            ">
+
+                                ${theme === 'light'
+                                        ? 'text-[rgb(70,70,70)]'
+                                        : 'text-gray-300'
+                                    }
+                            `}
+                            >
                                 Format daty
                             </label>
 
@@ -357,18 +441,30 @@ function Settings() {
                                         e.target.value
                                     )
                                 }
-                                className="
+                                className={`
                                     w-full
                                     rounded-2xl
                                     border
-                                    border-gray-700
-                                    bg-gray-800
                                     px-4
                                     py-3
-                                    text-white
                                     focus:border-blue-500
                                     focus:outline-none
-                                "
+
+                                    ${theme === 'light'
+                                        ?
+                                        `
+                                        border-[rgb(220,210,195)]
+                                        bg-[rgb(245,240,232)]
+                                        text-[rgb(35,35,35)]
+                                        `
+                                        :
+                                        `
+                                        border-gray-700
+                                        bg-gray-800
+                                        text-white
+                                        `
+                                    }
+                                `}
                             >
                                 <option value="dd.MM.yyyy">
                                     23.05.2026
@@ -412,9 +508,9 @@ function Settings() {
                                 text-left
                                 transition
 
-                                ${theme === 'dark'
+                            ${theme === 'dark'
                                     ? 'border-blue-500 bg-blue-500/10'
-                                    : 'border-gray-700 bg-gray-800 hover:border-gray-600'
+                                    : 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] hover:border-blue-300'
                                 }
                             `}
                         >
@@ -425,22 +521,25 @@ function Settings() {
                             ">
                                 <Monitor
                                     size={20}
-                                    className="text-white"
+                                    className={
+                                        theme === 'light'
+                                            ? 'text-[rgb(90,65,40)]'
+                                            : 'text-white'
+                                    }
                                 />
 
                                 <div>
-                                    <p className="
+                                    <p
+                                        className={`
                                         font-medium
-                                        text-white
-                                    ">
-                                        Ciemny
-                                    </p>
 
-                                    <p className="
-                                        text-sm
-                                        text-gray-400
-                                    ">
-                                        Aktualny motyw aplikacji
+                                        ${theme === 'light'
+                                                ? 'text-[rgb(90,65,40)]'
+                                                : 'text-white'
+                                            }
+                                        `}
+                                    >
+                                        Ciemny
                                     </p>
                                 </div>
                             </div>
@@ -472,22 +571,25 @@ function Settings() {
                             ">
                                 <Monitor
                                     size={20}
-                                    className="text-white"
+                                    className={
+                                        theme === 'light'
+                                            ? 'text-[rgb(90,65,40)]'
+                                            : 'text-white'
+                                    }
                                 />
 
                                 <div>
-                                    <p className="
+                                    <p
+                                        className={`
                                         font-medium
-                                        text-white
-                                    ">
-                                        Jasny
-                                    </p>
 
-                                    <p className="
-                                        text-sm
-                                        text-gray-400
-                                    ">
-                                        W przygotowaniu
+                                        ${theme === 'light'
+                                                ? 'text-[rgb(90,65,40)]'
+                                                : 'text-white'
+                                            }
+                                        `}
+                                    >
+                                        Jasny
                                     </p>
                                 </div>
                             </div>
@@ -510,18 +612,30 @@ function Settings() {
                             gap-4
                         ">
                             <div>
-                                <p className="
+                                <p
+                                    className={`
                                     font-medium
-                                    text-white
-                                ">
+
+                                    ${theme === 'light'
+                                            ? 'text-[rgb(90,65,40)]'
+                                            : 'text-white'
+                                        }
+                                    `}
+                                >
                                     Powiadomienia w aplikacji
                                 </p>
 
-                                <p className="
+                                <p
+                                    className={`
                                     mt-1
                                     text-sm
-                                    text-gray-400
-                                ">
+
+                                    ${theme === 'light'
+                                            ? 'text-[rgb(100,100,100)]'
+                                            : 'text-gray-400'
+                                        }
+                                    `}
+                                >
                                     Informacje o nadchodzących płatnościach.
                                 </p>
                             </div>
@@ -570,18 +684,30 @@ function Settings() {
                             gap-4
                         ">
                             <div>
-                                <p className="
-                                    font-medium
-                                    text-white
-                                ">
+                                <p
+                                    className={`
+                                        font-medium
+
+                                        ${theme === 'light'
+                                            ? 'text-[rgb(90,65,40)]'
+                                            : 'text-white'
+                                        }
+                                    `}
+                                >
                                     Powiadomienia e-mail
                                 </p>
 
-                                <p className="
-                                    mt-1
-                                    text-sm
-                                    text-gray-400
-                                ">
+                                <p
+                                    className={`
+                                        mt-1
+                                        text-sm
+
+                                        ${theme === 'light'
+                                            ? 'text-[rgb(100,100,100)]'
+                                            : 'text-gray-400'
+                                        }
+                                    `}
+                                >
                                     Przypomnienia wysyłane na e-mail.
                                 </p>
                             </div>
@@ -634,20 +760,29 @@ function Settings() {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="
+                        className={`
                             rounded-full
-                            bg-blue-500
                             px-8
                             py-4
                             text-sm
                             font-semibold
-                            text-white
                             shadow-lg
                             shadow-blue-500/20
                             transition
-                            hover:bg-blue-400
                             disabled:opacity-50
-                        "
+                            ${theme === 'light'
+                                ? `
+                                    bg-[rgb(90,65,40)]
+                                    hover:bg-[rgb(120,95,70)]
+                                    text-white
+                                `
+                                : `
+                                    bg-blue-500
+                                    hover:bg-blue-400
+                                    text-white
+                                `
+                            }
+                        `}
                     >
                         {saving
                             ? 'Zapisywanie...'

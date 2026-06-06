@@ -25,6 +25,7 @@ function SubscriptionCard({
     const {
         currency,
         dateFormat,
+        theme,
     } = usePreferences();
 
     const logoSrc = getLogoSrc(subscription);
@@ -46,7 +47,10 @@ function SubscriptionCard({
                 rounded-3xl
                 border
                 border-gray-800
-                ${!subscription.is_active ? 'bg-gray-900/45' : 'bg-gray-900/90'}
+               ${theme === 'light'
+                    ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)]'
+                    : `border border-gray-800 ${!subscription.is_active ? 'bg-gray-900/45' : 'bg-gray-900/90'}`
+                }
                 p-4
                 sm:p-5
                 relative
@@ -64,9 +68,10 @@ function SubscriptionCard({
                         h-14
                         w-14
                         rounded-2xl
-                        bg-gray-800
-                        border
-                        border-gray-700
+                       ${theme === 'light'
+                            ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
+                            : 'bg-gray-800 border-gray-700'
+                        }
                         overflow-hidden
                         flex
                         items-center
@@ -90,7 +95,7 @@ function SubscriptionCard({
 
                         <div className="flex items-center gap-2">
 
-                            <p className="text-lg font-semibold text-white">
+                            <p className={`text-lg font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                 {subscription.name}
                             </p>
 
@@ -111,7 +116,7 @@ function SubscriptionCard({
                             </button>
                         </div>
 
-                        <p className="mt-1 text-sm text-gray-400">
+                        <p className={`mt-1 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                             {subscription.category}
                         </p>
                     </div>
@@ -124,17 +129,17 @@ function SubscriptionCard({
                             flex-1
 
                             rounded-2xl
-                            border
-                            border-gray-800
-
-                            bg-gray-800/40
+                           ${theme === 'light'
+                                ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(70,70,70)]'
+                                : 'border border-gray-800 bg-gray-800/40 text-gray-300'
+                            }
 
                             sm:mr-12
                             px-4
                             py-3
 
                             text-sm
-                            text-gray-300
+                            
 
                             flex
                             items-center
@@ -154,11 +159,11 @@ function SubscriptionCard({
                 {/* Price */}
                 <div className={`text-right sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
-                    <p className="text-xl font-semibold text-white">
+                    <p className={`text-xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                         {formattedPrice}
                     </p>
 
-                    <p className="mt-1 text-sm text-gray-400">
+                    <p className={`mt-1 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                         Następna płatność:{' '}
                         {formatDate(
                             subscription.next_payment_date,
@@ -186,34 +191,19 @@ function SubscriptionCard({
                                     : `subscription-${subscription.id}`
                             );
                         }}
-                        className="
-                            text-gray-400
-                            hover:text-white
-                            p-2
-                            rounded-full
-                            hover:bg-gray-700
-                            transition
-                        "
+                        className={`p-2 rounded-full transition ${theme === 'light'
+                            ? 'text-[rgb(100,100,100)] hover:text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                            }`}
                     >
                         ⋯
                     </button>
 
                     {activePopup === `subscription-${subscription.id}` && (
-                        <div className="
-
-                            absolute
-                            right-0
-                            top-full
-                            mt-2
-
-                            bg-gray-800
-                            border
-                            border-gray-600
-                            rounded-lg
-                            p-2
-                            z-10
-                            min-w-[120px]
-                        "ref={popupRef}>
+                        <div className={`absolute right-0 top-full mt-2 rounded-lg p-2 z-10 min-w-[120px] ${theme === 'light'
+                            ? 'bg-[rgb(252,249,244)] border border-[rgb(220,210,195)]'
+                            : 'bg-gray-800 border border-gray-600'
+                            }`}>
 
                             {subscription.is_active ? (
                                 <>
@@ -221,16 +211,10 @@ function SubscriptionCard({
                                         onClick={() =>
                                             handleEditSubscription(subscription)
                                         }
-                                        className="
-                                            block
-                                            w-full
-                                            text-left
-                                            px-3
-                                            py-2
-                                            hover:bg-gray-700
-                                            text-white
-                                            rounded
-                                        "
+                                        className={`block w-full text-left px-3 py-2 rounded ${theme === 'light'
+                                                ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]'
+                                                : 'text-white hover:bg-gray-700'
+                                            }`}
                                     >
                                         Edytuj
                                     </button>

@@ -2,19 +2,31 @@ import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
 
-function AuthLayout() {
-    return (
-        <div className="min-h-screen bg-gray-900 flex flex-col">
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
 
-            {/* Header with logo */}
+function AuthLayout() {
+
+    const { theme } =
+        usePreferences();
+
+    return (
+        <div
+            className={`min-h-screen flex flex-col ${theme === 'light'
+                ? 'bg-[rgb(248,244,238)]'
+                : 'bg-gray-900'
+                }`}
+        >
+
             <Header />
 
-            {/* Center content */}
             <main className="flex-1 flex items-center justify-center px-4">
                 <Outlet />
             </main>
 
             <Footer />
+
         </div>
     );
 }

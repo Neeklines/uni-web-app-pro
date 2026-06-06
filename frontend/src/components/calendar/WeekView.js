@@ -7,6 +7,10 @@ import {
 
 import { pl } from 'date-fns/locale';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 import CalendarEventCard from './CalendarEventCard';
 
 function WeekView({
@@ -16,6 +20,8 @@ function WeekView({
     handleEditSubscription,
     handleCancelSubscription,
 }) {
+    const { theme } = usePreferences();
+
     const weekStart = startOfWeek(currentDate, {
         weekStartsOn: 1,
     });
@@ -35,16 +41,47 @@ function WeekView({
                 return (
                     <div
                         key={day.toISOString()}
-                        className="rounded-2xl border border-gray-700 bg-gray-900/70 p-3 min-h-[500px]"
+                        className={`
+                            rounded-2xl
+                            border
+                            p-3
+                            min-h-[500px]
+
+                            ${theme === 'light'
+                                ? `
+                                    border-[rgb(220,210,195)]
+                                    bg-[rgb(245,240,232)]
+                                `
+                                : `
+                                    border-gray-700
+                                    bg-gray-900/70
+                                `
+                            }
+                        `}
                     >
                         <div className="mb-4">
-                            <p className="text-sm text-gray-400">
+                            <p className={`
+                                text-sm
+
+                                ${theme === 'light'
+                                    ? 'text-[rgb(100,100,100)]'
+                                    : 'text-gray-400'
+                                }
+                            `}>
                                 {format(day, 'EEE', {
                                     locale: pl,
                                 })}
                             </p>
 
-                            <p className="text-2xl font-semibold text-white">
+                            <p className={`
+                                text-2xl
+                                font-semibold
+
+                                ${theme === 'light'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
+                                }
+                            `}>
                                 {format(day, 'd')}
                             </p>
                         </div>

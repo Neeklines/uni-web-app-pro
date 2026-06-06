@@ -18,7 +18,7 @@ function CalendarEventCard({
     handleEditSubscription,
     handleCancelSubscription,
 }) {
-    const { currency } = usePreferences();
+    const { currency, theme } = usePreferences();
     if (compact) {
         return (
             <div
@@ -26,23 +26,32 @@ function CalendarEventCard({
                     e.stopPropagation();
                     handleEditSubscription(subscription);
                 }}
-                className="
+                className={`
                 flex
                 items-center
                 gap-2
                 rounded-lg
                 border
-                border-gray-700
-                bg-gray-800/90
+                ${theme === 'light'
+                        ? `
+                        bg-[rgb(245,240,232)]
+                        border-[rgb(220,210,195)]
+                        text-[rgb(90,65,40)]
+                    `
+                        : `
+                        bg-gray-800/90
+                        border-gray-700
+                        text-white
+                    `
+                    }
                 px-2
                 py-1.5
                 text-xs
-                text-white
                 transition
                 hover:border-blue-500
                 hover:bg-gray-700/90
                 cursor-pointer
-            "
+            `}
             >
                 {/* Star */}
                 <button
@@ -91,7 +100,17 @@ function CalendarEventCard({
         <div
             onClick={(e) => e.stopPropagation()}
             className={`
-                rounded-xl border border-gray-700 bg-gray-800/90
+                rounded-xl border
+                ${theme === 'light'
+                    ? `
+                        border-[rgb(220,210,195)]
+                        bg-[rgb(245,240,232)]
+                    `
+                    : `
+                        border-gray-700
+                        bg-gray-800/90
+                    `
+                }
                 text-left
                 transition
                 hover:border-blue-500
@@ -102,7 +121,13 @@ function CalendarEventCard({
 
                 <div className="min-w-0 flex-1">
 
-                    <p className="truncate font-medium text-white">
+                    <p className={`
+                        truncate 
+                        font-medium
+                        ${theme === 'light'
+                            ? 'text-[rgb(90,65,40)]'
+                            : 'text-white'
+                        }`}>
                         {subscription.name}
                     </p>
 
@@ -126,7 +151,7 @@ function CalendarEventCard({
 
             <div className="mt-2 flex items-center justify-between gap-2">
 
-                <p className="text-xs text-gray-500">
+                <p className={`text-xs ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-500'}`}>
                     {formatPrice(
                         subscription.price,
                         currency

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { usePreferences } from '../../context/UserPreferencesContext';
 const chartColors = ['#7C3AED', '#EC4899', '#14B8A6', '#F97316', '#3B82F6', '#EAB308', '#10B981', '#F43F5E'];
 
 const polarToCartesian = (cx, cy, r, angleInDegrees) => {
@@ -23,7 +23,8 @@ const describeArc = (cx, cy, r, startAngle, endAngle) => {
     ].join(' ');
 };
 
-const renderPieChart = (data, isCurrency = false) => {
+const renderPieChart = (data, theme, isCurrency = false) => {
+
     const total = data.reduce((sum, item) => sum + item.value, 0);
     let startAngle = 0;
 
@@ -61,10 +62,10 @@ const renderPieChart = (data, isCurrency = false) => {
                 {data.map((item, index) => {
                     const displayValue = isCurrency ? `${item.value.toFixed(2)} PLN` : item.value;
                     return (
-                        <div key={item.label} className="flex items-center gap-3 text-sm text-gray-300">
+                        <div key={item.label} className={`flex items-center gap-3 text-sm ${theme === 'light' ? 'text-[rgb(70,70,70)]' : 'text-gray-300'}`}>
                             <span className="h-3 w-3 rounded-full" style={{ backgroundColor: chartColors[index % chartColors.length] }} />
                             <span>{item.label}</span>
-                            <span className="font-semibold text-white">{displayValue}</span>
+                            <span className={`font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{displayValue}</span>
                         </div>
                     );
                 })}
@@ -99,6 +100,7 @@ const groupActiveSubscriptions = (subscriptions) => {
 };
 
 function CategoryCharts({ subscriptions }) {
+    const { theme } = usePreferences();
     const { categoryTotals, categoryCounts } = groupActiveSubscriptions(subscriptions);
 
     if (categoryTotals.length === 0 && categoryCounts.length === 0) {
@@ -107,23 +109,23 @@ function CategoryCharts({ subscriptions }) {
 
     return (
         <div className="grid gap-4 mt-6 lg:grid-cols-2">
-            <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
+            <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Wydatki w kategoriach</p>
-                        <p className="mt-2 text-white text-lg">Suma cen subskrypcji według kategorii</p>
+                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Wydatki w kategoriach</p>
+                        <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Suma cen subskrypcji według kategorii</p>
                     </div>
                 </div>
-                {renderPieChart(categoryTotals, true)}
+                {renderPieChart(categoryTotals, theme, true)}
             </div>
-            <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
+            <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Subskrypcje w kategoriach</p>
-                        <p className="mt-2 text-white text-lg">Ilość subskrypcji w każdej kategorii</p>
+                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Subskrypcje w kategoriach</p>
+                        <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Ilość subskrypcji w każdej kategorii</p>
                     </div>
                 </div>
-                {renderPieChart(categoryCounts, false)}
+                {renderPieChart(categoryCounts, theme, false)}
             </div>
         </div>
     );

@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getMeta } from '../../services/metaService';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function Footer() {
     const [meta, setMeta] = useState(null);
+
+    const { theme } = usePreferences();
 
     useEffect(() => {
         const fetchMeta = async () => {
@@ -18,13 +24,20 @@ function Footer() {
     }, []);
 
     return (
-        <footer className="text-center text-gray-500 text-sm my-6">
-
+        <footer
+            className={`text-center text-sm my-6 ${theme === 'light'
+                ? 'text-[rgb(100,100,100)]'
+                : 'text-gray-500'
+                }`}
+        >
             <p>
                 SmartSub © 2026{' '}
                 <a
                     href="https://github.com/Neeklines"
-                    className="text-gray-400 hover:text-white transition"
+                    className={`transition ${theme === 'light'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-white'
+                        }`}
                 >
                     Yehor Timofieiev
                 </a>
@@ -33,21 +46,32 @@ function Footer() {
             <p className="mt-1">
                 <a
                     href="/tos"
-                    className="text-gray-400 hover:text-gray-300 transition"
+                    className={`transition ${theme === 'light'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-gray-300'
+                        }`}
                 >
                     Terms of Service
                 </a>{' '}
                 ·{' '}
                 <a
                     href="/privacy"
-                    className="text-gray-400 hover:text-gray-300 transition"
+                    className={`transition ${theme === 'light'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-gray-300'
+                        }`}
                 >
                     Privacy Policy
                 </a>
             </p>
 
             {meta?.env === 'dev' && (
-                <p className="mt-1 text-gray-600">
+                <p
+                    className={`mt-1 ${theme === 'light'
+                        ? 'text-[rgb(120,120,120)]'
+                        : 'text-gray-600'
+                        }`}
+                >
                     Running development version
                 </p>
             )}
@@ -61,14 +85,16 @@ function Footer() {
                             href={`https://github.com/Neeklines/uni-web-app-pro/commit/${meta.version}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-gray-400 hover:text-gray-300 transition"
+                            className={`transition ${theme === 'light'
+                                ? 'text-[rgb(90,65,40)] hover:text-black'
+                                : 'text-gray-400 hover:text-gray-300'
+                                }`}
                         >
                             {meta.version_short}
                         </a>{' '}
                         deployed at {meta.deployed_at_formatted}
                     </p>
                 )}
-
         </footer>
     );
 }

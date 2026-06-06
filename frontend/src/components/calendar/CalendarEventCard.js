@@ -28,6 +28,21 @@ function CalendarEventCard({
             <div
                 onClick={(e) => {
                     e.stopPropagation();
+
+                    if (subscription.is_active === false) {
+                        if (
+                            window.confirm(
+                                `Przywrócić subskrypcję "${subscription.name}"?`
+                            )
+                        ) {
+                            handleReactivateSubscription(
+                                subscription.id
+                            );
+                        }
+
+                        return;
+                    }
+
                     handleEditSubscription(subscription);
                 }}
                 className={`
@@ -83,21 +98,39 @@ function CalendarEventCard({
                 </div>
 
                 {/* Cancel */}
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleCancelSubscription(subscription.id);
-                    }}
-                    className="
-                    text-gray-500
-                    hover:text-red-400
-                    transition
-                    flex-shrink-0
-                "
-                >
-                    ✕
-                </button>
+                {subscription.is_active !== false ? (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleCancelSubscription(subscription.id);
+                        }}
+                        className="
+                            text-gray-500
+                            hover:text-red-400
+                            transition
+                            flex-shrink-0
+                        "
+                    >
+                        ✕
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSubscription(subscription.id);
+                        }}
+                        className="
+                            text-gray-500
+                            hover:text-red-400
+                            transition
+                            flex-shrink-0
+                        "
+                    >
+                        <Trash2 size={12} />
+                    </button>
+                )}
             </div>
         );
     }

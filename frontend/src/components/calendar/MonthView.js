@@ -43,12 +43,12 @@ function MonthView({
         <div className="overflow-hidden sm:rounded-[32px] rounded-[12px] border border-gray-700">
 
             {/* Week labels */}
-            <div className="grid grid-cols-7 bg-gray-900">
+            <div className="grid grid-cols-7 bg-gray-600">
 
-                {['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'].map((label) => (
+                {['Pon', 'Wt', 'Śrs', 'Czw', 'Pt', 'Sob', 'Ndz'].map((label) => (
                     <div
                         key={label}
-                        className="border-b border-r border-gray-700 sm:p-4 p-1 text-center text-sm font-medium text-gray-400 last:border-r-0"
+                        className="border-b border-r border-slate-700 sm:p-4 p-1 text-center text-sm font-medium text-white last:border-r-0"
                     >
                         {label}
                     </div>

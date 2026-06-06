@@ -8,6 +8,9 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const theme =
+        localStorage.getItem('theme') || 'dark';
+
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
@@ -21,7 +24,8 @@ function Login() {
     }, [resetSuccess]);
 
     const handleLogin = async (email, password) => {
-        console.log("LOGIN SUBMIT FIRED", { email, password });
+        console.log('LOGIN SUBMIT FIRED', { email, password });
+
         setLoading(true);
         setError('');
 
@@ -43,9 +47,16 @@ function Login() {
 
     return (
         <div className="w-full max-w-md">
+
             {resetSuccess && (
-                <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300">
-                    Hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.
+                <div
+                    className={`mb-4 rounded-lg px-4 py-3 text-sm ${theme === 'light'
+                        ? 'border border-green-300 bg-green-50 text-green-700'
+                        : 'border border-green-500/30 bg-green-500/10 text-green-300'
+                        }`}
+                >
+                    Hasło zostało pomyślnie zresetowane.
+                    Możesz się teraz zalogować.
                 </div>
             )}
 
@@ -57,19 +68,38 @@ function Login() {
                 showLoader={showLoader}
                 onResetError={() => setError('')}
             >
-                <div className="mt-4 pt-4 border-t border-gray-700/50 text-center">
-                    <Link 
-                        to="/forgot-password" 
-                        className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                <div
+                    className={`mt-4 pt-4 text-center ${theme === 'light'
+                        ? 'border-t border-stone-300'
+                        : 'border-t border-gray-700/50'
+                        }`}
+                >
+                    <Link
+                        to="/forgot-password"
+                        className={`text-sm transition-colors ${theme === 'light'
+                            ? 'text-blue-600 hover:text-blue-700'
+                            : 'text-blue-400 hover:text-blue-300'
+                            }`}
                     >
                         Nie pamiętasz hasła?
                     </Link>
                 </div>
             </AuthForm>
 
-            <p className="text-gray-400 mt-6 text-center">
+            <p
+                className={`mt-6 text-center ${theme === 'light'
+                    ? 'text-[rgb(100,100,100)]'
+                    : 'text-gray-400'
+                    }`}
+            >
                 Nie masz konta?{' '}
-                <Link to="/register" className="text-blue-400 hover:underline">
+                <Link
+                    to="/register"
+                    className={`hover:underline ${theme === 'light'
+                        ? 'text-blue-600'
+                        : 'text-blue-400'
+                        }`}
+                >
                     Zarejestruj się
                 </Link>
             </p>

@@ -451,50 +451,48 @@ function Dashboard() {
     };
 
     const isPageLoading = loading || !user;
-
+    const { theme } = usePreferences();
     return (
         <>
             <FullScreenLoader show={isPageLoading} />
 
-            {showPopup && (
-                <div className="fixed top-5 right-5 z-50 bg-gray-950/70 border border-gray-700 shadow-xl shadow-black/20 rounded-[32px] p-6 w-80">
-                    <div className="flex justify-between items-center mb-4">
-                        <p className="text-sm uppercase tracking-[0.15em] text-blue-400 whitespace-nowrap">
-                            Nadchodzące płatności
-                        </p>
-                        <button
-                            onClick={() => setShowPopup(false)}
-                            className="text-gray-400 hover:text-white text-xl leading-none ml-4 flex-shrink-0"
-                        >
-                            ×
-                        </button>
-                    </div>
-                    {upcomingPayments.length === 0 ? (
-                        <p className="text-gray-400 text-sm">Brak nadchodzących płatności</p>
-                    ) : (
-                        <ul className="space-y-3">
-                            {upcomingPayments.map((sub) => (
-                                <li key={sub.id} className="rounded-3xl border border-gray-800 bg-gray-900/90 px-4 py-3 flex justify-between text-sm">
-                                    <span className="text-white font-semibold">{sub.name}</span>
-                                    <span className="text-gray-400">
-                                        {formatDate(sub.next_payment_date, dateFormat)}
-                                    </span>                                </li>
-                            ))}
-                        </ul>
-                    )}
+            {showPopup && (<div className={`fixed top-5 right-5 z-50 rounded-[32px] p-6 w-80 shadow-xl ${theme === 'light' ? 'bg-[rgb(252,249,244)] border border-stone-300 shadow-stone-300/20' : 'bg-gray-950/70 border border-gray-700 shadow-black/20'}`}>
+                <div className="flex justify-between items-center mb-4">
+                    <p className="text-sm uppercase tracking-[0.15em] text-blue-400 whitespace-nowrap">
+                        Nadchodzące płatności
+                    </p>
+                    <button
+                        onClick={() => setShowPopup(false)}
+                        className={`text-xl leading-none ml-4 flex-shrink-0 ${theme === 'light' ? 'text-gray-500 hover:text-black' : 'text-gray-400 hover:text-white'}`}
+                    >
+                        ×
+                    </button>
                 </div>
+                {upcomingPayments.length === 0 ? (
+                    <p className={`text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>Brak nadchodzących płatności</p>
+                ) : (
+                    <ul className="space-y-3">
+                        {upcomingPayments.map((sub) => (
+                            <li key={sub.id} className={`rounded-3xl px-4 py-3 flex justify-between text-sm ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)]' : 'border border-gray-800 bg-gray-900/90'}`}>
+                                <span className={`font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{sub.name}</span>
+                                <span className={`${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>{formatDate(sub.next_payment_date, dateFormat)}</span>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
             )}
 
-            <div className="bg-gray-900 text-white px-4 py-4 sm:px-6 sm:py-6">
+            <div className={`px-4 py-4 sm:px-6 sm:py-6 ${theme === 'light' ? 'bg-[rgb(237,228,211)] text-black' : 'bg-gray-900 text-white'}`}>
                 <div className="max-w-6xl mx-auto space-y-8">
-                    <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
+                    <div className={`rounded-[32px] p-6 sm:p-8 shadow-xl ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20' : 'border border-gray-700 bg-gray-950/70 shadow-black/20'}`}>
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                             <div className="text-center sm:text-left">
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Dashboard</p>
-                                <h1 className="mt-3 text-3xl sm:text-4xl font-semibold text-white break-words">
+                                <h1 className={`mt-3 text-3xl sm:text-4xl font-semibold break-words ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                     Witaj, {user?.display_name || user?.email}
                                 </h1>
-                                <p className="mt-4 text-gray-400">
+                                <p className={`mt-4 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                                     Tutaj możesz sprawdzić swoje aktualne subskrypcje oraz miesięczne i roczne koszty.
                                 </p>
                             </div>
@@ -505,22 +503,7 @@ function Dashboard() {
                             ">
                                 <button
                                     onClick={() => navigate('/settings')}
-                                    className="
-                                        flex
-                                        h-12
-                                        w-12
-                                        items-center
-                                        justify-center
-
-                                        rounded-full
-                                        bg-gray-800
-
-                                        text-gray-300
-
-                                        transition
-                                        hover:bg-gray-700
-                                        hover:text-white
-                                    "
+                                    className={`flex h-12 w-12 items-center justify-center rounded-full transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'}`}
                                 >
                                     <Settings size={20} />
                                 </button>
@@ -552,21 +535,21 @@ function Dashboard() {
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
+                        <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                             <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Miesięczny koszt</p>
-                            <p className="mt-4 text-4xl font-semibold text-white">{formatPrice(totalMonthly, currency)}</p>
-                            <p className="mt-2 text-sm text-gray-400">Suma wszystkich subskrypcji na najbliższy miesiąc.</p>
+                            <p className={`mt-4 text-4xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{formatPrice(totalMonthly, currency)}</p>
+                            <p className={`mt-2 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>Suma wszystkich subskrypcji na najbliższy miesiąc.</p>
                         </div>
-                        <div className="rounded-3xl border border-gray-700 bg-gray-950/70 p-6 shadow-md shadow-black/10">
+                        <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                             <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Roczny koszt</p>
-                            <p className="mt-4 text-4xl font-semibold text-white">{formatPrice(totalYearly, currency)}</p>
-                            <p className="mt-2 text-sm text-gray-400">Szacowany koszt subskrypcji za 12 miesięcy.</p>
+                            <p className={`mt-4 text-4xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{formatPrice(totalYearly, currency)}</p>
+                            <p className={`mt-2 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>Szacowany koszt subskrypcji za 12 miesięcy.</p>
                         </div>
                     </div>
 
                     <CategoryCharts subscriptions={subscriptions} />
 
-                    <div className="rounded-[32px] border border-gray-700 bg-gray-950/70 p-6 sm:p-8 shadow-xl shadow-black/20">
+                    <div className={`rounded-[32px] p-6 sm:p-8 shadow-xl ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20' : 'border border-gray-700 bg-gray-950/70 shadow-black/20'}`}>
 
                         {/* Toolbar */}
 
@@ -579,7 +562,7 @@ function Dashboard() {
                                     Twoje subskrypcje
                                 </p>
 
-                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                <h2 className={`mt-3 text-2xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                     {viewMode === 'list'
                                         ? 'Lista subskrypcji'
                                         : 'Kalendarz subskrypcji'}
@@ -592,21 +575,7 @@ function Dashboard() {
                                 placeholder="Szukaj subskrypcji..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="
-                                    w-full
-                                    rounded-lg
-                                    border
-                                    border-gray-600
-                                    bg-gray-800
-                                    px-4
-                                    py-2
-                                    text-white
-                                    placeholder-gray-400
-                                    focus:border-blue-500
-                                    focus:outline-none
-                                    focus:ring-1
-                                    focus:ring-blue-500
-                                "
+                                className={`w-full rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
                             />
 
                             {/* View buttons */}
@@ -614,9 +583,10 @@ function Dashboard() {
 
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`rounded-full px-4 py-2 font-semibold transition
-                                    ${viewMode === 'list'
-                                            ? 'bg-blue-500 text-white'
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
+                                        ? 'bg-blue-500 text-white'
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
                                             : 'bg-gray-700 text-gray-300'
                                         }`}
                                 >
@@ -625,9 +595,10 @@ function Dashboard() {
 
                                 <button
                                     onClick={() => setViewMode('calendar')}
-                                    className={`rounded-full px-4 py-2 font-semibold transition
-                                    ${viewMode === 'calendar'
-                                            ? 'bg-blue-500 text-white'
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
+                                        ? 'bg-blue-500 text-white'
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
                                             : 'bg-gray-700 text-gray-300'
                                         }`}
                                 >
@@ -651,16 +622,7 @@ function Dashboard() {
                                                     : 'sort'
                                             );
                                         }}
-                                        className="
-                                            h-10
-                                            rounded-full
-                                            bg-gray-700
-                                            px-4
-                                            text-white
-                                            font-semibold
-                                            hover:bg-gray-600
-                                            transition
-                                        "
+                                        className={`h-10 rounded-full px-4 font-semibold transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                     >
                                         {getSortIcon()}
                                     </button>
@@ -668,29 +630,14 @@ function Dashboard() {
                                     {activePopup === 'sort' && (
                                         <div
                                             ref={popupRef}
-                                            className="
-                                                absolute
-                                                left-1/2
-                                                top-[calc(100%+8px)]
-                                                -translate-x-1/2
-
-                                                z-20
-                                                min-w-[140px]
-
-                                                rounded-xl
-                                                border
-                                                border-gray-700
-                                                bg-gray-800
-                                                p-2
-                                                shadow-xl
-                                            "
+                                            className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
                                         </div>
                                     )}
                                 </div>
@@ -706,18 +653,7 @@ function Dashboard() {
                                                 : 'filter'
                                         );
                                     }}
-                                    className="
-                                        flex
-                                        h-10
-                                        w-10
-                                        items-center
-                                        justify-center
-                                        rounded-full
-                                        bg-gray-700
-                                        text-white
-                                        hover:bg-gray-600
-                                        transition
-                                    "
+                                    className={`flex h-10 w-10 items-center justify-center rounded-full transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                 >
                                     <Filter size={18} fill={hasActiveFilters ? 'currentColor' : 'none'} />
                                 </button>
@@ -726,25 +662,7 @@ function Dashboard() {
                                     <div
                                         ref={popupRef}
                                         onClick={(e) => e.stopPropagation()}
-                                        className="
-                                            fixed
-                                            top-1/2
-                                            -ztranslate-x-1/2
-                                            -translate-y-1/2
-
-                                            z-50
-
-                                            w-[80vw]
-                                            max-w-sm
-
-                                            rounded-xl
-                                            border
-                                            border-gray-700
-                                            bg-gray-800
-                                            p-4
-                                            shadow-xl
-                                            text-white
-                                        "
+                                        className={`fixed top-1/2 -ztranslate-x-1/2 -translate-y-1/2 z-50 w-[80vw] max-w-sm rounded-xl p-4 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)] text-[rgb(35,35,35)]' : 'border border-gray-700 bg-gray-800 text-white'}`}
                                     >
                                         <div className="flex flex-col gap-4 min-w-[260px]">
                                             <label className="flex items-center gap-2 text-white">
@@ -775,21 +693,21 @@ function Dashboard() {
                                                     >
                                                         {onlyFavorites ? '★' : '☆'}
                                                     </span>
-                                                    <span className="text-white">
+                                                    <span className={`${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                                         Tylko ulubione
                                                     </span>
                                                 </button>
                                             </label>
 
                                             <div>
-                                                <label className="block mb-1 text-sm text-gray-300">
+                                                <label className={`block mb-1 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                                     Kategoria
                                                 </label>
 
                                                 <select
                                                     value={selectedCategory}
                                                     onChange={(e) => setSelectedCategory(e.target.value)}
-                                                    className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                 >
                                                     <option value="all">
                                                         Wszystkie
@@ -805,14 +723,14 @@ function Dashboard() {
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="block mb-1 text-sm text-gray-300">
+                                                <label className={`block mb-1 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                                     Cykl rozliczeniowy
                                                 </label>
 
                                                 <select
                                                     value={selectedBillingCycle}
                                                     onChange={(e) => setSelectedBillingCycle(e.target.value)}
-                                                    className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                    className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                 >
                                                     <option value="all">
                                                         Wszystkie
@@ -826,7 +744,7 @@ function Dashboard() {
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="block mb-2 text-sm text-gray-300">
+                                                <label className={`block mb-2 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                                     Cena
                                                 </label>
 
@@ -836,7 +754,7 @@ function Dashboard() {
                                                         placeholder="Od"
                                                         value={minPrice}
                                                         onChange={(e) => setMinPrice(e.target.value)}
-                                                        className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                        className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                     />
 
                                                     <input
@@ -844,14 +762,14 @@ function Dashboard() {
                                                         placeholder="Do"
                                                         value={maxPrice}
                                                         onChange={(e) => setMaxPrice(e.target.value)}
-                                                        className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                                                        className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="mt-2 flex items-center justify-between gap-3">
 
-                                            <p className="text-sm text-gray-400">
+                                            <p className={`text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                                                 {filteredSubscriptions.length}{' '}
                                                 {getResultsLabel(
                                                     filteredSubscriptions.length
@@ -866,15 +784,7 @@ function Dashboard() {
                                                     setMinPrice('');
                                                     setMaxPrice('');
                                                 }}
-                                                className="
-                                                        rounded-lg
-                                                        bg-gray-700
-                                                        px-3
-                                                        py-2
-                                                        text-white
-                                                        transition
-                                                        hover:bg-gray-600
-                                                    "
+                                                className={`rounded-lg px-3 py-2 transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                             >
                                                 Wyczyść
                                             </button>
@@ -909,7 +819,7 @@ function Dashboard() {
                         <div className="hidden sm:flex sm:flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                             <div>
                                 <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
-                                <h2 className="mt-3 text-2xl font-semibold text-white">
+                                <h2 className={`mt-3 text-2xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                     {viewMode === 'list'
                                         ? 'Lista subskrypcji'
                                         : 'Kalendarz subskrypcji'}
@@ -923,24 +833,18 @@ function Dashboard() {
                                     placeholder="Szukaj subskrypcji..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
                                 />
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-700 text-gray-300'
-                                        }`}
+                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
                                 >
                                     Lista
                                 </button>
 
                                 <button
                                     onClick={() => setViewMode('calendar')}
-                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-700 text-gray-300'
-                                        }`}
+                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
                                 >
                                     Kalendarz
                                 </button>
@@ -956,16 +860,7 @@ function Dashboard() {
                                                     : 'sort'
                                             );
                                         }}
-                                        className="
-                                            h-10
-                                            rounded-full
-                                            bg-gray-700
-                                            px-4
-                                            text-white
-                                            font-semibold
-                                            hover:bg-gray-600
-                                            transition
-                                        "
+                                        className={`h-10 rounded-full px-4 font-semibold transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                     >
                                         {getSortIcon()}
                                     </button>
@@ -973,29 +868,14 @@ function Dashboard() {
                                     {activePopup === 'sort' && (
                                         <div
                                             ref={popupRef}
-                                            className="
-                                                absolute
-                                                left-1/2
-                                                top-[calc(100%+8px)]
-                                                -translate-x-1/2
-
-                                                z-20
-                                                min-w-[140px]
-
-                                                rounded-xl
-                                                border
-                                                border-gray-700
-                                                bg-gray-800
-                                                p-2
-                                                shadow-xl
-                                            "
+                                            className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className="block w-full text-left px-3 py-1 hover:bg-gray-700 text-white">↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
                                         </div>
                                     )}
 
@@ -1008,7 +888,7 @@ function Dashboard() {
                                             e.stopPropagation();
                                             setActivePopup((prev) => prev === 'filter' ? null : 'filter');
                                         }}
-                                        className=" rounded-full bg-gray-700 px-4 h-10 text-white hover:bg-gray-600 transition "
+                                        className={`rounded-full px-4 h-10 transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                     >
                                         <Filter size={18} />
                                     </button>
@@ -1016,7 +896,7 @@ function Dashboard() {
                                     {activePopup === 'filter' && (
                                         <div
                                             ref={popupRef}
-                                            className="absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 rounded-xl border border-gray-700 bg-gray-800 p-4 shadow-xl text-white "
+                                            className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 rounded-xl p-4 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)] text-[rgb(35,35,35)]' : 'border border-gray-700 bg-gray-800 text-white'}`}
                                         >
                                             <div className="flex flex-col gap-4 min-w-[260px]">
                                                 <label className="flex items-center gap-2 text-white">
@@ -1047,21 +927,21 @@ function Dashboard() {
                                                         >
                                                             {onlyFavorites ? '★' : '☆'}
                                                         </span>
-                                                        <span className="text-white">
+                                                        <span className={`${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                                             Tylko ulubione
                                                         </span>
                                                     </button>
                                                 </label>
 
                                                 <div>
-                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                    <label className={`${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                                         Kategoria
                                                     </label>
 
                                                     <select
                                                         value={selectedCategory}
                                                         onChange={(e) => setSelectedCategory(e.target.value)}
-                                                        className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                        className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                     >
                                                         <option value="all">
                                                             Wszystkie
@@ -1077,14 +957,14 @@ function Dashboard() {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block mb-1 text-sm text-gray-300">
+                                                    <label className={`${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                                         Cykl rozliczeniowy
                                                     </label>
 
                                                     <select
                                                         value={selectedBillingCycle}
                                                         onChange={(e) => setSelectedBillingCycle(e.target.value)}
-                                                        className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                        className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                     >
                                                         <option value="all">
                                                             Wszystkie
@@ -1098,7 +978,7 @@ function Dashboard() {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block mb-2 text-sm text-gray-300">
+                                                    <label className={`${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                                         Cena
                                                     </label>
 
@@ -1108,7 +988,7 @@ function Dashboard() {
                                                             placeholder="Od"
                                                             value={minPrice}
                                                             onChange={(e) => setMinPrice(e.target.value)}
-                                                            className=" w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white "
+                                                            className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                         />
 
                                                         <input
@@ -1116,7 +996,7 @@ function Dashboard() {
                                                             placeholder="Do"
                                                             value={maxPrice}
                                                             onChange={(e) => setMaxPrice(e.target.value)}
-                                                            className="w-full rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
+                                                            className={`w-full rounded-lg border px-3 py-2 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-700 text-white'}`}
                                                         />
                                                     </div>
                                                 </div>
@@ -1138,15 +1018,7 @@ function Dashboard() {
                                                         setMinPrice('');
                                                         setMaxPrice('');
                                                     }}
-                                                    className="
-                                                        rounded-lg
-                                                        bg-gray-700
-                                                        px-3
-                                                        py-2
-                                                        text-white
-                                                        transition
-                                                        hover:bg-gray-600
-                                                    "
+                                                    className={`rounded-lg px-3 py-2 transition ${theme === 'light' ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)] hover:bg-[rgb(235,228,218)]' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
                                                 >
                                                     Wyczyść
                                                 </button>
@@ -1221,19 +1093,19 @@ function Dashboard() {
                     setShowAddForm(false);
                     resetForm();
                 }}>
-                    <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+                    <div className={`p-6 rounded-lg max-w-md w-full mx-4 ${theme === 'light' ? 'bg-[rgb(252,249,244)] border border-[rgb(220,210,195)]' : 'bg-gray-800'}`} onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-white">
+                            <h2 className={`text-xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                 {editingSubscription ? 'Edytuj subskrypcję' : 'Dodaj subskrypcję'}
                             </h2>
                             <button onClick={() => {
                                 setShowAddForm(false);
                                 resetForm();
-                            }} className="text-gray-400 hover:text-white text-2xl">×</button>
+                            }} className={`text-2xl ${theme === 'light' ? 'text-gray-500 hover:text-black' : 'text-gray-400 hover:text-white'}`}>×</button>
                         </div>
                         <form onSubmit={editingSubscription ? handleUpdateSubscription : handleFormSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                     Predefiniowana subskrypcja
                                 </label>
                                 <select
@@ -1247,7 +1119,7 @@ function Dashboard() {
                                             setFormData(prev => ({ ...prev, selectedPredefined: value, name: value }));
                                         }
                                     }}
-                                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                 >
                                     <option value="custom">Własna</option>
                                     {predefinedLogos.map((logo) => (
@@ -1258,7 +1130,7 @@ function Dashboard() {
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                         Nazwa
                                     </label>
                                     <input
@@ -1268,13 +1140,13 @@ function Dashboard() {
                                         onChange={handleFormChange}
                                         required
                                         disabled={formData.selectedPredefined && formData.selectedPredefined !== 'custom'}
-                                        className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+                                        className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                         placeholder="np. Netflix"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                         Cena
                                     </label>
                                     <input
@@ -1285,7 +1157,7 @@ function Dashboard() {
                                         required
                                         step="0.01"
                                         min="0"
-                                        className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                         placeholder="0.00"
                                     />
                                 </div>
@@ -1293,14 +1165,14 @@ function Dashboard() {
 
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                         Cykl rozliczeniowy
                                     </label>
                                     <select
                                         name="billing_cycle"
                                         value={formData.billing_cycle}
                                         onChange={handleFormChange}
-                                        className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                     >
                                         <option value="monthly">Miesięczny</option>
                                         <option value="yearly">Roczny</option>
@@ -1308,7 +1180,7 @@ function Dashboard() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                         Następna płatność
                                     </label>
                                     <input
@@ -1317,13 +1189,13 @@ function Dashboard() {
                                         value={formData.next_payment_date}
                                         onChange={handleFormChange}
                                         required
-                                        className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                     Kategoria
                                 </label>
                                 <input
@@ -1332,27 +1204,27 @@ function Dashboard() {
                                     value={formData.category}
                                     onChange={handleFormChange}
                                     required
-                                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                     placeholder="np. Rozrywka"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                     Notatki
                                 </label>
                                 <textarea
                                     name="notes"
                                     value={formData.notes}
                                     onChange={handleFormChange}
-                                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className={`w-full rounded-lg border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)]' : 'border-gray-600 bg-gray-800 text-white'}`}
                                     placeholder="Dodatkowe notatki..."
                                     rows="3"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className={`block text-sm font-medium mb-2 ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-300'}`}>
                                     Ulubione
                                 </label>
                                 <button

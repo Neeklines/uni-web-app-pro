@@ -3,8 +3,17 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 function Layout() {
+
+    const theme =
+        localStorage.getItem('theme') || 'dark';
+
     return (
-        <div className="min-h-screen bg-gray-900 flex flex-col">
+        <div
+            className={`min-h-screen flex flex-col ${theme === 'light'
+                    ? 'bg-[rgb(248,244,238)]'
+                    : 'bg-gray-900'
+                }`}
+        >
 
             <Navbar />
 

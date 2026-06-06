@@ -9,7 +9,9 @@ import {
     endOfWeek,
     format,
 } from 'date-fns';
-
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
 import { pl } from 'date-fns/locale';
 
 function CalendarToolbar({
@@ -19,6 +21,7 @@ function CalendarToolbar({
     setView,
     isMobile,
 }) {
+    const { theme } = usePreferences();
     const handlePrevious = () => {
         if (view === 'month') {
             setCurrentDate(subMonths(currentDate, 1));
@@ -98,7 +101,7 @@ function CalendarToolbar({
 
             {/* Left */}
             <div>
-                <h2 className="sm:ml-6 text-3xl font-semibold text-white text-center sm:text-left">
+                <h2 className={`sm:ml-6 text-3xl font-semibold text-center sm:text-left ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                     {getTitle()}
                 </h2>
             </div>
@@ -111,28 +114,28 @@ function CalendarToolbar({
 
                     <button
                         onClick={() => handlePrevious()}
-                        className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-2 text-white hover:bg-gray-700 transition"
+                        className={`rounded-2xl px-4 py-2 transition ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(90,65,40)] hover:bg-[rgb(235,228,218)]' : 'border border-gray-700 bg-gray-800 text-white hover:bg-gray-700'}`}
                     >
                         ←
                     </button>
 
                     <button
                         onClick={() => setCurrentDate(new Date())}
-                        className="rounded-2xl border border-gray-700 bg-gray-800 px-5 py-2 text-white hover:bg-gray-700 transition"
+                        className={`rounded-2xl px-4 py-2 transition ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(90,65,40)] hover:bg-[rgb(235,228,218)]' : 'border border-gray-700 bg-gray-800 text-white hover:bg-gray-700'}`}
                     >
                         Dziś
                     </button>
 
                     <button
                         onClick={() => handleNext()}
-                        className="rounded-2xl border border-gray-700 bg-gray-800 px-4 py-2 text-white hover:bg-gray-700 transition"
+                        className={`rounded-2xl px-4 py-2 transition ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(90,65,40)] hover:bg-[rgb(235,228,218)]' : 'border border-gray-700 bg-gray-800 text-white hover:bg-gray-700'}`}
                     >
                         →
                     </button>
                 </div>
 
                 {/* View switch */}
-                <div className="flex rounded-2xl border border-gray-700 bg-gray-900 p-1">
+                <div className={`flex rounded-2xl p-1 ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)]' : 'border border-gray-700 bg-gray-900'}`}>
 
                     {['month', ...(isMobile ? [] : ['week']), 'day'].map((item) => (
                         <button
@@ -140,9 +143,11 @@ function CalendarToolbar({
                             onClick={() => setView(item)}
                             className={`
                                 rounded-xl px-5 py-2 text-sm font-medium transition
-                                ${view === item
-                                    ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white'
+                               ${view === item
+                                    ? 'bg-blue-500 text-white'
+                                    : theme === 'light'
+                                        ? 'text-[rgb(90,65,40)] hover:bg-[rgb(235,228,218)]'
+                                        : 'text-gray-400 hover:text-white'
                                 }
                             `}
                         >

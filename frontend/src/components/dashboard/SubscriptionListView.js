@@ -1,6 +1,7 @@
 import SubscriptionCard from './SubscriptionCard';
-
+import { usePreferences } from '../../context/UserPreferencesContext';
 function SubscriptionListView({
+
     loading,
     error,
     subscriptions,
@@ -14,12 +15,14 @@ function SubscriptionListView({
     activePopup,
     setActivePopup,
     popupRef,
-}) {
+}
+) {
+    const { theme } = usePreferences();
     return (
         <div className="mt-6 space-y-4">
 
             {loading ? (
-                <p className="text-gray-400">
+                <p className={`${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                     Ładowanie subskrypcji...
                 </p>
 
@@ -29,12 +32,12 @@ function SubscriptionListView({
                 </p>
 
             ) : subscriptions.length === 0 ? (
-                <p className="text-gray-400">
+                <p className={`${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                     Brak subskrypcji do wyświetlenia.
                 </p>
 
             ) : filteredSubscriptions.length === 0 ? (
-                <p className="text-gray-400">
+                <p className={`${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>
                     Nie znaleziono subskrypcji.
                 </p>
 

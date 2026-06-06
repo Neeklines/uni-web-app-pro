@@ -9,7 +9,7 @@ import {
     useRef,
     useState,
 } from 'react';
-
+import { usePreferences } from '../../context/UserPreferencesContext';
 import CalendarEventCard from './CalendarEventCard';
 
 function CalendarDayCell({
@@ -36,7 +36,7 @@ function CalendarDayCell({
     const [hasOverflow, setHasOverflow] = useState(false);
     const [showTopFade, setShowTopFade] = useState(false);
     const [showBottomFade, setShowBottomFade] = useState(false);
-
+    const { theme } = usePreferences();
     useEffect(() => {
         if (!expanded || !scrollRef.current) return;
 

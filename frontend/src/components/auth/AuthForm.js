@@ -1,12 +1,27 @@
 import { useState } from 'react';
 import { loginSchema, registerSchema } from '../../validation/authSchemas';
 
-function AuthForm({ type, onSubmit, error, success, loading, showLoader, onResetError, children }) {
+function AuthForm({
+    type,
+    onSubmit,
+    error,
+    success,
+    loading,
+    showLoader,
+    onResetError,
+    children,
+}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
 
-    const schema = type === 'login' ? loginSchema : registerSchema;
+    const theme =
+        localStorage.getItem('theme') || 'dark';
+
+    const schema =
+        type === 'login'
+            ? loginSchema
+            : registerSchema;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,10 +29,16 @@ function AuthForm({ type, onSubmit, error, success, loading, showLoader, onReset
         setValidationError('');
         onResetError?.();
 
-        const result = schema.safeParse({ email, password });
+        const result = schema.safeParse({
+            email,
+            password,
+        });
 
         if (!result.success) {
-            setValidationError(result.error.issues?.[0]?.message || 'Invalid input');
+            setValidationError(
+                result.error.issues?.[0]?.message ||
+                'Invalid input'
+            );
             return;
         }
 
@@ -25,37 +46,75 @@ function AuthForm({ type, onSubmit, error, success, loading, showLoader, onReset
     };
 
     return (
-        <div className="bg-gray-800 p-8 rounded-2xl shadow-lg">
-
-            <h1 className="text-3xl font-bold text-white mb-6 text-center">
-                {type === 'login' ? 'Logowanie' : 'Rejestracja'}
+        <div
+            className={`p-8 rounded-2xl shadow-lg ${theme === 'light'
+                    ? 'bg-[rgb(252,249,244)] border border-stone-300'
+                    : 'bg-gray-800'
+                }`}
+        >
+            <h1
+                className={`text-3xl font-bold mb-6 text-center ${theme === 'light'
+                        ? 'text-[rgb(90,65,40)]'
+                        : 'text-white'
+                    }`}
+            >
+                {type === 'login'
+                    ? 'Logowanie'
+                    : 'Rejestracja'}
             </h1>
 
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-
+            <form
+                onSubmit={handleSubmit}
+                noValidate
+                className="space-y-4"
+            >
                 <div>
-                    <label htmlFor="email" className="block text-gray-300 mb-1">
+                    <label
+                        htmlFor="email"
+                        className={`block mb-1 ${theme === 'light'
+                                ? 'text-[rgb(100,100,100)]'
+                                : 'text-gray-300'
+                            }`}
+                    >
                         Email
                     </label>
+
                     <input
                         id="email"
                         type="email"
-                        className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) =>
+                            setEmail(e.target.value)
+                        }
+                        className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
+                                ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                                : 'bg-gray-700 text-white'
+                            }`}
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="password" className="block text-gray-300 mb-1">
+                    <label
+                        htmlFor="password"
+                        className={`block mb-1 ${theme === 'light'
+                                ? 'text-[rgb(100,100,100)]'
+                                : 'text-gray-300'
+                            }`}
+                    >
                         Hasło
                     </label>
+
                     <input
                         id="password"
                         type="password"
-                        className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) =>
+                            setPassword(e.target.value)
+                        }
+                        className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
+                                ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                                : 'bg-gray-700 text-white'
+                            }`}
                     />
                 </div>
 
@@ -64,27 +123,30 @@ function AuthForm({ type, onSubmit, error, success, loading, showLoader, onReset
                     disabled={loading}
                     className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition disabled:opacity-50"
                 >
-                    {showLoader ? 'Ładowanie...' : type === 'login' ? 'Zaloguj się' : 'Zarejestruj się'}
+                    {showLoader
+                        ? 'Ładowanie...'
+                        : type === 'login'
+                            ? 'Zaloguj się'
+                            : 'Zarejestruj się'}
                 </button>
+
                 {children}
             </form>
 
-            {/* Validation error */}
             {validationError && (
                 <p className="text-red-400 mt-4 text-center">
                     {validationError}
                 </p>
             )}
 
-            {/* Backend error */}
             {error && (
-                <p className="text-yellow-400 mt-2 text-center">
+                <p className="text-yellow-500 mt-2 text-center">
                     {error}
                 </p>
             )}
-            {/* Success message */}
+
             {success && (
-                <p className="text-green-400 mt-2 text-center">
+                <p className="text-green-500 mt-2 text-center">
                     {success}
                 </p>
             )}

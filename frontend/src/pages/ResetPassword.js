@@ -7,6 +7,9 @@ function ResetPassword() {
 
   const token = searchParams.get('token');
 
+  const theme =
+    localStorage.getItem('theme') || 'dark';
+
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -15,6 +18,7 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError('');
     setMessage('');
 
@@ -50,23 +54,38 @@ function ResetPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        let errorMessage = 'Nie udało się zmienić hasła.';
+        let errorMessage =
+          'Nie udało się zmienić hasła.';
 
-        if (Array.isArray(data.detail) && data.detail.length > 0) {
-          errorMessage = data.detail[0].msg.replace('Value error, ','');
-        } else if (typeof data.detail === 'string') {
+        if (
+          Array.isArray(data.detail) &&
+          data.detail.length > 0
+        ) {
+          errorMessage =
+            data.detail[0].msg.replace(
+              'Value error, ',
+              ''
+            );
+        } else if (
+          typeof data.detail === 'string'
+        ) {
           errorMessage = data.detail;
         }
 
         throw new Error(errorMessage);
       }
 
+      navigate('/login', {
+        state: {
+          resetSuccess: true,
+        },
+      });
 
-    navigate('/login', {
-      state: { resetSuccess: true }
-    });
     } catch (err) {
-      setError(err.message || 'Wystąpił błąd.');
+      setError(
+        err.message ||
+        'Wystąpił błąd.'
+      );
     } finally {
       setLoading(false);
     }
@@ -74,8 +93,20 @@ function ResetPassword() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-gray-800 p-8 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">
+
+      <div
+        className={`p-8 rounded-2xl shadow-lg ${theme === 'light'
+            ? 'bg-[rgb(252,249,244)] border border-stone-300'
+            : 'bg-gray-800'
+          }`}
+      >
+
+        <h1
+          className={`text-3xl font-bold mb-6 text-center ${theme === 'light'
+              ? 'text-[rgb(90,65,40)]'
+              : 'text-white'
+            }`}
+        >
           Ustaw nowe hasło
         </h1>
 
@@ -85,41 +116,77 @@ function ResetPassword() {
           </p>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+
           <div>
-            <label htmlFor="newPassword" className="block text-gray-300 mb-1">
+            <label
+              htmlFor="newPassword"
+              className={`block mb-1 ${theme === 'light'
+                  ? 'text-[rgb(100,100,100)]'
+                  : 'text-gray-300'
+                }`}
+            >
               Nowe hasło
             </label>
+
             <input
               id="newPassword"
               type="password"
-              className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(e) =>
+                setNewPassword(
+                  e.target.value
+                )
+              }
               disabled={!token}
+              className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
+                  ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                  : 'bg-gray-700 text-white'
+                }`}
             />
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-gray-300 mb-1">
+            <label
+              htmlFor="confirmPassword"
+              className={`block mb-1 ${theme === 'light'
+                  ? 'text-[rgb(100,100,100)]'
+                  : 'text-gray-300'
+                }`}
+            >
               Powtórz hasło
             </label>
+
             <input
               id="confirmPassword"
               type="password"
-              className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) =>
+                setConfirmPassword(
+                  e.target.value
+                )
+              }
               disabled={!token}
+              className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
+                  ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                  : 'bg-gray-700 text-white'
+                }`}
             />
           </div>
 
           {message && (
-            <p className="text-green-400 text-sm text-center">{message}</p>
+            <p className="text-green-500 text-sm text-center">
+              {message}
+            </p>
           )}
 
           {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
+            <p className="text-red-400 text-sm text-center">
+              {error}
+            </p>
           )}
 
           <button
@@ -127,15 +194,30 @@ function ResetPassword() {
             disabled={loading || !token}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition disabled:opacity-60"
           >
-            {loading ? 'Zapisywanie...' : 'Zmień hasło'}
+            {loading
+              ? 'Zapisywanie...'
+              : 'Zmień hasło'}
           </button>
+
         </form>
 
-        <p className="text-gray-400 mt-6 text-center">
-          <Link to="/login" className="text-blue-400 hover:underline">
+        <p
+          className={`mt-6 text-center ${theme === 'light'
+              ? 'text-[rgb(100,100,100)]'
+              : 'text-gray-400'
+            }`}
+        >
+          <Link
+            to="/login"
+            className={`hover:underline ${theme === 'light'
+                ? 'text-blue-600'
+                : 'text-blue-400'
+              }`}
+          >
             Wróć do logowania
           </Link>
         </p>
+
       </div>
     </div>
   );

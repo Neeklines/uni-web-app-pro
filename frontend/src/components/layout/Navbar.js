@@ -3,6 +3,11 @@ import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 import {
+    CalendarDays,
+    LogOut,
+} from 'lucide-react';
+
+import {
     usePreferences,
 } from '../../context/UserPreferencesContext';
 
@@ -48,37 +53,73 @@ function Navbar() {
 
                     {user ? (
                         <>
-                            <p
-                                className={`text-sm ${theme === 'light'
+                            <div className="text-right">
+                                <p className={`text-sm ${theme === 'light'
                                     ? 'text-[rgb(100,100,100)]'
                                     : 'text-gray-400'
-                                    }`}
+                                    }`}>
+                                    Zalogowano jako
+                                </p>
+
+                                <p className={`text-sm font-medium ${theme === 'light'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
+                                    }`}>
+                                    {user.display_name}
+                                </p>
+                            </div>
+
+                            <Link
+                                to="/dashboard"
+                                className="
+                                    flex
+                                    items-center
+                                    gap-2
+
+                                    rounded-lg
+                                    bg-gray-700
+
+                                    px-3
+                                    py-2
+
+                                    text-gray-200
+                                    transition
+
+                                    hover:bg-gray-600
+                                    hover:text-white
+                                "
                             >
-                                Zalogowano jako{' '}
-                                <span
-                                    className={`font-medium ${theme === 'light'
-                                        ? 'text-[rgb(90,65,40)]'
-                                        : 'text-white'
-                                        }`}
-                                >
-                                    {username}
+                                <CalendarDays size={16} />
+                                <span className="hidden sm:inline">
+                                    Dashboard
                                 </span>
-                            </p>
+                            </Link>
 
                             <button
                                 onClick={logout}
                                 className="
-                                    bg-red-500
-                                    hover:bg-red-600
-                                    text-white
-                                    px-4
-                                    py-1.5
-                                    rounded-md
-                                    font-medium
+                                    flex
+                                    items-center
+                                    gap-2
+
+                                    rounded-lg
+                                    bg-gray-700
+
+                                    px-3
+                                    py-2
+
+                                    text-gray-200
                                     transition
+
+                                    hover:bg-red-500
+                                    hover:text-white
                                 "
                             >
-                                Wyloguj
+                                <LogOut size={16} />
+
+                                <span className="hidden sm:inline">
+                                    Wyloguj
+                                </span>
                             </button>
                         </>
                     ) : (

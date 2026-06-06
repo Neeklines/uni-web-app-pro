@@ -2,16 +2,20 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function Layout() {
 
-    const theme =
-        localStorage.getItem('theme') || 'dark';
+    const { theme } =
+        usePreferences();
 
     return (
         <div
             className={`min-h-screen flex flex-col ${theme === 'light'
-                    ? 'bg-[rgb(248,244,238)]'
-                    : 'bg-gray-900'
+                ? 'bg-[rgb(248,244,238)]'
+                : 'bg-gray-900'
                 }`}
         >
 

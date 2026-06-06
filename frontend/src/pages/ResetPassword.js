@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 
+import {
+  usePreferences,
+} from '../context/UserPreferencesContext';
+
 function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const token = searchParams.get('token');
 
-  const theme =
-    localStorage.getItem('theme') || 'dark';
+  const { theme } =
+    usePreferences();
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -96,15 +100,15 @@ function ResetPassword() {
 
       <div
         className={`p-8 rounded-2xl shadow-lg ${theme === 'light'
-            ? 'bg-[rgb(252,249,244)] border border-stone-300'
-            : 'bg-gray-800'
+          ? 'bg-[rgb(252,249,244)] border border-stone-300'
+          : 'bg-gray-800'
           }`}
       >
 
         <h1
           className={`text-3xl font-bold mb-6 text-center ${theme === 'light'
-              ? 'text-[rgb(90,65,40)]'
-              : 'text-white'
+            ? 'text-[rgb(90,65,40)]'
+            : 'text-white'
             }`}
         >
           Ustaw nowe hasło
@@ -125,8 +129,8 @@ function ResetPassword() {
             <label
               htmlFor="newPassword"
               className={`block mb-1 ${theme === 'light'
-                  ? 'text-[rgb(100,100,100)]'
-                  : 'text-gray-300'
+                ? 'text-[rgb(100,100,100)]'
+                : 'text-gray-300'
                 }`}
             >
               Nowe hasło
@@ -143,8 +147,8 @@ function ResetPassword() {
               }
               disabled={!token}
               className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
-                  ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
-                  : 'bg-gray-700 text-white'
+                ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                : 'bg-gray-700 text-white'
                 }`}
             />
           </div>
@@ -153,8 +157,8 @@ function ResetPassword() {
             <label
               htmlFor="confirmPassword"
               className={`block mb-1 ${theme === 'light'
-                  ? 'text-[rgb(100,100,100)]'
-                  : 'text-gray-300'
+                ? 'text-[rgb(100,100,100)]'
+                : 'text-gray-300'
                 }`}
             >
               Powtórz hasło
@@ -171,8 +175,8 @@ function ResetPassword() {
               }
               disabled={!token}
               className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
-                  ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
-                  : 'bg-gray-700 text-white'
+                ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                : 'bg-gray-700 text-white'
                 }`}
             />
           </div>
@@ -203,15 +207,15 @@ function ResetPassword() {
 
         <p
           className={`mt-6 text-center ${theme === 'light'
-              ? 'text-[rgb(100,100,100)]'
-              : 'text-gray-400'
+            ? 'text-[rgb(100,100,100)]'
+            : 'text-gray-400'
             }`}
         >
           <Link
             to="/login"
             className={`hover:underline ${theme === 'light'
-                ? 'text-blue-600'
-                : 'text-blue-400'
+              ? 'text-blue-600'
+              : 'text-blue-400'
               }`}
           >
             Wróć do logowania

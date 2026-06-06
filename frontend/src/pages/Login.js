@@ -3,13 +3,17 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import AuthForm from '../components/auth/AuthForm';
 import { useState, useEffect } from 'react';
 
+import {
+    usePreferences,
+} from '../context/UserPreferencesContext';
+
 function Login() {
     const { login } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const theme =
-        localStorage.getItem('theme') || 'dark';
+    const { theme } =
+        usePreferences();
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

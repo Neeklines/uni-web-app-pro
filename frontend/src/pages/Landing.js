@@ -1,28 +1,32 @@
+import {
+    usePreferences,
+} from '../context/UserPreferencesContext';
+
 function Landing() {
 
-    const theme =
-        localStorage.getItem('theme') || 'dark';
+    const { theme } =
+        usePreferences();
 
     return (
         <div
             className={`px-6 py-12 flex items-center justify-center ${theme === 'light'
-                    ? 'bg-[rgb(248,244,238)] text-[rgb(35,35,35)]'
-                    : 'bg-gray-900 text-white'
+                ? 'bg-[rgb(248,244,238)] text-[rgb(35,35,35)]'
+                : 'bg-gray-900 text-white'
                 }`}
         >
             <div className="max-w-4xl mx-auto">
 
                 <div
                     className={`rounded-3xl p-10 shadow-xl ${theme === 'light'
-                            ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20'
-                            : 'border border-gray-700 bg-gray-950/60 shadow-black/20'
+                        ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20'
+                        : 'border border-gray-700 bg-gray-950/60 shadow-black/20'
                         }`}
                 >
 
                     <h1
                         className={`text-4xl sm:text-5xl font-bold tracking-tight ${theme === 'light'
-                                ? 'text-[rgb(90,65,40)]'
-                                : 'text-white'
+                            ? 'text-[rgb(90,65,40)]'
+                            : 'text-white'
                             }`}
                     >
                         SmartSub
@@ -30,8 +34,8 @@ function Landing() {
 
                     <p
                         className={`mt-4 text-lg sm:text-xl max-w-3xl ${theme === 'light'
-                                ? 'text-[rgb(70,70,70)]'
-                                : 'text-gray-300'
+                            ? 'text-[rgb(70,70,70)]'
+                            : 'text-gray-300'
                             }`}
                     >
                         Zarządzaj swoimi subskrypcjami i stałymi wydatkami w jednym miejscu.
@@ -43,14 +47,14 @@ function Landing() {
 
                         <div
                             className={`rounded-2xl p-5 border ${theme === 'light'
-                                    ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
-                                    : 'bg-gray-900/90 border-gray-800'
+                                ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
+                                : 'bg-gray-900/90 border-gray-800'
                                 }`}
                         >
                             <h2
                                 className={`text-xl font-semibold ${theme === 'light'
-                                        ? 'text-[rgb(90,65,40)]'
-                                        : 'text-white'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
                                     }`}
                             >
                                 Wszystko w jednym
@@ -58,8 +62,8 @@ function Landing() {
 
                             <p
                                 className={`mt-2 text-sm ${theme === 'light'
-                                        ? 'text-[rgb(100,100,100)]'
-                                        : 'text-gray-400'
+                                    ? 'text-[rgb(100,100,100)]'
+                                    : 'text-gray-400'
                                     }`}
                             >
                                 Przechowuj subskrypcje, opłaty i stałe wydatki
@@ -69,14 +73,14 @@ function Landing() {
 
                         <div
                             className={`rounded-2xl p-5 border ${theme === 'light'
-                                    ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
-                                    : 'bg-gray-900/90 border-gray-800'
+                                ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
+                                : 'bg-gray-900/90 border-gray-800'
                                 }`}
                         >
                             <h2
                                 className={`text-xl font-semibold ${theme === 'light'
-                                        ? 'text-[rgb(90,65,40)]'
-                                        : 'text-white'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
                                     }`}
                             >
                                 Śledź wydatki
@@ -84,8 +88,8 @@ function Landing() {
 
                             <p
                                 className={`mt-2 text-sm ${theme === 'light'
-                                        ? 'text-[rgb(100,100,100)]'
-                                        : 'text-gray-400'
+                                    ? 'text-[rgb(100,100,100)]'
+                                    : 'text-gray-400'
                                     }`}
                             >
                                 Zobacz, ile wydajesz co miesiąc i które usługi
@@ -95,14 +99,14 @@ function Landing() {
 
                         <div
                             className={`rounded-2xl p-5 border ${theme === 'light'
-                                    ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
-                                    : 'bg-gray-900/90 border-gray-800'
+                                ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
+                                : 'bg-gray-900/90 border-gray-800'
                                 }`}
                         >
                             <h2
                                 className={`text-xl font-semibold ${theme === 'light'
-                                        ? 'text-[rgb(90,65,40)]'
-                                        : 'text-white'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
                                     }`}
                             >
                                 Bezpieczny start
@@ -110,8 +114,8 @@ function Landing() {
 
                             <p
                                 className={`mt-2 text-sm ${theme === 'light'
-                                        ? 'text-[rgb(100,100,100)]'
-                                        : 'text-gray-400'
+                                    ? 'text-[rgb(100,100,100)]'
+                                    : 'text-gray-400'
                                     }`}
                             >
                                 Zaloguj się lub zarejestruj, aby szybko rozpocząć

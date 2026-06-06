@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getMeta } from '../../services/metaService';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function Footer() {
     const [meta, setMeta] = useState(null);
 
-    const theme =
-        localStorage.getItem('theme') || 'dark';
+    const { theme } = usePreferences();
 
     useEffect(() => {
         const fetchMeta = async () => {
@@ -23,8 +26,8 @@ function Footer() {
     return (
         <footer
             className={`text-center text-sm my-6 ${theme === 'light'
-                    ? 'text-[rgb(100,100,100)]'
-                    : 'text-gray-500'
+                ? 'text-[rgb(100,100,100)]'
+                : 'text-gray-500'
                 }`}
         >
             <p>
@@ -32,8 +35,8 @@ function Footer() {
                 <a
                     href="https://github.com/Neeklines"
                     className={`transition ${theme === 'light'
-                            ? 'text-[rgb(90,65,40)] hover:text-black'
-                            : 'text-gray-400 hover:text-white'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-white'
                         }`}
                 >
                     Yehor Timofieiev
@@ -44,8 +47,8 @@ function Footer() {
                 <a
                     href="/tos"
                     className={`transition ${theme === 'light'
-                            ? 'text-[rgb(90,65,40)] hover:text-black'
-                            : 'text-gray-400 hover:text-gray-300'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-gray-300'
                         }`}
                 >
                     Terms of Service
@@ -54,8 +57,8 @@ function Footer() {
                 <a
                     href="/privacy"
                     className={`transition ${theme === 'light'
-                            ? 'text-[rgb(90,65,40)] hover:text-black'
-                            : 'text-gray-400 hover:text-gray-300'
+                        ? 'text-[rgb(90,65,40)] hover:text-black'
+                        : 'text-gray-400 hover:text-gray-300'
                         }`}
                 >
                     Privacy Policy
@@ -65,8 +68,8 @@ function Footer() {
             {meta?.env === 'dev' && (
                 <p
                     className={`mt-1 ${theme === 'light'
-                            ? 'text-[rgb(120,120,120)]'
-                            : 'text-gray-600'
+                        ? 'text-[rgb(120,120,120)]'
+                        : 'text-gray-600'
                         }`}
                 >
                     Running development version
@@ -83,8 +86,8 @@ function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`transition ${theme === 'light'
-                                    ? 'text-[rgb(90,65,40)] hover:text-black'
-                                    : 'text-gray-400 hover:text-gray-300'
+                                ? 'text-[rgb(90,65,40)] hover:text-black'
+                                : 'text-gray-400 hover:text-gray-300'
                                 }`}
                         >
                             {meta.version_short}

@@ -2,24 +2,25 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 function Navbar() {
     const { user, logout } = useAuth();
     const username = user?.email?.split('@')[0];
 
-    const [theme, setTheme] = useState(
-        localStorage.getItem('theme') || 'dark'
-    );
+    const {
+        theme,
+        setTheme,
+    } = usePreferences();
 
     const toggleTheme = () => {
-        const newTheme =
+        setTheme(
             theme === 'dark'
                 ? 'light'
-                : 'dark';
-
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-
-        window.location.reload();
+                : 'dark'
+        );
     };
 
     return (
@@ -44,16 +45,6 @@ function Navbar() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-3">
-
-                    <button
-                        onClick={toggleTheme}
-                        className={`h-9 w-9 rounded-full border text-lg transition ${theme === 'light'
-                            ? 'border-stone-300 bg-[rgb(245,240,232)] hover:bg-[rgb(235,228,218)]'
-                            : 'border-gray-600 bg-gray-700 hover:bg-gray-600'
-                            }`}
-                    >
-                        {theme === 'light' ? '🌙' : '☀️'}
-                    </button>
 
                     {user ? (
                         <>
@@ -92,6 +83,16 @@ function Navbar() {
                         </>
                     ) : (
                         <>
+                            <button
+                                onClick={toggleTheme}
+                                className={`h-9 w-9 rounded-full border text-lg transition ${theme === 'light'
+                                    ? 'border-stone-300 bg-[rgb(245,240,232)] hover:bg-[rgb(235,228,218)]'
+                                    : 'border-gray-600 bg-gray-700 hover:bg-gray-600'
+                                    }`}
+                            >
+                                {theme === 'light' ? '🌙' : '☀️'}
+                            </button>
+
                             <Link
                                 to="/login"
                                 className={`px-3 py-1.5 rounded-md transition ${theme === 'light'
@@ -104,16 +105,25 @@ function Navbar() {
 
                             <Link
                                 to="/register"
-                                className="
-                                    bg-blue-500
-                                    hover:bg-blue-600
-                                    text-white
+                                className={`
+                                    ${theme === 'light'
+                                        ? `
+                                            bg-[rgb(90,65,40)]
+                                            hover:bg-[rgb(120,95,70)]
+                                            text-white
+                                        `
+                                        : `
+                                            bg-blue-500
+                                            hover:bg-blue-600
+                                            text-white
+                                        `
+                                    }
                                     px-4
                                     py-1.5
                                     rounded-md
                                     font-medium
                                     transition
-                                "
+                                `}
                             >
                                 Register
                             </Link>

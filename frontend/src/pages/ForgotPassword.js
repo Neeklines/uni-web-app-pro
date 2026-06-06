@@ -1,13 +1,17 @@
 import { useState } from 'react';
 
+import {
+  usePreferences,
+} from '../context/UserPreferencesContext';
+
 function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const theme =
-    localStorage.getItem('theme') || 'dark';
+  const { theme } =
+    usePreferences();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,15 +60,15 @@ function ForgotPassword() {
 
       <div
         className={`p-8 rounded-2xl shadow-lg ${theme === 'light'
-            ? 'bg-[rgb(252,249,244)] border border-stone-300'
-            : 'bg-gray-800'
+          ? 'bg-[rgb(252,249,244)] border border-stone-300'
+          : 'bg-gray-800'
           }`}
       >
 
         <h1
           className={`text-3xl font-bold mb-6 text-center ${theme === 'light'
-              ? 'text-[rgb(90,65,40)]'
-              : 'text-white'
+            ? 'text-[rgb(90,65,40)]'
+            : 'text-white'
             }`}
         >
           Reset hasła
@@ -72,8 +76,8 @@ function ForgotPassword() {
 
         <p
           className={`text-sm text-center mb-6 ${theme === 'light'
-              ? 'text-[rgb(100,100,100)]'
-              : 'text-gray-400'
+            ? 'text-[rgb(100,100,100)]'
+            : 'text-gray-400'
             }`}
         >
           Podaj adres email.
@@ -89,8 +93,8 @@ function ForgotPassword() {
             <label
               htmlFor="email"
               className={`block mb-1 ${theme === 'light'
-                  ? 'text-[rgb(100,100,100)]'
-                  : 'text-gray-300'
+                ? 'text-[rgb(100,100,100)]'
+                : 'text-gray-300'
                 }`}
             >
               Email
@@ -105,8 +109,8 @@ function ForgotPassword() {
                 setEmail(e.target.value)
               }
               className={`w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'light'
-                  ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
-                  : 'bg-gray-700 text-white'
+                ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)] text-[rgb(35,35,35)]'
+                : 'bg-gray-700 text-white'
                 }`}
             />
 

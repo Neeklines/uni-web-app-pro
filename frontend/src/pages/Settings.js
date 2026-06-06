@@ -225,7 +225,7 @@ function Settings() {
                             tracking-[0.3em]
 
                         ${theme === 'light'
-                                    ? 'text-blue-500'
+                                    ? 'text-[rgb(140,110,80)]'
                                     : 'text-blue-400'
                                 }
                             `}
@@ -760,20 +760,29 @@ function Settings() {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="
+                        className={`
                             rounded-full
-                            bg-blue-500
                             px-8
                             py-4
                             text-sm
                             font-semibold
-                            text-white
                             shadow-lg
                             shadow-blue-500/20
                             transition
-                            hover:bg-blue-400
                             disabled:opacity-50
-                        "
+                            ${theme === 'light'
+                                ? `
+                                    bg-[rgb(90,65,40)]
+                                    hover:bg-[rgb(120,95,70)]
+                                    text-white
+                                `
+                                : `
+                                    bg-blue-500
+                                    hover:bg-blue-400
+                                    text-white
+                                `
+                            }
+                        `}
                     >
                         {saving
                             ? 'Zapisywanie...'

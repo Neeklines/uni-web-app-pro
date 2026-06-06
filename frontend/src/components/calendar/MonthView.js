@@ -8,6 +8,10 @@ import {
     format,
 } from 'date-fns';
 
+import {
+    usePreferences,
+} from '../../context/UserPreferencesContext';
+
 import CalendarDayCell from './CalendarDayCell';
 
 function MonthView({
@@ -19,6 +23,8 @@ function MonthView({
     handleEditSubscription,
     handleCancelSubscription,
 }) {
+    const { theme } = usePreferences();
+
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
 
@@ -40,15 +46,60 @@ function MonthView({
     }
 
     return (
-        <div className="overflow-hidden sm:rounded-[32px] rounded-[12px] border border-gray-700">
+        <div
+            className={`
+                overflow-hidden
+                sm:rounded-[32px]
+                rounded-[12px]
+                border
+
+                ${theme === 'light'
+                    ? 'border-[rgb(220,210,195)]'
+                    : 'border-gray-700'
+                }
+            `}
+        >
 
             {/* Week labels */}
-            <div className="grid grid-cols-7 bg-gray-600">
+            <div
+                className={`
+                    grid
+                    grid-cols-7
+
+                    ${theme === 'light'
+                        ? 'bg-[rgb(245,240,232)]'
+                        : 'bg-gray-900'
+                    }
+                `}
+            >
 
                 {['Pon', 'Wt', 'Śrs', 'Czw', 'Pt', 'Sob', 'Ndz'].map((label) => (
                     <div
                         key={label}
-                        className="border-b border-r border-slate-700 sm:p-4 p-1 text-center text-sm font-medium text-white last:border-r-0"
+                        className={`
+                            border-b
+                            border-r
+
+                            sm:p-4
+                            p-1
+
+                            text-center
+                            text-sm
+                            font-medium
+
+                            last:border-r-0
+
+                            ${theme === 'light'
+                                ? `
+                                    border-[rgb(220,210,195)]
+                                    text-[rgb(100,100,100)]
+                                `
+                                : `
+                                    border-gray-700
+                                    text-gray-400
+                                `
+                            }
+                        `}
                     >
                         {label}
                     </div>

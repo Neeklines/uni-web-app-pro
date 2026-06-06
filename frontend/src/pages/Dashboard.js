@@ -458,7 +458,7 @@ function Dashboard() {
 
             {showPopup && (<div className={`fixed top-5 right-5 z-50 rounded-[32px] p-6 w-80 shadow-xl ${theme === 'light' ? 'bg-[rgb(252,249,244)] border border-stone-300 shadow-stone-300/20' : 'bg-gray-950/70 border border-gray-700 shadow-black/20'}`}>
                 <div className="flex justify-between items-center mb-4">
-                    <p className="text-sm uppercase tracking-[0.15em] text-blue-400 whitespace-nowrap">
+                    <p className={`text-sm uppercase tracking-[0.15em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'} whitespace-nowrap`}>
                         Nadchodzące płatności
                     </p>
                     <button
@@ -488,7 +488,7 @@ function Dashboard() {
                     <div className={`rounded-[32px] p-6 sm:p-8 shadow-xl ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/20' : 'border border-gray-700 bg-gray-950/70 shadow-black/20'}`}>
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                             <div className="text-center sm:text-left">
-                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Dashboard</p>
+                                <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Dashboard</p>
                                 <h1 className={`mt-3 text-3xl sm:text-4xl font-semibold break-words ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                     Witaj, {user?.display_name || user?.email}
                                 </h1>
@@ -516,17 +516,26 @@ function Dashboard() {
 
                                         logout();
                                     }}
-                                    className="
+                                    className={`
                                         rounded-full
-                                        bg-blue-500
                                         px-6
                                         py-3
                                         text-sm
                                         font-semibold
-                                        text-white
                                         transition
-                                        hover:bg-blue-400
-                                    "
+                                        ${theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                hover:bg-[rgb(120,95,70)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                hover:bg-blue-400
+                                                text-white
+                                            `
+                                        }
+                                    `}
                                 >
                                     Wyloguj się
                                 </button>
@@ -536,12 +545,12 @@ function Dashboard() {
 
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
-                            <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Miesięczny koszt</p>
+                            <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Miesięczny koszt</p>
                             <p className={`mt-4 text-4xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{formatPrice(totalMonthly, currency)}</p>
                             <p className={`mt-2 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>Suma wszystkich subskrypcji na najbliższy miesiąc.</p>
                         </div>
                         <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
-                            <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Roczny koszt</p>
+                            <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Roczny koszt</p>
                             <p className={`mt-4 text-4xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>{formatPrice(totalYearly, currency)}</p>
                             <p className={`mt-2 text-sm ${theme === 'light' ? 'text-[rgb(100,100,100)]' : 'text-gray-400'}`}>Szacowany koszt subskrypcji za 12 miesięcy.</p>
                         </div>
@@ -558,7 +567,7 @@ function Dashboard() {
 
                             {/* Title */}
                             <div className="text-center">
-                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">
+                                <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>
                                     Twoje subskrypcje
                                 </p>
 
@@ -584,7 +593,15 @@ function Dashboard() {
                                 <button
                                     onClick={() => setViewMode('list')}
                                     className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
-                                        ? 'bg-blue-500 text-white'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
                                         : theme === 'light'
                                             ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
                                             : 'bg-gray-700 text-gray-300'
@@ -596,7 +613,15 @@ function Dashboard() {
                                 <button
                                     onClick={() => setViewMode('calendar')}
                                     className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
-                                        ? 'bg-blue-500 text-white'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
                                         : theme === 'light'
                                             ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
                                             : 'bg-gray-700 text-gray-300'
@@ -796,19 +821,28 @@ function Dashboard() {
                                 {/* ADD */}
                                 <button
                                     onClick={() => setShowAddForm(true)}
-                                    className="
+                                    className={`
                                         flex
                                         h-10
                                         w-10
                                         items-center
                                         justify-center
                                         rounded-full
-                                        bg-blue-500
-                                        text-white
                                         font-semibold
-                                        hover:bg-blue-400
                                         transition
-                                    "
+                                        ${theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                hover:bg-[rgb(120,95,70)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                hover:bg-blue-400
+                                                text-white
+                                            `
+                                        }
+                                    `}
                                 >
                                     +
                                 </button>
@@ -818,7 +852,7 @@ function Dashboard() {
                         {/* Desktop */}
                         <div className="hidden sm:flex sm:flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                             <div>
-                                <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Twoje subskrypcje</p>
+                                <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Twoje subskrypcje</p>
                                 <h2 className={`mt-3 text-2xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                                     {viewMode === 'list'
                                         ? 'Lista subskrypcji'
@@ -1030,7 +1064,20 @@ function Dashboard() {
                                 </div>
                                 <button
                                     onClick={() => setShowAddForm(true)}
-                                    className="rounded-full bg-blue-500 px-4 h-10 text-white font-semibold hover:bg-blue-400 transition"
+                                    className={`rounded-full px-4 h-10 font-semibold transition
+                                        ${theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                hover:bg-[rgb(120,95,70)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                hover:bg-blue-400
+                                                text-white
+                                            `
+                                        }
+                                    `}
                                 >
                                     +
                                 </button>
@@ -1244,7 +1291,20 @@ function Dashboard() {
                             <button
                                 type="submit"
                                 disabled={formLoading}
-                                className="w-full rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={`w-full rounded-full px-6 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed
+                                    ${theme === 'light'
+                                        ? `
+                                                bg-[rgb(90,65,40)]
+                                                hover:bg-[rgb(120,95,70)]
+                                                text-white
+                                            `
+                                        : `
+                                                bg-blue-500
+                                                hover:bg-blue-400
+                                                text-white
+                                            `
+                                    }
+                                `}
                             >
                                 {formLoading ? (editingSubscription ? 'Aktualizowanie...' : 'Dodawanie...') : (editingSubscription ? 'Aktualizuj subskrypcję' : 'Dodaj subskrypcję')}
                             </button>

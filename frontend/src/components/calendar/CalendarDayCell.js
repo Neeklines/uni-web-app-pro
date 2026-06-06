@@ -68,39 +68,70 @@ function CalendarDayCell({
         <button
             onClick={onClick}
             className={`
-            group
+                group
 
-            h-[72px] sm:h-[150px]
-            overflow-hidden
+                h-[72px]
+                sm:h-[150px]
 
-            border-r
-            border-b
-            border-gray-700
+                overflow-hidden
 
-            p-1.5 sm:p-3
-            text-left
-            transition
-            hover:bg-gray-800/70
+                border-r
+                border-b
 
-            flex
-            flex-col
+                p-1.5
+                sm:p-3
 
-            ${isCurrentMonth
-                    ? 'bg-gray-950/70'
-                    : 'bg-gray-900/40 opacity-50'
+                text-left
+                transition
+
+                hover:bg-opacity-70
+
+                flex
+                flex-col
+
+                ${isCurrentMonth
+                    ? (
+                        theme === 'light'
+                            ? 'bg-[rgb(252,249,244)]'
+                            : 'bg-gray-950/70'
+                    )
+                    : (
+                        theme === 'light'
+                            ? 'bg-[rgb(245,240,232)] opacity-70'
+                            : 'bg-gray-900/40 opacity-50'
+                    )
                 }
 
-            ${isToday(day)
-                    ? 'border border-blue-500/70 shadow-[inset_0_0_0_1px_rgba(59,130,246,0.6),0_0_18px_rgba(59,130,246,0.18)]'
+                ${theme === 'light'
+                    ? 'border-[rgb(220,210,195)]'
+                    : 'border-gray-700'
+                }
+
+                ${isToday(day)
+                    ? (
+                        theme === 'light'
+                            ? 'border-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.25)]'
+                            : 'border border-blue-500/70 shadow-[inset_0_0_0_1px_rgba(59,130,246,0.6),0_0_18px_rgba(59,130,246,0.18)]'
+                    )
                     : ''
                 }
-        `}
+            `}
         >
 
             {/* Header */}
             <div className="mb-1 flex items-center justify-center sm:justify-between flex-shrink-0">
 
-                <span className="text-sm font-semibold text-white">
+                <span
+                    className={`
+                        text-sm
+                        font-semibold
+
+                        ${theme === 'light'
+                            ? 'text-[rgb(90,65,40)]'
+                            : 'text-white'
+                        }
+                    `}
+                >
                     {format(day, 'd')}
                 </span>
 
@@ -182,7 +213,7 @@ function CalendarDayCell({
                             {/* Top fade */}
                             {hasOverflow && showTopFade && (
                                 <div
-                                    className="
+                                    className={`
                             pointer-events-none
                             absolute
                             top-0
@@ -190,20 +221,23 @@ function CalendarDayCell({
                             right-0
                             h-5
                             bg-gradient-to-b
-                            from-gray-950
+                            ${theme === 'light'
+                                            ? 'from-[rgb(252,249,244)]'
+                                            : 'from-gray-950'
+                                        }
                             to-transparent
                             opacity-100
                             transition-opacity
                             duration-200
                             group-hover:opacity-60
-                        "
+                        `}
                                 />
                             )}
 
                             {/* Bottom fade */}
                             {hasOverflow && showBottomFade && (
                                 <div
-                                    className="
+                                    className={`
                             pointer-events-none
                             absolute
                             bottom-0
@@ -211,13 +245,16 @@ function CalendarDayCell({
                             right-0
                             h-5
                             bg-gradient-to-t
-                            from-gray-950
+                            ${theme === 'light'
+                                            ? 'from-[rgb(252,249,244)]'
+                                            : 'from-gray-950'
+                                        }
                             to-transparent
                             opacity-100
                             transition-opacity
                             duration-200
                             group-hover:opacity-60
-                        "
+                        `}
                                 />
                             )}
                         </div>
@@ -243,7 +280,17 @@ function CalendarDayCell({
                     ))}
 
                     {daySubscriptions.length > 4 && (
-                        <div className="text-[10px] text-gray-500 leading-none">
+                        <div
+                            className={`
+                                text-[10px]
+                                leading-none
+
+                                ${theme === 'light'
+                                    ? 'text-[rgb(100,100,100)]'
+                                    : 'text-gray-500'
+                                }
+                            `}
+                        >
                             +{daySubscriptions.length - 4}
                         </div>
                     )}

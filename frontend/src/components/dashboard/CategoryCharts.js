@@ -112,7 +112,7 @@ function CategoryCharts({ subscriptions }) {
             <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Wydatki w kategoriach</p>
+                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Wydatki w kategoriach</p>
                         <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Suma cen subskrypcji według kategorii</p>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ function CategoryCharts({ subscriptions }) {
             <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-blue-400">Subskrypcje w kategoriach</p>
+                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Subskrypcje w kategoriach</p>
                         <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Ilość subskrypcji w każdej kategorii</p>
                     </div>
                 </div>

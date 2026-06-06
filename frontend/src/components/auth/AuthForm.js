@@ -13,9 +13,9 @@ function AuthForm({
     loading,
     showLoader,
     onResetError,
-    children,
+    children, initialEmail = '',
 }) {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(initialEmail);
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
 

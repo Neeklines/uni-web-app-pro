@@ -21,6 +21,8 @@ function CalendarDayCell({
     toggleFavorite,
     handleEditSubscription,
     handleCancelSubscription,
+    handleReactivateSubscription,
+    handleDeleteSubscription,
 }) {
     const [expanded, setExpanded] = useState(false);
     const daySubscriptions = subscriptions.filter((subscription) => {
@@ -161,6 +163,8 @@ function CalendarDayCell({
                                     toggleFavorite={toggleFavorite}
                                     handleEditSubscription={handleEditSubscription}
                                     handleCancelSubscription={handleCancelSubscription}
+                                    handleReactivateSubscription={handleReactivateSubscription}
+                                    handleDeleteSubscription={handleDeleteSubscription}
                                 />
                             ))}
 
@@ -206,6 +210,8 @@ function CalendarDayCell({
                                         toggleFavorite={toggleFavorite}
                                         handleEditSubscription={handleEditSubscription}
                                         handleCancelSubscription={handleCancelSubscription}
+                                        handleReactivateSubscription={handleReactivateSubscription}
+                                        handleDeleteSubscription={handleDeleteSubscription}
                                     />
                                 ))}
                             </div>

@@ -28,8 +28,6 @@ function Login() {
     }, [resetSuccess]);
 
     const handleLogin = async (email, password) => {
-        console.log('LOGIN SUBMIT FIRED', { email, password });
-
         setLoading(true);
         setError('');
 

@@ -431,12 +431,12 @@ function Dashboard() {
 
     const getSortIcon = () => {
         switch (sortMode) {
-            case 'name-asc': return 'A-Z↑';
-            case 'name-desc': return 'A-Z↓';
-            case 'price-asc': return '↑ Cena';
-            case 'price-desc': return '↓ Cena';
-            case 'date-asc': return '↑ 🕒';
-            case 'date-desc': return '↓ 🕒';
+            case 'name-asc': return 'A-Z ↑';
+            case 'name-desc': return 'A-Z ↓';
+            case 'price-asc': return 'Cena ↑';
+            case 'price-desc': return 'Cena ↓';
+            case 'date-asc': return '🕒 ↑';
+            case 'date-desc': return '🕒 ↓';
             default: return 'A↑';
         }
     };
@@ -681,12 +681,12 @@ function Dashboard() {
                                             ref={popupRef}
                                             className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↑</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↓</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↑</button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↓</button>
                                         </div>
                                     )}
                                 </div>
@@ -928,12 +928,12 @@ function Dashboard() {
                                             ref={popupRef}
                                             className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↑</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↓</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↑</button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↓</button>
                                         </div>
                                     )}
 
@@ -1148,6 +1148,7 @@ function Dashboard() {
                                 handleEditSubscription={handleEditSubscription}
                                 handleCancelSubscription={handleCancelSubscription}
                                 handleDeleteSubscription={handleDeleteSubscription}
+                                handleReactivateSubscription={handleReactivateSubscription}
 
                                 showDeleteConfirm={showDeleteConfirm}
                                 setShowDeleteConfirm={setShowDeleteConfirm}

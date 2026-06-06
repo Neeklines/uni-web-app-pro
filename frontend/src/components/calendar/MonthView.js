@@ -22,6 +22,8 @@ function MonthView({
     toggleFavorite,
     handleEditSubscription,
     handleCancelSubscription,
+    handleReactivateSubscription,
+    handleDeleteSubscription,
 }) {
     const { theme } = usePreferences();
 
@@ -124,6 +126,8 @@ function MonthView({
                             toggleFavorite={toggleFavorite}
                             handleEditSubscription={handleEditSubscription}
                             handleCancelSubscription={handleCancelSubscription}
+                            handleReactivateSubscription={handleReactivateSubscription}
+                            handleDeleteSubscription={handleDeleteSubscription}
                         />
                     ))}
                 </div>

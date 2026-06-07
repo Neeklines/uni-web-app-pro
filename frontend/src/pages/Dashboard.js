@@ -431,12 +431,12 @@ function Dashboard() {
 
     const getSortIcon = () => {
         switch (sortMode) {
-            case 'name-asc': return 'A-Z↑';
-            case 'name-desc': return 'A-Z↓';
-            case 'price-asc': return '↑ Cena';
-            case 'price-desc': return '↓ Cena';
-            case 'date-asc': return '↑ 🕒';
-            case 'date-desc': return '↓ 🕒';
+            case 'name-asc': return 'A-Z ↑';
+            case 'name-desc': return 'A-Z ↓';
+            case 'price-asc': return 'Cena ↑';
+            case 'price-desc': return 'Cena ↓';
+            case 'date-asc': return '🕒 ↑';
+            case 'date-desc': return '🕒 ↓';
             default: return 'A↑';
         }
     };
@@ -498,8 +498,10 @@ function Dashboard() {
                             </div>
                             <div className="
                                 flex
+                                justify-center
                                 items-center
                                 gap-3
+                                sm:justify-start
                             ">
                                 <button
                                     onClick={() => navigate('/settings')}
@@ -657,12 +659,12 @@ function Dashboard() {
                                             ref={popupRef}
                                             className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↑</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↓</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↑</button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↓</button>
                                         </div>
                                     )}
                                 </div>
@@ -871,14 +873,40 @@ function Dashboard() {
                                 />
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
                                 >
                                     Lista
                                 </button>
 
                                 <button
                                     onClick={() => setViewMode('calendar')}
-                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
                                 >
                                     Kalendarz
                                 </button>
@@ -904,12 +932,12 @@ function Dashboard() {
                                             ref={popupRef}
                                             className={`absolute left-1/2 top-[calc(100%+8px)] -translate-x-1/2 z-20 min-w-[140px] rounded-xl p-2 shadow-xl ${theme === 'light' ? 'border border-[rgb(220,210,195)] bg-[rgb(252,249,244)]' : 'border border-gray-700 bg-gray-800'}`}
                                         >
-                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↑</button>
-                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z↓</button>
-                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑ Cena</button>
-                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ Cena</button>
-                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↑🕒 </button>
-                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>↓ 🕒</button>
+                                            <button onClick={() => { setSortMode('name-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↑</button>
+                                            <button onClick={() => { setSortMode('name-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>A-Z ↓</button>
+                                            <button onClick={() => { setSortMode('price-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↑</button>
+                                            <button onClick={() => { setSortMode('price-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>Cena ↓</button>
+                                            <button onClick={() => { setSortMode('date-asc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↑</button>
+                                            <button onClick={() => { setSortMode('date-desc'); setActivePopup(null); }} className={`block w-full text-left px-3 py-1 rounded-lg ${theme === 'light' ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]' : 'text-white hover:bg-gray-700'}`}>🕒 ↓</button>
                                         </div>
                                     )}
 
@@ -1124,6 +1152,7 @@ function Dashboard() {
                                 handleEditSubscription={handleEditSubscription}
                                 handleCancelSubscription={handleCancelSubscription}
                                 handleDeleteSubscription={handleDeleteSubscription}
+                                handleReactivateSubscription={handleReactivateSubscription}
 
                                 showDeleteConfirm={showDeleteConfirm}
                                 setShowDeleteConfirm={setShowDeleteConfirm}

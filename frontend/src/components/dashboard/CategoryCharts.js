@@ -1,5 +1,7 @@
 import React from 'react';
 import { usePreferences } from '../../context/UserPreferencesContext';
+import { formatPrice } from '../../utils/formatPrice';
+
 const chartColors = ['#7C3AED', '#EC4899', '#14B8A6', '#F97316', '#3B82F6', '#EAB308', '#10B981', '#F43F5E'];
 
 const polarToCartesian = (cx, cy, r, angleInDegrees) => {
@@ -23,13 +25,13 @@ const describeArc = (cx, cy, r, startAngle, endAngle) => {
     ].join(' ');
 };
 
-const renderPieChart = (data, theme, isCurrency = false) => {
+const renderPieChart = (data, theme, isCurrency = false, currency = 'PLN') => {
 
     const total = data.reduce((sum, item) => sum + item.value, 0);
     let startAngle = 0;
 
     return (
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-4 sm:flex-row items-center">
             <svg viewBox="0 0 220 220" className="h-56 w-56">
                 {data.map((item, index) => {
                     const sliceAngle = total === 0 ? 0 : (item.value / total) * 360;
@@ -60,7 +62,10 @@ const renderPieChart = (data, theme, isCurrency = false) => {
             </svg>
             <div className="grid gap-3">
                 {data.map((item, index) => {
-                    const displayValue = isCurrency ? `${item.value.toFixed(2)} PLN` : item.value;
+                    const displayValue =
+                        isCurrency
+                            ? formatPrice(item.value, currency)
+                            : item.value;
                     return (
                         <div key={item.label} className={`flex items-center gap-3 text-sm ${theme === 'light' ? 'text-[rgb(70,70,70)]' : 'text-gray-300'}`}>
                             <span className="h-3 w-3 rounded-full" style={{ backgroundColor: chartColors[index % chartColors.length] }} />
@@ -79,10 +84,14 @@ const groupActiveSubscriptions = (subscriptions) => {
     const categories = activeSubscriptions.reduce((acc, item) => {
         const category = item.category?.trim() || 'Inne';
         const price = Number(item.price) || 0;
+        const yearlyCost =
+            item.billing_cycle === 'yearly'
+                ? price
+                : price * 12;
         if (!acc[category]) {
             acc[category] = { total: 0, count: 0 };
         }
-        acc[category].total += price;
+        acc[category].total += yearlyCost;
         acc[category].count += 1;
         return acc;
     }, {});
@@ -100,7 +109,7 @@ const groupActiveSubscriptions = (subscriptions) => {
 };
 
 function CategoryCharts({ subscriptions }) {
-    const { theme } = usePreferences();
+    const { theme, currency } = usePreferences();
     const { categoryTotals, categoryCounts } = groupActiveSubscriptions(subscriptions);
 
     if (categoryTotals.length === 0 && categoryCounts.length === 0) {
@@ -112,11 +121,11 @@ function CategoryCharts({ subscriptions }) {
             <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Wydatki w kategoriach</p>
+                        <p className={`text-sm uppercase tracking-[0.3em] ${theme === 'light' ? 'text-[rgb(140,110,80)]' : 'text-blue-400'}`}>Roczne wydatki w kategoriach</p>
                         <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Suma cen subskrypcji według kategorii</p>
                     </div>
                 </div>
-                {renderPieChart(categoryTotals, theme, true)}
+                {renderPieChart(categoryTotals, theme, true, currency)}
             </div>
             <div className={`rounded-3xl p-6 shadow-md ${theme === 'light' ? 'border border-stone-300 bg-[rgb(252,249,244)] shadow-stone-300/10' : 'border border-gray-700 bg-gray-950/70 shadow-black/10'}`}>
                 <div className="flex items-center justify-between mb-4">
@@ -125,7 +134,7 @@ function CategoryCharts({ subscriptions }) {
                         <p className={`mt-2 text-lg ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>Ilość subskrypcji w każdej kategorii</p>
                     </div>
                 </div>
-                {renderPieChart(categoryCounts, theme, false)}
+                {renderPieChart(categoryCounts, theme, false, currency)}
             </div>
         </div>
     );

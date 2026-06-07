@@ -1,6 +1,8 @@
 import {
     Pencil,
     X,
+    RotateCcw,
+    Trash2,
 } from 'lucide-react';
 
 import {
@@ -17,6 +19,8 @@ function CalendarEventCard({
     toggleFavorite,
     handleEditSubscription,
     handleCancelSubscription,
+    handleReactivateSubscription,
+    handleDeleteSubscription,
 }) {
     const { currency, theme } = usePreferences();
     if (compact) {
@@ -24,6 +28,21 @@ function CalendarEventCard({
             <div
                 onClick={(e) => {
                     e.stopPropagation();
+
+                    if (subscription.is_active === false) {
+                        if (
+                            window.confirm(
+                                `Przywrócić subskrypcję "${subscription.name}"?`
+                            )
+                        ) {
+                            handleReactivateSubscription(
+                                subscription.id
+                            );
+                        }
+
+                        return;
+                    }
+
                     handleEditSubscription(subscription);
                 }}
                 className={`
@@ -51,6 +70,7 @@ function CalendarEventCard({
                 hover:border-blue-500
                 hover:bg-gray-700/90
                 cursor-pointer
+                ${!subscription.is_active ? 'opacity-50' : ''}
             `}
             >
                 {/* Star */}
@@ -78,21 +98,39 @@ function CalendarEventCard({
                 </div>
 
                 {/* Cancel */}
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleCancelSubscription(subscription.id);
-                    }}
-                    className="
-                    text-gray-500
-                    hover:text-red-400
-                    transition
-                    flex-shrink-0
-                "
-                >
-                    ✕
-                </button>
+                {subscription.is_active !== false ? (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleCancelSubscription(subscription.id);
+                        }}
+                        className="
+                            text-gray-500
+                            hover:text-red-400
+                            transition
+                            flex-shrink-0
+                        "
+                    >
+                        ✕
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSubscription(subscription.id);
+                        }}
+                        className="
+                            text-gray-500
+                            hover:text-red-400
+                            transition
+                            flex-shrink-0
+                        "
+                    >
+                        <Trash2 size={12} />
+                    </button>
+                )}
             </div>
         );
     }
@@ -115,6 +153,7 @@ function CalendarEventCard({
                 transition
                 hover:border-blue-500
                 px-2 py-1.5 text-xs
+                ${!subscription.is_active ? 'opacity-50' : ''}
             `}
         >
             <div className="flex items-start justify-between gap-2">
@@ -160,19 +199,43 @@ function CalendarEventCard({
 
                 <div className="flex items-center gap-2">
 
-                    <button
-                        onClick={() => handleEditSubscription(subscription)}
-                        className="text-gray-400 hover:text-blue-400 transition"
-                    >
-                        <Pencil size={13} />
-                    </button>
+                    {subscription.is_active !== false ? (
+                        <>
+                            <button
+                                onClick={() => handleEditSubscription(subscription)}
+                                className="text-gray-400 hover:text-blue-400 transition"
+                            >
+                                <Pencil size={13} />
+                            </button>
 
-                    <button
-                        onClick={() => handleCancelSubscription(subscription.id)}
-                        className="text-gray-400 hover:text-red-400 transition"
-                    >
-                        <X size={14} />
-                    </button>
+                            <button
+                                onClick={() => handleCancelSubscription(subscription.id)}
+                                className="text-gray-400 hover:text-red-400 transition"
+                            >
+                                <X size={14} />
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() =>
+                                    handleReactivateSubscription(subscription.id)
+                                }
+                                className="text-gray-400 hover:text-green-400 transition"
+                            >
+                                <RotateCcw size={13} />
+                            </button>
+
+                            <button
+                                onClick={() =>
+                                    handleDeleteSubscription(subscription.id)
+                                }
+                                className="text-gray-400 hover:text-red-400 transition"
+                            >
+                                <Trash2 size={13} />
+                            </button>
+                        </>
+                    )}
 
                 </div>
             </div>

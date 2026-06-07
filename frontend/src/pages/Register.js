@@ -7,18 +7,16 @@ function Register() {
     const { register } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const handleRegister = async (email, password) => {
         try {
             await register(email, password);
 
-            setError('');
-            setSuccess('Registration was successful.');
-
-            setTimeout(() => {
-                navigate('/login');
-
-            }, 4000);
+            navigate('/login', {
+                state: {
+                    registrationSuccess: 'Konto zostało utworzone. Możesz się teraz zalogować.',
+                    registeredEmail: email,
+                },
+            });
         } catch (err) {
             setError(err.message);
         }
@@ -31,7 +29,6 @@ function Register() {
                 type="register"
                 onSubmit={handleRegister}
                 error={error}
-                success={success}
             />
 
             <p className="text-gray-400 mt-6 text-center">

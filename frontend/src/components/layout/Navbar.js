@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+
+import {
+    CalendarDays,
+    LogOut,
+} from 'lucide-react';
 
 import {
     usePreferences,
@@ -8,7 +12,6 @@ import {
 
 function Navbar() {
     const { user, logout } = useAuth();
-    const username = user?.email?.split('@')[0];
 
     const {
         theme,
@@ -48,37 +51,89 @@ function Navbar() {
 
                     {user ? (
                         <>
-                            <p
-                                className={`text-sm ${theme === 'light'
+                            <div className="text-right">
+                                <p className={`text-sm ${theme === 'light'
                                     ? 'text-[rgb(100,100,100)]'
                                     : 'text-gray-400'
-                                    }`}
+                                    }`}>
+                                    Zalogowano jako
+                                </p>
+
+                                <p className={`text-sm font-medium ${theme === 'light'
+                                    ? 'text-[rgb(90,65,40)]'
+                                    : 'text-white'
+                                    }`}>
+                                    {user.display_name}
+                                </p>
+                            </div>
+
+                            <Link
+                                to="/dashboard"
+                                className={`
+                                    flex
+                                    items-center
+                                    gap-2
+
+                                    rounded-lg
+                                    
+                                    px-3
+                                    py-2
+
+                                    text-gray-200
+                                    transition
+                                    hover:text-white
+
+                                    ${theme === 'light'
+                                        ? `
+                                            bg-[rgb(90,65,40)]
+                                            hover:bg-[rgb(120,95,70)]
+                                        `
+                                        : `
+                                            bg-gray-700
+                                            hover:bg-gray-600
+                                        `
+                                    }
+                                `}
                             >
-                                Zalogowano jako{' '}
-                                <span
-                                    className={`font-medium ${theme === 'light'
-                                        ? 'text-[rgb(90,65,40)]'
-                                        : 'text-white'
-                                        }`}
-                                >
-                                    {username}
+                                <CalendarDays size={16} />
+                                <span className="hidden sm:inline">
+                                    Dashboard
                                 </span>
-                            </p>
+                            </Link>
 
                             <button
                                 onClick={logout}
-                                className="
-                                    bg-red-500
-                                    hover:bg-red-600
-                                    text-white
-                                    px-4
-                                    py-1.5
-                                    rounded-md
-                                    font-medium
+                                className={`
+                                    flex
+                                    items-center
+                                    gap-2
+
+                                    rounded-lg
+
+                                    px-3
+                                    py-2
+
+                                    text-gray-200
                                     transition
-                                "
+
+                                    hover:bg-red-500
+                                    hover:text-white
+
+                                    ${theme === 'light'
+                                        ? `
+                                            bg-[rgb(90,65,40)]
+                                        `
+                                        : `
+                                            bg-gray-700
+                                        `
+                                    }
+                                `}
                             >
-                                Wyloguj
+                                <LogOut size={16} />
+
+                                <span className="hidden sm:inline">
+                                    Wyloguj
+                                </span>
                             </button>
                         </>
                     ) : (

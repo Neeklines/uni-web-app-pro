@@ -19,6 +19,8 @@ function WeekView({
     toggleFavorite,
     handleEditSubscription,
     handleCancelSubscription,
+    handleReactivateSubscription,
+    handleDeleteSubscription,
 }) {
     const { theme } = usePreferences();
 
@@ -95,6 +97,8 @@ function WeekView({
                                     toggleFavorite={toggleFavorite}
                                     handleEditSubscription={handleEditSubscription}
                                     handleCancelSubscription={handleCancelSubscription}
+                                    handleReactivateSubscription={handleReactivateSubscription}
+                                    handleDeleteSubscription={handleDeleteSubscription}
                                 />
                             ))}
                         </div>

@@ -11,6 +11,8 @@ function DayView({
     toggleFavorite,
     handleEditSubscription,
     handleCancelSubscription,
+    handleReactivateSubscription,
+    handleDeleteSubscription,
 }) {
     const dayEvents = subscriptions.filter((subscription) =>
         isSameDay(subscription.eventDate, currentDate)
@@ -33,6 +35,8 @@ function DayView({
                         toggleFavorite={toggleFavorite}
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
+                        handleReactivateSubscription={handleReactivateSubscription}
+                        handleDeleteSubscription={handleDeleteSubscription}
                     />
                 ))
             )}

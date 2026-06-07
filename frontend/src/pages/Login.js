@@ -19,17 +19,27 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
 
+    const registrationSuccess =
+        location.state?.registrationSuccess || '';
+
+    const registeredEmail =
+        location.state?.registeredEmail || '';
+
     const resetSuccess = location.state?.resetSuccess || false;
 
     useEffect(() => {
-        if (resetSuccess) {
-            window.history.replaceState({}, document.title);
+        if (resetSuccess || registrationSuccess) {
+            window.history.replaceState(
+                {},
+                document.title
+            );
         }
-    }, [resetSuccess]);
+    }, [
+        resetSuccess,
+        registrationSuccess,
+    ]);
 
     const handleLogin = async (email, password) => {
-        console.log('LOGIN SUBMIT FIRED', { email, password });
-
         setLoading(true);
         setError('');
 
@@ -66,7 +76,9 @@ function Login() {
 
             <AuthForm
                 type="login"
+                initialEmail={registeredEmail}
                 onSubmit={handleLogin}
+                success={registrationSuccess}
                 error={error}
                 loading={loading}
                 showLoader={showLoader}

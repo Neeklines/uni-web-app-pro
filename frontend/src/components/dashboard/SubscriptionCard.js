@@ -148,8 +148,8 @@ function SubscriptionCard({
                         `}
                     >
                         <p className="
+                            break-all
                             line-clamp-2
-                            break-words
                         ">
                             {subscription.notes}
                         </p>
@@ -157,7 +157,8 @@ function SubscriptionCard({
                 )}
 
                 {/* Price */}
-                <div className={`text-right sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
+                <div className={`text-right flex flex-col items-end justify-center self-stretch 
+                                    sm:ml-auto ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     <p className={`text-xl font-semibold ${theme === 'light' ? 'text-[rgb(90,65,40)]' : 'text-white'}`}>
                         {formattedPrice}
@@ -200,10 +201,27 @@ function SubscriptionCard({
                     </button>
 
                     {activePopup === `subscription-${subscription.id}` && (
-                        <div className={`absolute right-0 top-full mt-2 rounded-lg p-2 z-10 min-w-[120px] ${theme === 'light'
-                            ? 'bg-[rgb(252,249,244)] border border-[rgb(220,210,195)]'
-                            : 'bg-gray-800 border border-gray-600'
-                            }`}>
+                        <div className={`
+                            ${theme === 'light'
+                                ? 'bg-[rgb(252,249,244)] border border-[rgb(220,210,195)]'
+                                : 'bg-gray-800 border border-gray-600'
+                            }
+
+                            absolute
+                            right-0
+                            top-full
+                            sm:right-4
+                            sm:top-12
+                            mt-2
+
+                            bg-gray-800
+                            border
+                            border-gray-600
+                            rounded-lg
+                            p-2
+                            z-10
+                            min-w-[120px]
+                        `} ref={popupRef}>
 
                             {subscription.is_active ? (
                                 <>
@@ -212,8 +230,8 @@ function SubscriptionCard({
                                             handleEditSubscription(subscription)
                                         }
                                         className={`block w-full text-left px-3 py-2 rounded ${theme === 'light'
-                                                ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]'
-                                                : 'text-white hover:bg-gray-700'
+                                            ? 'text-[rgb(90,65,40)] hover:bg-[rgb(245,240,232)]'
+                                            : 'text-white hover:bg-gray-700'
                                             }`}
                                     >
                                         Edytuj

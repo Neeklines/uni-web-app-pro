@@ -1,5 +1,4 @@
 from app.database import SessionLocal
-import app.models.password_reset_token
 from app.services.notification_service import send_daily_subscription_notifications
 
 

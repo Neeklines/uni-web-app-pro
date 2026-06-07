@@ -22,6 +22,7 @@ function CalendarView({
     handleEditSubscription,
     handleCancelSubscription,
     handleDeleteSubscription,
+    handleReactivateSubscription,
 
     showDeleteConfirm,
     setShowDeleteConfirm,
@@ -48,6 +49,13 @@ function CalendarView({
     );
 
     const isMobile = window.innerWidth < 640;
+
+    console.log({
+        CalendarToolbar,
+        DayView,
+        WeekView,
+        MonthView,
+    });
 
     return (
         <div className="mt-6">
@@ -80,6 +88,7 @@ function CalendarView({
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
                         handleDeleteSubscription={handleDeleteSubscription}
+                        handleReactivateSubscription={handleReactivateSubscription}
 
                         showDeleteConfirm={showDeleteConfirm}
                         setShowDeleteConfirm={setShowDeleteConfirm}
@@ -97,6 +106,7 @@ function CalendarView({
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
                         handleDeleteSubscription={handleDeleteSubscription}
+                        handleReactivateSubscription={handleReactivateSubscription}
 
                         showDeleteConfirm={showDeleteConfirm}
                         setShowDeleteConfirm={setShowDeleteConfirm}
@@ -114,6 +124,7 @@ function CalendarView({
                         handleEditSubscription={handleEditSubscription}
                         handleCancelSubscription={handleCancelSubscription}
                         handleDeleteSubscription={handleDeleteSubscription}
+                        handleReactivateSubscription={handleReactivateSubscription}
 
                         showDeleteConfirm={showDeleteConfirm}
                         setShowDeleteConfirm={setShowDeleteConfirm}

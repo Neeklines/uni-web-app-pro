@@ -541,28 +541,6 @@ function Dashboard() {
                                 >
                                     Wyloguj się
                                 </button>
-
-                                <button
-                                    onClick={() => navigate('/settings')}
-                                    className="
-                                        flex
-                                        h-12
-                                        w-12
-                                        items-center
-                                        justify-center
-
-                                        rounded-full
-                                        bg-gray-800
-
-                                        text-gray-300
-
-                                        transition
-                                        hover:bg-gray-700
-                                        hover:text-white
-                                    "
-                                >
-                                    <Settings size={20} />
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -895,14 +873,40 @@ function Dashboard() {
                                 />
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'list'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
                                 >
                                     Lista
                                 </button>
 
                                 <button
                                     onClick={() => setViewMode('calendar')}
-                                    className={`rounded-lg border px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${theme === 'light' ? 'border-[rgb(220,210,195)] bg-[rgb(245,240,232)] text-[rgb(35,35,35)] placeholder-[rgb(120,120,120)]' : 'border-gray-600 bg-gray-800 text-white placeholder-gray-400'}`}
+                                    className={`rounded-full px-4 py-2 font-semibold transition ${viewMode === 'calendar'
+                                        ? theme === 'light'
+                                            ? `
+                                                bg-[rgb(90,65,40)]
+                                                text-white
+                                            `
+                                            : `
+                                                bg-blue-500
+                                                text-white
+                                            `
+                                        : theme === 'light'
+                                            ? 'bg-[rgb(245,240,232)] text-[rgb(90,65,40)] border border-[rgb(220,210,195)]'
+                                            : 'bg-gray-700 text-gray-300'
+                                        }`}
                                 >
                                     Kalendarz
                                 </button>

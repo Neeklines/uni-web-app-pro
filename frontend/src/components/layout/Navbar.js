@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 import {
@@ -13,7 +12,6 @@ import {
 
 function Navbar() {
     const { user, logout } = useAuth();
-    const username = user?.email?.split('@')[0];
 
     const {
         theme,
@@ -71,23 +69,31 @@ function Navbar() {
 
                             <Link
                                 to="/dashboard"
-                                className="
+                                className={`
                                     flex
                                     items-center
                                     gap-2
 
                                     rounded-lg
-                                    bg-gray-700
-
+                                    
                                     px-3
                                     py-2
 
                                     text-gray-200
                                     transition
-
-                                    hover:bg-gray-600
                                     hover:text-white
-                                "
+
+                                    ${theme === 'light'
+                                        ? `
+                                            bg-[rgb(90,65,40)]
+                                            hover:bg-[rgb(120,95,70)]
+                                        `
+                                        : `
+                                            bg-gray-700
+                                            hover:bg-gray-600
+                                        `
+                                    }
+                                `}
                             >
                                 <CalendarDays size={16} />
                                 <span className="hidden sm:inline">
@@ -97,13 +103,12 @@ function Navbar() {
 
                             <button
                                 onClick={logout}
-                                className="
+                                className={`
                                     flex
                                     items-center
                                     gap-2
 
                                     rounded-lg
-                                    bg-gray-700
 
                                     px-3
                                     py-2
@@ -113,7 +118,16 @@ function Navbar() {
 
                                     hover:bg-red-500
                                     hover:text-white
-                                "
+
+                                    ${theme === 'light'
+                                        ? `
+                                            bg-[rgb(90,65,40)]
+                                        `
+                                        : `
+                                            bg-gray-700
+                                        `
+                                    }
+                                `}
                             >
                                 <LogOut size={16} />
 

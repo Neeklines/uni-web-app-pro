@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getMeta } from '../../services/metaService';
 
@@ -44,25 +45,25 @@ function Footer() {
             </p>
 
             <p className="mt-1">
-                <a
-                    href="/tos"
+                <Link
+                    to="/tos"
                     className={`transition ${theme === 'light'
                         ? 'text-[rgb(90,65,40)] hover:text-black'
                         : 'text-gray-400 hover:text-gray-300'
                         }`}
                 >
                     Terms of Service
-                </a>{' '}
+                </Link>{' '}
                 ·{' '}
-                <a
-                    href="/privacy"
+                <Link
+                    to="/privacy"
                     className={`transition ${theme === 'light'
                         ? 'text-[rgb(90,65,40)] hover:text-black'
                         : 'text-gray-400 hover:text-gray-300'
                         }`}
                 >
                     Privacy Policy
-                </a>
+                </Link>
             </p>
 
             {meta?.env === 'dev' && (

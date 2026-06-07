@@ -18,7 +18,9 @@ export function UserPreferencesProvider({
     const [
         theme,
         setTheme,
-    ] = useState('dark');
+    ] = useState(() => {
+        return localStorage.getItem('theme') || 'dark';
+    });
 
     const [
         currency,
@@ -92,6 +94,10 @@ export function UserPreferencesProvider({
     */
 
     useEffect(() => {
+        localStorage.setItem(
+            'theme',
+            theme
+        );
 
         document.documentElement.classList.remove(
             'light',

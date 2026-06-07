@@ -45,8 +45,6 @@ function SubscriptionCard({
         <div
             className={`
                 rounded-3xl
-                border
-                border-gray-800
                ${theme === 'light'
                     ? 'border border-[rgb(220,210,195)] bg-[rgb(245,240,232)]'
                     : `border border-gray-800 ${!subscription.is_active ? 'bg-gray-900/45' : 'bg-gray-900/90'}`
@@ -64,19 +62,19 @@ function SubscriptionCard({
                 <div className={`flex items-center gap-4 sm:min-w-[260px] sm:max-w-[320px] ${!subscription.is_active ? 'opacity-50' : ''}`}>
 
                     {/* Logo */}
-                    <div className="
+                    <div className={`
                         h-14
                         w-14
                         rounded-2xl
                        ${theme === 'light'
-                            ? 'bg-[rgb(245,240,232)] border-[rgb(220,210,195)]'
-                            : 'bg-gray-800 border-gray-700'
+                            ? 'bg-[rgb(245,240,232)] border border-[rgb(220,210,195)]'
+                            : 'bg-gray-800 border border-gray-700'
                         }
                         overflow-hidden
                         flex
                         items-center
                         justify-center
-                    ">
+                    `}>
                         {logoSrc ? (
                             <img
                                 src={logoSrc}
@@ -84,7 +82,7 @@ function SubscriptionCard({
                                 className="h-full w-full object-contain"
                             />
                         ) : (
-                            <span className="text-white text-lg font-semibold">
+                            <span className={`${theme === 'light' ? 'text-black' : 'text-white'} text-lg font-semibold`}>
                                 {subscription.name?.charAt(0).toUpperCase()}
                             </span>
                         )}

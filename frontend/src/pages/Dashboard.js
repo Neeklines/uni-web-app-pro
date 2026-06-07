@@ -119,13 +119,13 @@ function Dashboard() {
             return;
         }
 
-        if (!inAppNotifications) {
-            return;
-        }
-
         try {
             const data = await subscriptionService.getSubscriptions(token);
             setSubscriptions(data);
+
+            if (!inAppNotifications) {
+                return;
+            }
 
             const popupAlreadyShown = sessionStorage.getItem('popupShown');
             if (popupAlreadyShown) return;
@@ -142,7 +142,6 @@ function Dashboard() {
 
                 return isActive && payDate >= today && payDate <= in7Days;
             });
-
 
             setUpcomingPayments(upcoming);
             setShowPopup(true);

@@ -53,6 +53,10 @@ def send_daily_subscription_notifications(db: Session):
         if not user:
             continue
 
+        if not user.email_notifications:
+            print(f"EMAIL DISABLED FOR USER {user.id}")
+            continue
+
         content = build_email_content(user_subs)
 
         send_email(

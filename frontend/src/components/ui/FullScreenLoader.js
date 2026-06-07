@@ -2,7 +2,6 @@ import { usePreferences } from "../../context/UserPreferencesContext";
 
 function FullScreenLoader({ show }) {
     const { theme } = usePreferences();
-    console.log('Loader theme:', theme);
     return (
         <div
             className={`

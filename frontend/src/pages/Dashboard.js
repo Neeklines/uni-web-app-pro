@@ -126,7 +126,6 @@ function Dashboard() {
         try {
             const data = await subscriptionService.getSubscriptions(token);
             setSubscriptions(data);
-            console.log('Fetched subscriptions:', data);
 
             const popupAlreadyShown = sessionStorage.getItem('popupShown');
             if (popupAlreadyShown) return;

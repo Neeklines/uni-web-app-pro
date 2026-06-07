@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from sqlalchemy.orm import Session
 from app.models.subscription import Subscription
+from app.models.password_reset_token import PasswordResetToken  # noqa: F401
 from app.models.user import User
 from collections import defaultdict
 from app.services.email_service import send_email

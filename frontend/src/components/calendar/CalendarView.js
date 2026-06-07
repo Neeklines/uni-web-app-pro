@@ -50,13 +50,6 @@ function CalendarView({
 
     const isMobile = window.innerWidth < 640;
 
-    console.log({
-        CalendarToolbar,
-        DayView,
-        WeekView,
-        MonthView,
-    });
-
     return (
         <div className="mt-6">
 
